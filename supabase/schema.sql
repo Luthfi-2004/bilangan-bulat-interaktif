@@ -102,6 +102,81 @@ CREATE TRIGGER on_auth_user_created
   FOR EACH ROW EXECUTE FUNCTION public.handle_new_user();
 
 -- ==========================================================
+-- FUNGSI KHUSUS GURU: Buat Akun Siswa Langsung Aktif
+-- Tanpa perlu verifikasi email (Direct Confirmation)
+-- ==========================================================
+CREATE OR REPLACE FUNCTION public.create_student_user(
+  student_email TEXT,
+  student_password TEXT,
+  student_name TEXT,
+  guru_id UUID DEFAULT NULL
+)
+RETURNS JSON AS $$
+DECLARE
+  new_id UUID := gen_random_uuid();
+  encrypted_pw TEXT;
+BEGIN
+  -- Cek apakah email sudah terdaftar
+  IF EXISTS (SELECT 1 FROM auth.users WHERE email = LOWER(TRIM(student_email))) THEN
+    RAISE EXCEPTION 'Email sudah terdaftar di sistem!';
+  END IF;
+
+  encrypted_pw := crypt(student_password, gen_salt('bf'));
+
+  -- Masukkan langsung ke auth.users dengan status terkonfirmasi
+  INSERT INTO auth.users (
+    instance_id,
+    id,
+    aud,
+    role,
+    email,
+    encrypted_password,
+    email_confirmed_at,
+    raw_app_meta_data,
+    raw_user_meta_data,
+    created_at,
+    updated_at,
+    confirmation_token,
+    recovery_token,
+    email_change_token_new,
+    email_change
+  ) VALUES (
+    '00000000-0000-0000-0000-000000000000',
+    new_id,
+    'authenticated',
+    'authenticated',
+    LOWER(TRIM(student_email)),
+    encrypted_pw,
+    NOW(), -- Langsung aktif seketika tanpa perlu link verifikasi!
+    '{"provider":"email","providers":["email"]}'::jsonb,
+    jsonb_build_object('name', student_name, 'role', 'siswa', 'dibuat_oleh_guru_id', guru_id),
+    NOW(),
+    NOW(),
+    '', '', '', ''
+  );
+
+  -- Pastikan tersimpan di users_metadata
+  INSERT INTO public.users_metadata (
+    id,
+    email,
+    name,
+    role,
+    dibuat_oleh_guru_id
+  ) VALUES (
+    new_id,
+    LOWER(TRIM(student_email)),
+    student_name,
+    'siswa',
+    guru_id
+  ) ON CONFLICT (id) DO UPDATE SET
+    name = EXCLUDED.name,
+    role = 'siswa';
+
+  RETURN json_build_object('id', new_id, 'email', student_email, 'name', student_name);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ==========================================================
 -- ROW LEVEL SECURITY (RLS) POLICIES
 -- ==========================================================
 ALTER TABLE public.users_metadata ENABLE ROW LEVEL SECURITY;

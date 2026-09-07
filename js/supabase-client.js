@@ -336,7 +336,23 @@ export async function updateMateriContent(slug, contentData) {
 export async function registerStudentByGuru({ name, email, password, guruId }) {
   if (!supabase) throw new Error("Database offline.");
 
-  // 1. Buat client sekunder tanpa merusak sesi guru yang aktif
+  // 1. Coba lewat RPC function PostgreSQL (Paling handal, 100% bypass email verification & domain restriction)
+  try {
+    const { data: rpcData, error: rpcError } = await supabase.rpc('create_student_user', {
+      student_email: email,
+      student_password: password,
+      student_name: name,
+      guru_id: guruId
+    });
+
+    if (!rpcError && rpcData) {
+      return rpcData;
+    }
+  } catch (rpcErr) {
+    console.warn("RPC create_student_user belum aktif di database, mencoba fallback signUp...", rpcErr);
+  }
+
+  // 2. Fallback: Buat client sekunder tanpa merusak sesi guru yang aktif
   const tempClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
     auth: {
       persistSession: false,
@@ -357,9 +373,19 @@ export async function registerStudentByGuru({ name, email, password, guruId }) {
     }
   });
 
-  if (error) throw error;
+  if (error) {
+    // Jika Supabase memblokir karena format email / domain / confirm email setting
+    if (error.message && error.message.includes('is invalid')) {
+      throw new Error(
+        `Email "${email}" ditolak oleh Supabase. ` +
+        `Solusi: Jalankan ulang script SQL schema.sql terbaru di Supabase SQL Editor ` +
+        `atau matikan toggle "Confirm email" di Supabase Dashboard -> Authentication -> Providers -> Email.`
+      );
+    }
+    throw error;
+  }
 
-  // 2. Pastikan tabel users_metadata tercatat (bila trigger terlambat)
+  // 3. Pastikan tabel users_metadata tercatat
   if (data?.user) {
     try {
       await supabase.from('users_metadata').upsert({
