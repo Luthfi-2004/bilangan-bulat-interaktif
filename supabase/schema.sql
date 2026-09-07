@@ -466,3 +466,213 @@ BEGIN
       name = 'Bapak/Ibu Guru Matematika';
   END IF;
 END $$;
+
+-- ==========================================================
+-- 8. TABEL KONTEN MATERI (CMS MATERI GURU)
+-- ==========================================================
+CREATE TABLE IF NOT EXISTS public.materi_content (
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  slug TEXT UNIQUE NOT NULL,
+  urutan INT NOT NULL DEFAULT 1,
+  judul TEXT NOT NULL,
+  ringkasan TEXT,
+  konten TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW(),
+  updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+ALTER TABLE public.materi_content ENABLE ROW LEVEL SECURITY;
+
+-- Policy: Siapapun dapat membaca materi
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE tablename = 'materi_content' AND policyname = 'Anyone can view materi'
+  ) THEN
+    CREATE POLICY "Anyone can view materi" ON public.materi_content
+      FOR SELECT USING (true);
+  END IF;
+END $$;
+
+-- Policy: Hanya Guru yang dapat mengelola (Insert, Update, Delete) materi
+DO $$
+BEGIN
+  IF NOT EXISTS (
+    SELECT 1 FROM pg_policies WHERE tablename = 'materi_content' AND policyname = 'Guru can manage materi'
+  ) THEN
+    CREATE POLICY "Guru can manage materi" ON public.materi_content
+      FOR ALL USING (
+        EXISTS (
+          SELECT 1 FROM public.users_metadata
+          WHERE id = auth.uid() AND role = 'guru'
+        )
+      );
+  END IF;
+END $$;
+
+-- Seed Data Awal untuk 9 Submateri Inti
+INSERT INTO public.materi_content (slug, urutan, judul, ringkasan, konten) VALUES
+('1-definisi', 1, 'Definisi Bilangan Bulat', 'Mengenal bilangan bulat positif, negatif, dan nol beserta garis bilangannya.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+      <i class="fa-solid fa-lightbulb text-amber-500"></i> Pengertian Bilangan Bulat
+    </h3>
+    <p class="text-slate-600 leading-relaxed text-base mb-4">
+      Bilangan bulat adalah himpunan bilangan utuh (bukan pecahan atau desimal) yang terdiri dari:
+    </p>
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+      <div class="p-4 rounded-xl bg-red-50 border border-red-100 text-center">
+        <div class="text-xs font-bold uppercase tracking-wider text-red-600 mb-1">Bilangan Negatif</div>
+        <div class="font-mono text-lg font-bold text-red-700">..., -3, -2, -1</div>
+        <div class="text-xs text-slate-500 mt-1">Nilai lebih kecil dari nol</div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-100 border border-slate-200 text-center">
+        <div class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Bilangan Nol</div>
+        <div class="font-mono text-lg font-bold text-slate-900">0</div>
+        <div class="text-xs text-slate-500 mt-1">Bukan positif & bukan negatif</div>
+      </div>
+      <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-center">
+        <div class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-1">Bilangan Positif</div>
+        <div class="font-mono text-lg font-bold text-emerald-700">1, 2, 3, ...</div>
+        <div class="text-xs text-slate-500 mt-1">Nilai lebih besar dari nol</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+      <i class="fa-solid fa-arrows-left-right text-blue-600"></i> Garis Bilangan Interaktif
+    </h3>
+    <p class="text-slate-600 text-sm mb-4">Klik titik bilangan pada garis berikut untuk melihat posisi dan nilainya:</p>
+    <div id="number-line-container" class="my-6"></div>
+    <div id="nilai-mutlak-info" class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-center font-medium text-blue-900">
+      Klik salah satu angka pada garis bilangan di atas.
+    </div>
+  </div>
+
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+      <i class="fa-solid fa-calculator text-indigo-600"></i> Nilai Mutlak |x|
+    </h3>
+    <p class="text-slate-600 leading-relaxed text-sm mb-3">
+      Nilai mutlak menyatakan jarak suatu bilangan terhadap titik nol pada garis bilangan. Karena jarak tidak pernah bernilai negatif, nilai mutlak selalu bernilai positif atau nol.
+    </p>
+    <div class="flex flex-wrap gap-4 justify-center font-mono font-bold text-slate-800">
+      <span class="px-4 py-2 bg-slate-100 rounded-xl border border-slate-200">|-7| = 7</span>
+      <span class="px-4 py-2 bg-slate-100 rounded-xl border border-slate-200">|0| = 0</span>
+      <span class="px-4 py-2 bg-slate-100 rounded-xl border border-slate-200">|+7| = 7</span>
+    </div>
+  </div>
+</div>'),
+
+('2-garis-bilangan', 2, 'Garis Bilangan & Perbandingan', 'Aturan membandingkan bilangan bulat: semakin ke kanan semakin besar nilainya.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3">Prinsip Perbandingan</h3>
+    <div class="p-4 rounded-xl bg-blue-50 border-l-4 border-blue-600 text-blue-900 space-y-2 text-sm font-medium">
+      <p>• Semakin ke <strong>kanan</strong> posisi suatu bilangan, nilainya semakin <strong>besar</strong>.</p>
+      <p>• Semakin ke <strong>kiri</strong> posisi suatu bilangan, nilainya semakin <strong>kecil</strong>.</p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center font-mono">
+        <span class="text-emerald-700 font-bold text-xl">5 > -8</span>
+        <div class="text-xs text-slate-500 mt-1">5 lebih besar dari -8 (5 berada jauh di kanan -8)</div>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center font-mono">
+        <span class="text-red-700 font-bold text-xl">-10 < -2</span>
+        <div class="text-xs text-slate-500 mt-1">-10 lebih kecil dari -2 (-10 berada lebih ke kiri)</div>
+      </div>
+    </div>
+  </div>
+</div>'),
+
+('3-penjumlahan', 3, 'Operasi Penjumlahan Bilangan Bulat', 'Konsep menjumlahkan dua bilangan bulat bertanda sama maupun berbeda.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3">Aturan Penjumlahan</h3>
+    <div class="space-y-3 text-sm text-slate-700">
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+        <strong>1. Bertanda Sama:</strong> Jumlahkan kedua nilainya, tandanya mengikuti tanda bilangan tersebut.<br>
+        <span class="font-mono text-blue-700 font-bold">5 + 3 = 8</span> | <span class="font-mono text-red-700 font-bold">(-5) + (-3) = -8</span>
+      </div>
+      <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+        <strong>2. Bertanda Beda:</strong> Cari selisih angka besar dikurangi angka kecil, tandanya mengikuti bilangan dengan nilai mutlak terbesar.<br>
+        <span class="font-mono text-blue-700 font-bold">9 + (-4) = 5</span> | <span class="font-mono text-red-700 font-bold">(-9) + 4 = -5</span>
+      </div>
+    </div>
+  </div>
+</div>'),
+
+('4-sifat-penjumlahan', 4, 'Sifat-Sifat Penjumlahan', 'Mempelajari sifat komutatif, asosiatif, unsur identitas (0), dan invers tambah.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3">Sifat-Sifat Utama</h3>
+    <ul class="space-y-3 text-sm text-slate-700 list-disc list-inside">
+      <li><strong>Komutatif (Pertukaran):</strong> a + b = b + a</li>
+      <li><strong>Asosiatif (Pengelompokan):</strong> (a + b) + c = a + (b + c)</li>
+      <li><strong>Unsur Identitas:</strong> a + 0 = a</li>
+      <li><strong>Invers Tambah (Lawan):</strong> a + (-a) = 0</li>
+    </ul>
+  </div>
+</div>'),
+
+('5-pengurangan', 5, 'Operasi Pengurangan Bilangan Bulat', 'Memahami bahwa mengurangi sama dengan menjumlahkan dengan lawan bilangan.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3">Rumus Kunci Pengurangan</h3>
+    <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 font-mono text-center text-lg font-bold text-amber-900 mb-3">
+      a - b = a + (-b)<br>
+      a - (-b) = a + b
+    </div>
+    <p class="text-slate-600 text-sm">Contoh: 7 - (-3) = 7 + 3 = 10.</p>
+  </div>
+</div>'),
+
+('6-perkalian', 6, 'Operasi Perkalian Bilangan Bulat', 'Aturan perkalian tanda: (+)(+) = (+), (-)(-) = (+), (+)(-) = (-).', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3">Aturan Tanda Perkalian</h3>
+    <div class="grid grid-cols-2 gap-3 text-center font-mono font-bold text-sm">
+      <div class="p-3 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">(+) x (+) = (+)</div>
+      <div class="p-3 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">(-) x (-) = (+)</div>
+      <div class="p-3 rounded-lg bg-red-50 text-red-800 border border-red-200">(+) x (-) = (-)</div>
+      <div class="p-3 rounded-lg bg-red-50 text-red-800 border border-red-200">(-) x (+) = (-)</div>
+    </div>
+  </div>
+</div>'),
+
+('7-pembagian', 7, 'Operasi Pembagian Bilangan Bulat', 'Kebalikan dari perkalian dengan aturan tanda yang serupa.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3">Aturan Pembagian</h3>
+    <p class="text-slate-600 text-sm mb-3">Pembagian dua bilangan bertanda sama menghasilkan bilangan positif. Bertanda beda menghasilkan bilangan negatif.</p>
+    <div class="font-mono text-sm space-y-1 bg-slate-50 p-4 rounded-xl border border-slate-200">
+      <div>12 : 3 = 4</div>
+      <div>(-12) : (-3) = 4</div>
+      <div>(-12) : 3 = -4</div>
+    </div>
+  </div>
+</div>'),
+
+('8-operasi-campuran', 8, 'Operasi Campuran (KABATAKU)', 'Tingkat prioritas operasi hitung: Kurung, Kali & Bagi, Tambah & Kurang.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+      <i class="fa-solid fa-ranking-star text-amber-500"></i> Urutan Hierarki Operasi
+    </h3>
+    <ol class="space-y-2 text-sm text-slate-700 list-decimal list-inside font-semibold">
+      <li>Kerjakan tanda kurung <strong>(...)</strong> terlebih dahulu.</li>
+      <li>Kerjakan <strong>Perkalian (x)</strong> dan <strong>Pembagian (:)</strong> dari kiri ke kanan.</li>
+      <li>Kerjakan <strong>Penjumlahan (+)</strong> dan <strong>Pengurangan (-)</strong> dari kiri ke kanan.</li>
+    </ol>
+  </div>
+</div>'),
+
+('9-penerapan', 9, 'Penerapan di Kehidupan Nyata', 'Contoh penerapan bilangan bulat pada suhu udara, kedalaman laut, dan keuangan.', '<div class="space-y-6">
+  <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs">
+    <h3 class="text-xl font-bold text-slate-900 mb-3">Penerapan Nyata</h3>
+    <ul class="space-y-2 text-sm text-slate-700 list-disc list-inside">
+      <li><strong>Suhu:</strong> 5°C di bawah titik beku ditulis <strong>-5°C</strong>.</li>
+      <li><strong>Kedalaman Laut:</strong> 150 meter di bawah permukaan laut ditulis <strong>-150 m</strong>.</li>
+      <li><strong>Keuangan:</strong> Keuntungan ditulis positif, kerugian/utang ditulis negatif.</li>
+    </ul>
+  </div>
+</div>')
+ON CONFLICT (slug) DO UPDATE SET
+  judul = EXCLUDED.judul,
+  ringkasan = EXCLUDED.ringkasan,
+  konten = EXCLUDED.konten,
+  urutan = EXCLUDED.urutan;

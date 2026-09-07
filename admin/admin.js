@@ -17,12 +17,15 @@ import {
   updateQuestion,
   deleteQuestion,
   getAllMateri,
-  updateMateriContent
+  addMateri,
+  updateMateriContent,
+  deleteMateri
 } from '../js/supabase-client.js';
 
 let currentUser = null;
 let allQuestionsCache = [];
 let allStudentsProgressCache = [];
+let allMateriCache = [];
 let studentsDataTable = null;
 let progressDataTable = null;
 
@@ -668,33 +671,60 @@ async function loadMateriCMS() {
 
   try {
     const list = await getAllMateri();
-    if (list.length === 0) {
-      container.innerHTML = `<div class="p-6 bg-white rounded-xl text-center text-slate-400">Data materi kosong di Supabase.</div>`;
+    allMateriCache = list || [];
+
+    if (allMateriCache.length === 0) {
+      container.innerHTML = `
+        <div class="p-8 bg-white rounded-2xl border border-slate-200 text-center text-slate-400">
+          <i class="fa-solid fa-folder-open text-3xl mb-2 text-slate-300"></i>
+          <p class="text-sm font-semibold text-slate-600">Belum ada data materi di sistem.</p>
+          <p class="text-xs text-slate-400 mt-1">Klik tombol "Tambah Materi Baru" di atas untuk menambahkan submateri pertama.</p>
+        </div>
+      `;
       return;
     }
 
     let html = '';
-    list.forEach(m => {
+    allMateriCache.forEach(m => {
+      const isStatic = ['1-definisi', '2-garis-bilangan', '3-penjumlahan', '4-sifat-penjumlahan', '5-pengurangan', '6-perkalian', '7-pembagian', '8-operasi-campuran', '9-penerapan'].includes(m.slug);
+      const previewUrl = isStatic ? `../materi/${m.slug}.html` : `../materi/baca.html?slug=${encodeURIComponent(m.slug)}`;
+
       html += `
-        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm">
-          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-4 pb-3 border-b border-slate-100">
-            <div>
-              <span class="text-[11px] font-bold text-blue-600 uppercase tracking-widest">Submateri #${m.urutan}</span>
-              <h3 class="text-lg font-bold text-slate-900">${m.judul}</h3>
+        <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:border-blue-200 transition-all">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-slate-100">
+            <div class="flex items-start gap-3">
+              <div class="w-10 h-10 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center font-black text-sm flex-shrink-0">
+                #${m.urutan || 1}
+              </div>
+              <div>
+                <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(m.judul)}</h3>
+                <div class="flex items-center gap-2 mt-1">
+                  <span class="text-[11px] font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded">slug: ${escapeHtml(m.slug)}</span>
+                  ${m.konten ? `<span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-semibold border border-emerald-100"><i class="fa-solid fa-check mr-1"></i>Uraian Tersedia</span>` : ''}
+                </div>
+              </div>
             </div>
-            <button class="btn-save-materi px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-colors flex items-center gap-1.5 self-start" data-slug="${m.slug}">
-              <i class="fa-solid fa-floppy-disk"></i> Simpan Materi
-            </button>
+
+            <div class="flex items-center gap-2 self-start sm:self-auto">
+              <a href="${previewUrl}" target="_blank" class="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-xs rounded-xl border border-slate-200 transition-colors flex items-center gap-1.5" title="Buka Pratinjau Materi">
+                <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
+                <span class="hidden sm:inline">Pratinjau</span>
+              </a>
+              <button class="btn-edit-materi px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-xs rounded-xl border border-blue-200 transition-colors flex items-center gap-1.5" data-slug="${escapeHtml(m.slug)}">
+                <i class="fa-solid fa-pen-to-square text-[11px]"></i>
+                <span>Edit</span>
+              </button>
+              <button class="btn-delete-materi px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl border border-red-200 transition-colors flex items-center gap-1.5" data-slug="${escapeHtml(m.slug)}" data-judul="${escapeHtml(m.judul)}">
+                <i class="fa-solid fa-trash-can text-[11px]"></i>
+                <span>Hapus</span>
+              </button>
+            </div>
           </div>
 
-          <div class="space-y-3">
+          <div class="mt-4 space-y-2">
             <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Judul Submateri</label>
-              <input type="text" id="materi-title-${m.slug}" value="${m.judul}" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm font-medium">
-            </div>
-            <div>
-              <label class="block text-xs font-semibold text-slate-600 mb-1">Ringkasan Materi (Muncul di Halaman Siswa)</label>
-              <textarea id="materi-desc-${m.slug}" rows="3" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed">${m.ringkasan || ''}</textarea>
+              <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Ringkasan Materi:</span>
+              <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">${escapeHtml(m.ringkasan || 'Tidak ada ringkasan.')}</p>
             </div>
           </div>
         </div>
@@ -703,49 +733,79 @@ async function loadMateriCMS() {
 
     container.innerHTML = html;
 
-    // Pasang listener simpan materi
-    document.querySelectorAll('.btn-save-materi').forEach(btn => {
+    // Pasang listener Edit Materi
+    container.querySelectorAll('.btn-edit-materi').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const slug = btn.getAttribute('data-slug');
+        const materi = allMateriCache.find(m => m.slug === slug);
+        if (materi) {
+          openMateriModal(materi);
+        }
+      });
+    });
+
+    // Pasang listener Hapus Materi
+    container.querySelectorAll('.btn-delete-materi').forEach(btn => {
       btn.addEventListener('click', async () => {
         const slug = btn.getAttribute('data-slug');
-        const judul = document.getElementById(`materi-title-${slug}`).value.trim();
-        const ringkasan = document.getElementById(`materi-desc-${slug}`).value.trim();
+        const judul = btn.getAttribute('data-judul');
 
-        btn.disabled = true;
-        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+        let confirmed = false;
+        if (typeof Swal !== 'undefined') {
+          const res = await Swal.fire({
+            title: 'Hapus Submateri?',
+            text: `Apakah Anda yakin ingin menghapus materi "${judul}"? Tindakan ini akan menghapus materi dari platform belajar siswa.`,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#ef4444',
+            cancelButtonColor: '#64748b',
+            confirmButtonText: 'Ya, Hapus Materi',
+            cancelButtonText: 'Batal',
+            customClass: {
+              popup: 'rounded-2xl shadow-xl font-sans',
+              confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm',
+              cancelButton: 'px-5 py-2.5 rounded-xl font-semibold text-sm'
+            }
+          });
+          confirmed = res.isConfirmed;
+        } else {
+          confirmed = confirm(`Apakah Anda yakin ingin menghapus materi "${judul}"?`);
+        }
 
-        try {
-          await updateMateriContent(slug, { judul, ringkasan });
-          if (typeof Swal !== 'undefined') {
-            Swal.fire({
-              icon: 'success',
-              title: 'Materi Diperbarui!',
-              text: `Materi "${judul}" berhasil disimpan.`,
-              timer: 1800,
-              showConfirmButton: false
-            });
-          } else {
-            alert(`Materi "${judul}" berhasil diperbarui!`);
+        if (confirmed) {
+          try {
+            await deleteMateri(slug);
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                icon: 'success',
+                title: 'Materi Dihapus!',
+                text: `Materi "${judul}" berhasil dihapus.`,
+                timer: 1800,
+                showConfirmButton: false
+              });
+            } else {
+              alert(`Materi "${judul}" berhasil dihapus.`);
+            }
+            await loadMateriCMS();
+          } catch (e) {
+            if (typeof Swal !== 'undefined') {
+              Swal.fire({
+                icon: 'error',
+                title: 'Gagal Menghapus',
+                text: e.message || 'Terjadi kesalahan saat menghapus materi.',
+                confirmButtonColor: '#2563eb'
+              });
+            } else {
+              alert("Gagal menghapus materi: " + e.message);
+            }
           }
-        } catch (e) {
-          if (typeof Swal !== 'undefined') {
-            Swal.fire({
-              icon: 'error',
-              title: 'Gagal Menyimpan',
-              text: 'Gagal memperbarui materi: ' + e.message,
-              confirmButtonColor: '#2563eb'
-            });
-          } else {
-            alert("Gagal memperbarui materi: " + e.message);
-          }
-        } finally {
-          btn.disabled = false;
-          btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Materi`;
         }
       });
     });
 
   } catch (err) {
     console.error("Gagal load materi CMS:", err);
+    container.innerHTML = `<div class="p-6 bg-red-50 text-red-600 rounded-xl text-center text-sm">Gagal memuat materi: ${err.message}</div>`;
   }
 }
 
@@ -1223,6 +1283,119 @@ function setupEventListeners() {
     link.click();
     document.body.removeChild(link);
   });
+
+  // ==========================================================
+  // EVENT LISTENER MODAL MATERI (CMS)
+  // ==========================================================
+  const modalMateri = document.getElementById('modal-materi');
+  const formMateri = document.getElementById('form-materi');
+  const btnSaveMateri = document.getElementById('btn-save-materi');
+
+  document.getElementById('btn-open-add-materi-modal')?.addEventListener('click', () => {
+    openMateriModal(null);
+  });
+
+  document.getElementById('btn-close-materi-modal')?.addEventListener('click', () => {
+    modalMateri?.classList.add('hidden');
+  });
+
+  document.getElementById('btn-cancel-materi')?.addEventListener('click', () => {
+    modalMateri?.classList.add('hidden');
+  });
+
+  formMateri?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const id = document.getElementById('materi-id').value;
+    const existingSlug = document.getElementById('materi-slug').value;
+    const urutan = parseInt(document.getElementById('materi-urutan').value) || 1;
+    const judul = document.getElementById('materi-judul').value.trim();
+    const ringkasan = document.getElementById('materi-ringkasan').value.trim();
+    const konten = document.getElementById('materi-konten').value.trim();
+
+    if (!judul) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Judul Wajib Diisi',
+          text: 'Harap masukkan judul submateri pembelajaran.',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert("Judul materi wajib diisi!");
+      }
+      return;
+    }
+
+    btnSaveMateri.disabled = true;
+    btnSaveMateri.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+
+    try {
+      if (existingSlug || id) {
+        // Mode Edit Materi
+        await updateMateriContent(existingSlug || id, {
+          id: id || undefined,
+          slug: existingSlug || undefined,
+          urutan,
+          judul,
+          ringkasan,
+          konten
+        });
+
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Materi Diperbarui!',
+            text: `Perubahan pada "${judul}" berhasil disimpan ke sistem.`,
+            timer: 1800,
+            showConfirmButton: false
+          });
+        } else {
+          alert("Materi berhasil diperbarui!");
+        }
+      } else {
+        // Mode Tambah Materi Baru
+        const slug = judul.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+        await addMateri({
+          urutan,
+          judul,
+          slug,
+          ringkasan,
+          konten
+        });
+
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Materi Ditambahkan!',
+            text: `Submateri baru "${judul}" berhasil ditambahkan ke silabus siswa.`,
+            timer: 1800,
+            showConfirmButton: false
+          });
+        } else {
+          alert("Materi baru berhasil ditambahkan!");
+        }
+      }
+
+      modalMateri.classList.add('hidden');
+      await loadMateriCMS();
+
+    } catch (err) {
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: err.message || 'Terjadi kendala saat menyimpan data materi.',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert("Gagal menyimpan materi: " + err.message);
+      }
+    } finally {
+      btnSaveMateri.disabled = false;
+      btnSaveMateri.innerHTML = `<span>Simpan Materi</span> <i class="fa-solid fa-check"></i>`;
+    }
+  });
 }
 
 function openQuestionModal(q) {
@@ -1256,6 +1429,36 @@ function openQuestionModal(q) {
     form.reset();
     document.getElementById('q-id').value = '';
     document.getElementById('q-urutan').value = 1;
+  }
+
+  modal.classList.remove('hidden');
+}
+
+function openMateriModal(m) {
+  const modal = document.getElementById('modal-materi');
+  const title = document.getElementById('modal-materi-title');
+  const form = document.getElementById('form-materi');
+
+  if (m) {
+    title.innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Materi (${escapeHtml(m.judul)})`;
+    document.getElementById('materi-id').value = m.id || '';
+    document.getElementById('materi-slug').value = m.slug || '';
+    document.getElementById('materi-urutan').value = m.urutan || 1;
+    document.getElementById('materi-judul').value = m.judul || '';
+    document.getElementById('materi-ringkasan').value = m.ringkasan || '';
+    document.getElementById('materi-konten').value = m.konten || '';
+  } else {
+    title.innerHTML = `<i class="fa-solid fa-book-open text-blue-600"></i> Tambah Materi Baru`;
+    form.reset();
+    document.getElementById('materi-id').value = '';
+    document.getElementById('materi-slug').value = '';
+
+    // Hitung urutan berikutnya
+    let nextUrutan = 1;
+    if (allMateriCache && allMateriCache.length > 0) {
+      nextUrutan = Math.max(...allMateriCache.map(x => parseInt(x.urutan) || 0)) + 1;
+    }
+    document.getElementById('materi-urutan').value = nextUrutan;
   }
 
   modal.classList.remove('hidden');

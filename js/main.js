@@ -35,6 +35,11 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   // Set timeout kecil agar topbar layout selesai di-inject
   setTimeout(() => updateProfileUI(currentUser), 200);
+
+  // Responsif terhadap perpindahan halaman SPA
+  window.addEventListener('spa:navigated', () => {
+    updateProfileUI(currentUser);
+  });
 });
 
 function updateProfileUI(user) {

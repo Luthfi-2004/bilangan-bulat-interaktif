@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Belajar - Operasi Campuran Bilangan Bulat</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
+  <div id="page-container" class="max-w-4xl mx-auto space-y-6">
+    
+    <!-- Top Navigation Breadcrumb -->
+    <div class="flex items-center justify-between">
+      <a href="index.html" class="inline-flex items-center text-xs font-semibold text-slate-500 hover:text-blue-600 transition-colors">
+        <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Silabus Materi
+      </a>
+      <span id="materi-badge" class="text-xs font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full border border-blue-100">
+        Materi Pembelajaran
+      </span>
+    </div>
+
+    <!-- Header Section -->
+    <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+      <div class="flex items-start gap-4">
+        <div id="materi-number" class="w-12 h-12 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center font-black text-xl flex-shrink-0">
+          #
+        </div>
+        <div>
+          <h1 id="materi-title" class="text-2xl md:text-3xl font-extrabold text-slate-900 tracking-tight">
+            Memuat Materi...
+          </h1>
+          <p id="materi-summary" class="text-sm md:text-base text-slate-500 mt-2 leading-relaxed">
+            Menyiapkan bahan ajar dari sistem...
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Dynamic Content Area -->
+    <div id="materi-body" class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-400">
+        <i class="fa-solid fa-circle-notch fa-spin text-2xl text-blue-600 mb-3"></i>
+        <p class="text-sm font-medium">Memuat konten penjelasan materi...</p>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <div class="flex items-center justify-between pt-4 border-t border-slate-200">
+      <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-bold transition-all shadow-xs flex items-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> Semua Materi
+      </a>
+      <a href="../latihan.html" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2">
+        <span>Uji di Latihan Soal</span>
+        <i class="fa-solid fa-arrow-right"></i>
+      </a>
+    </div>
+
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script type="module">
+    import { getMateri } from '../js/supabase-client.js';
+
+    async function renderMateriDetail() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const slug = urlParams.get('slug');
+
+      const titleEl = document.getElementById('materi-title');
+      const summaryEl = document.getElementById('materi-summary');
+      const numberEl = document.getElementById('materi-number');
+      const badgeEl = document.getElementById('materi-badge');
+      const bodyEl = document.getElementById('materi-body');
+
+      if (!slug) {
+        if (titleEl) titleEl.textContent = "Materi Tidak Ditemukan";
+        if (summaryEl) summaryEl.textContent = "Parameter slug materi tidak disertakan pada tautan ini.";
+        if (bodyEl) bodyEl.innerHTML = `
+          <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center">
+            <a href="index.html" class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl">Kembali ke Daftar Materi</a>
+          </div>
+        `;
+        return;
+      }
+
+      try {
+        const item = await getMateri(slug);
+        if (!item) {
+          if (titleEl) titleEl.textContent = "Materi Belum Tersedia";
+          if (summaryEl) summaryEl.textContent = `Materi dengan slug "${slug}" belum dibuat atau telah dihapus oleh guru.`;
+          if (bodyEl) bodyEl.innerHTML = `
+            <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center">
+              <a href="index.html" class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl">Kembali ke Daftar Materi</a>
+            </div>
+          `;
+          return;
+        }
+
+        document.title = `${item.judul} - Operasi Campuran Bilangan Bulat`;
+        if (titleEl) titleEl.textContent = item.judul;
+        if (summaryEl) summaryEl.textContent = item.ringkasan || '';
+        if (numberEl) numberEl.textContent = item.urutan || '1';
+        if (badgeEl) badgeEl.textContent = `Submateri #${item.urutan || 1}`;
+
+        if (bodyEl) {
+          if (item.konten && item.konten.trim().length > 0) {
+            bodyEl.innerHTML = item.konten;
+          } else {
+            bodyEl.innerHTML = `
+              <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-500">
+                <p class="text-sm">Guru belum mengisi detail uraian lengkap untuk materi ini.</p>
+              </div>
+            `;
+          }
+        }
+
+      } catch (err) {
+        console.error("Gagal load detail materi:", err);
+        if (bodyEl) {
+          bodyEl.innerHTML = `
+            <div class="bg-red-50 text-red-700 p-6 rounded-2xl text-center text-sm font-semibold border border-red-200">
+              Gagal memuat detail materi. Silakan muat ulang halaman.
+            </div>
+          `;
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', renderMateriDetail);
+    window.addEventListener('spa:navigated', () => {
+      if (window.location.pathname.includes('/materi/baca.html')) {
+        renderMateriDetail();
+      }
+    });
+  </script>
+</body>
+</html>

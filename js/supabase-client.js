@@ -312,43 +312,399 @@ export async function deleteQuestion(id) {
 }
 
 // ----------------------------------------------------
-// KONTEN MATERI (MATERI CMS)
+// KONTEN MATERI (MATERI CMS - FULL CRUD DENGAN SYNC & FALLBACK)
 // ----------------------------------------------------
 
-export async function getMateri(slug) {
-  if (!supabase) return null;
-  const { data, error } = await supabase
-    .from('materi_content')
-    .select('*')
-    .eq('slug', slug)
-    .maybeSingle();
+export const DEFAULT_MATERI = [
+  {
+    id: 'mat_1',
+    slug: '1-definisi',
+    urutan: 1,
+    judul: 'Definisi Bilangan Bulat',
+    ringkasan: 'Mengenal bilangan bulat positif, negatif, dan nol beserta garis bilangannya.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-lightbulb text-amber-500"></i> Pengertian Bilangan Bulat
+        </h3>
+        <p class="text-slate-600 leading-relaxed text-base mb-4">
+          Bilangan bulat adalah himpunan bilangan utuh (bukan pecahan atau desimal) yang terdiri dari bilangan bulat positif, nol, dan bilangan bulat negatif.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div class="p-4 rounded-xl bg-red-50 border border-red-100 text-center">
+            <div class="text-xs font-bold uppercase tracking-wider text-red-600 mb-1">Bilangan Negatif</div>
+            <div class="font-mono text-lg font-bold text-red-700">..., -3, -2, -1</div>
+            <div class="text-xs text-slate-500 mt-1">Nilai lebih kecil dari nol</div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-100 border border-slate-200 text-center">
+            <div class="text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Bilangan Nol</div>
+            <div class="font-mono text-lg font-bold text-slate-900">0</div>
+            <div class="text-xs text-slate-500 mt-1">Bukan positif & bukan negatif</div>
+          </div>
+          <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-100 text-center">
+            <div class="text-xs font-bold uppercase tracking-wider text-emerald-600 mb-1">Bilangan Positif</div>
+            <div class="font-mono text-lg font-bold text-emerald-700">1, 2, 3, ...</div>
+            <div class="text-xs text-slate-500 mt-1">Nilai lebih besar dari nol</div>
+          </div>
+        </div>
+      </div>
 
-  if (error) return null;
-  return data;
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-arrows-left-right text-blue-600"></i> Garis Bilangan Interaktif
+        </h3>
+        <p class="text-slate-600 text-sm mb-4">Klik titik bilangan pada garis berikut untuk melihat posisi dan nilainya secara interaktif:</p>
+        <div id="number-line-container" class="my-6"></div>
+        <div id="nilai-mutlak-info" class="p-4 rounded-xl bg-blue-50 border border-blue-200 text-center font-medium text-blue-900">
+          Klik salah satu angka pada garis bilangan di atas untuk mengecek nilainya.
+        </div>
+      </div>
+
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-calculator text-indigo-600"></i> Nilai Mutlak |x|
+        </h3>
+        <p class="text-slate-600 leading-relaxed text-sm mb-3">
+          Nilai mutlak menyatakan jarak suatu bilangan terhadap titik nol pada garis bilangan. Karena jarak tidak pernah bernilai negatif, nilai mutlak selalu bernilai positif atau nol.
+        </p>
+        <div class="flex flex-wrap gap-4 justify-center font-mono font-bold text-slate-800">
+          <span class="px-4 py-2 bg-slate-100 rounded-xl border border-slate-200">|-7| = 7</span>
+          <span class="px-4 py-2 bg-slate-100 rounded-xl border border-slate-200">|0| = 0</span>
+          <span class="px-4 py-2 bg-slate-100 rounded-xl border border-slate-200">|+7| = 7</span>
+        </div>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_2',
+    slug: '2-garis-bilangan',
+    urutan: 2,
+    judul: 'Garis Bilangan & Perbandingan',
+    ringkasan: 'Aturan membandingkan bilangan bulat: semakin ke kanan semakin besar nilainya.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Prinsip Perbandingan</h3>
+        <div class="p-4 rounded-xl bg-blue-50 border-l-4 border-blue-600 text-blue-900 space-y-2 text-sm font-medium">
+          <p>• Semakin ke <strong>kanan</strong> posisi suatu bilangan, nilainya semakin <strong>besar</strong>.</p>
+          <p>• Semakin ke <strong>kiri</strong> posisi suatu bilangan, nilainya semakin <strong>kecil</strong>.</p>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-4">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center font-mono">
+            <span class="text-emerald-700 font-bold text-xl">5 > -8</span>
+            <div class="text-xs text-slate-500 mt-1">5 lebih besar dari -8 (5 berada jauh di sebelah kanan -8)</div>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200 text-center font-mono">
+            <span class="text-red-700 font-bold text-xl">-10 < -2</span>
+            <div class="text-xs text-slate-500 mt-1">-10 lebih kecil dari -2 (-10 berada lebih ke kiri)</div>
+          </div>
+        </div>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_3',
+    slug: '3-penjumlahan',
+    urutan: 3,
+    judul: 'Operasi Penjumlahan Bilangan Bulat',
+    ringkasan: 'Konsep menjumlahkan dua bilangan bulat bertanda sama maupun berbeda.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Aturan Penjumlahan</h3>
+        <div class="space-y-3 text-sm text-slate-700">
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <strong>1. Bertanda Sama:</strong> Jumlahkan kedua nilainya, tandanya mengikuti tanda bilangan tersebut.<br>
+            <span class="font-mono text-blue-700 font-bold">5 + 3 = 8</span> | <span class="font-mono text-red-700 font-bold">(-5) + (-3) = -8</span>
+          </div>
+          <div class="p-4 rounded-xl bg-slate-50 border border-slate-200">
+            <strong>2. Bertanda Beda:</strong> Cari selisih angka besar dikurangi angka kecil, tandanya mengikuti tanda bilangan dengan nilai mutlak terbesar.<br>
+            <span class="font-mono text-blue-700 font-bold">9 + (-4) = 5</span> | <span class="font-mono text-red-700 font-bold">(-9) + 4 = -5</span>
+          </div>
+        </div>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_4',
+    slug: '4-sifat-penjumlahan',
+    urutan: 4,
+    judul: 'Sifat-Sifat Penjumlahan',
+    ringkasan: 'Mempelajari sifat komutatif, asosiatif, unsur identitas (0), dan invers tambah.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Sifat-Sifat Utama</h3>
+        <ul class="space-y-3 text-sm text-slate-700 list-disc list-inside">
+          <li><strong>Komutatif (Pertukaran):</strong> a + b = b + a (Contoh: 4 + 7 = 7 + 4 = 11)</li>
+          <li><strong>Asosiatif (Pengelompokan):</strong> (a + b) + c = a + (b + c)</li>
+          <li><strong>Unsur Identitas:</strong> a + 0 = a (Bilangan berapapun ditambah 0 hasilnya tetap)</li>
+          <li><strong>Invers Tambah (Lawan):</strong> a + (-a) = 0</li>
+        </ul>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_5',
+    slug: '5-pengurangan',
+    urutan: 5,
+    judul: 'Operasi Pengurangan Bilangan Bulat',
+    ringkasan: 'Memahami bahwa mengurangi sama dengan menjumlahkan dengan lawan bilangan.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Rumus Kunci Pengurangan</h3>
+        <div class="p-4 rounded-xl bg-amber-50 border border-amber-200 font-mono text-center text-lg font-bold text-amber-900 mb-3">
+          a - b = a + (-b)<br>
+          a - (-b) = a + b
+        </div>
+        <p class="text-slate-600 text-sm">Contoh: 7 - (-3) = 7 + 3 = 10.</p>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_6',
+    slug: '6-perkalian',
+    urutan: 6,
+    judul: 'Operasi Perkalian Bilangan Bulat',
+    ringkasan: 'Aturan perkalian tanda: (+)(+) = (+), (-)(-) = (+), (+)(-) = (-).',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Aturan Tanda Perkalian</h3>
+        <div class="grid grid-cols-2 gap-3 text-center font-mono font-bold text-sm">
+          <div class="p-3 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">(+) x (+) = (+)</div>
+          <div class="p-3 rounded-lg bg-emerald-50 text-emerald-800 border border-emerald-200">(-) x (-) = (+)</div>
+          <div class="p-3 rounded-lg bg-red-50 text-red-800 border border-red-200">(+) x (-) = (-)</div>
+          <div class="p-3 rounded-lg bg-red-50 text-red-800 border border-red-200">(-) x (+) = (-)</div>
+        </div>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_7',
+    slug: '7-pembagian',
+    urutan: 7,
+    judul: 'Operasi Pembagian Bilangan Bulat',
+    ringkasan: 'Kebalikan dari perkalian dengan aturan tanda yang serupa.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Aturan Pembagian</h3>
+        <p class="text-slate-600 text-sm mb-3">Pembagian dua bilangan bertanda sama menghasilkan bilangan positif. Bertanda beda menghasilkan bilangan negatif.</p>
+        <div class="font-mono text-sm space-y-1 bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <div>12 : 3 = 4</div>
+          <div>(-12) : (-3) = 4</div>
+          <div>(-12) : 3 = -4</div>
+        </div>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_8',
+    slug: '8-operasi-campuran',
+    urutan: 8,
+    judul: 'Operasi Campuran (KABATAKU)',
+    ringkasan: 'Tingkat prioritas operasi hitung: Kurung, Kali & Bagi, Tambah & Kurang.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3 flex items-center gap-2">
+          <i class="fa-solid fa-ranking-star text-amber-500"></i> Urutan Hierarki Operasi
+        </h3>
+        <ol class="space-y-2 text-sm text-slate-700 list-decimal list-inside font-semibold">
+          <li>Kerjakan tanda kurung <strong>(...)</strong> terlebih dahulu.</li>
+          <li>Kerjakan <strong>Perkalian (x)</strong> dan <strong>Pembagian (:)</strong> dari kiri ke kanan.</li>
+          <li>Kerjakan <strong>Penjumlahan (+)</strong> dan <strong>Pengurangan (-)</strong> dari kiri ke kanan.</li>
+        </ol>
+      </div>
+    </div>`
+  },
+  {
+    id: 'mat_9',
+    slug: '9-penerapan',
+    urutan: 9,
+    judul: 'Penerapan di Kehidupan Nyata',
+    ringkasan: 'Contoh penerapan bilangan bulat pada suhu udara, kedalaman laut, dan keuangan.',
+    konten: `<div class="space-y-6">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs">
+        <h3 class="text-xl font-bold text-slate-900 mb-3">Penerapan Nyata</h3>
+        <ul class="space-y-2 text-sm text-slate-700 list-disc list-inside">
+          <li><strong>Suhu:</strong> 5°C di bawah titik beku ditulis <strong>-5°C</strong>.</li>
+          <li><strong>Kedalaman Laut:</strong> 150 meter di bawah permukaan laut ditulis <strong>-150 m</strong>.</li>
+          <li><strong>Keuangan:</strong> Keuntungan ditulis positif, kerugian/utang ditulis negatif.</li>
+        </ul>
+      </div>
+    </div>`
+  }
+];
+
+function getLocalMateriList() {
+  const custom = localStorage.getItem('math_custom_materi');
+  if (custom) {
+    try {
+      const parsed = JSON.parse(custom);
+      if (Array.isArray(parsed) && parsed.length > 0) return parsed;
+    } catch (_) {}
+  }
+  return DEFAULT_MATERI;
 }
 
+function saveLocalMateriList(list) {
+  try {
+    localStorage.setItem('math_custom_materi', JSON.stringify(list));
+  } catch (_) {}
+}
+
+/**
+ * Mengambil seluruh materi pembelajaran
+ */
 export async function getAllMateri() {
-  if (!supabase) return [];
-  const { data, error } = await supabase
-    .from('materi_content')
-    .select('*')
-    .order('urutan', { ascending: true });
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('materi_content')
+        .select('*')
+        .order('urutan', { ascending: true });
 
-  if (error) return [];
-  return data;
+      if (!error && data && data.length > 0) {
+        saveLocalMateriList(data);
+        return data;
+      }
+    } catch (e) {
+      console.warn("Supabase getAllMateri fallback:", e);
+    }
+  }
+
+  return getLocalMateriList();
 }
 
-export async function updateMateriContent(slug, contentData) {
-  if (!supabase) throw new Error("Database offline.");
-  const { data, error } = await supabase
-    .from('materi_content')
-    .update({ ...contentData, updated_at: new Date().toISOString() })
-    .eq('slug', slug)
-    .select()
-    .single();
+/**
+ * Mengambil materi spesifik berdasarkan slug
+ */
+export async function getMateri(slug) {
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('materi_content')
+        .select('*')
+        .eq('slug', slug)
+        .maybeSingle();
 
-  if (error) throw error;
-  return data;
+      if (!error && data) return data;
+    } catch (e) {
+      console.warn("Supabase getMateri fallback:", e);
+    }
+  }
+
+  const localList = getLocalMateriList();
+  return localList.find(m => m.slug === slug) || null;
+}
+
+/**
+ * Tambah Materi Baru (Guru / Admin)
+ */
+export async function addMateri(materiData) {
+  const id = materiData.id || ('mat_' + Date.now().toString(36));
+  const slug = materiData.slug || (materiData.judul.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
+  const payload = {
+    ...materiData,
+    id,
+    slug,
+    urutan: parseInt(materiData.urutan) || 1,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString()
+  };
+
+  // 1. Simpan ke database Supabase jika online
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from('materi_content')
+        .insert([payload])
+        .select()
+        .single();
+
+      if (!error && data) {
+        // Sync ke local
+        const list = getLocalMateriList();
+        list.push(data);
+        list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
+        saveLocalMateriList(list);
+        return data;
+      }
+    } catch (err) {
+      console.warn("Insert materi to supabase warning:", err);
+    }
+  }
+
+  // 2. Simpan ke local cache fallback
+  const list = getLocalMateriList();
+  list.push(payload);
+  list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
+  saveLocalMateriList(list);
+  return payload;
+}
+
+/**
+ * Update Materi (Guru / Admin)
+ */
+export async function updateMateriContent(idOrSlug, contentData) {
+  const updatedPayload = {
+    ...contentData,
+    urutan: parseInt(contentData.urutan) || contentData.urutan,
+    updated_at: new Date().toISOString()
+  };
+
+  // 1. Coba update di Supabase
+  if (supabase) {
+    try {
+      // Coba match berdasarkan slug atau id
+      let query = supabase.from('materi_content').update(updatedPayload);
+      if (contentData.id) {
+        query = query.eq('id', contentData.id);
+      } else {
+        query = query.eq('slug', idOrSlug);
+      }
+      const { data, error } = await query.select().single();
+      if (!error && data) {
+        // Sync ke local
+        const list = getLocalMateriList().map(m => (m.slug === idOrSlug || m.id === contentData.id) ? { ...m, ...data } : m);
+        list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
+        saveLocalMateriList(list);
+        return data;
+      }
+    } catch (err) {
+      console.warn("Update materi supabase warning:", err);
+    }
+  }
+
+  // 2. Update di local storage
+  const list = getLocalMateriList();
+  const idx = list.findIndex(m => m.slug === idOrSlug || (contentData.id && m.id === contentData.id));
+  if (idx !== -1) {
+    list[idx] = { ...list[idx], ...updatedPayload };
+  } else {
+    list.push({ slug: idOrSlug, ...updatedPayload });
+  }
+  list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
+  saveLocalMateriList(list);
+  return list[idx] || updatedPayload;
+}
+
+/**
+ * Hapus Materi (Guru / Admin)
+ */
+export async function deleteMateri(idOrSlug) {
+  // 1. Hapus dari Supabase jika ada
+  if (supabase) {
+    try {
+      await supabase
+        .from('materi_content')
+        .delete()
+        .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`);
+    } catch (err) {
+      console.warn("Delete materi supabase warning:", err);
+    }
+  }
+
+  // 2. Hapus dari local storage
+  const list = getLocalMateriList().filter(m => m.id !== idOrSlug && m.slug !== idOrSlug);
+  saveLocalMateriList(list);
+  return true;
 }
 
 // ----------------------------------------------------
