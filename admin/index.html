@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel Guru - BilBul Interaktif</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
+</head>
+<body data-no-layout="true" class="bg-slate-50 text-slate-800 font-sans antialiased">
+
+  <div class="flex h-screen overflow-hidden">
+    
+    <!-- ==========================================================
+         SIDEBAR ADMIN
+         ========================================================== -->
+    <aside class="w-64 bg-slate-900 text-white flex flex-col flex-shrink-0 border-r border-slate-800">
+      
+      <!-- Brand -->
+      <div class="h-20 flex items-center px-6 border-b border-slate-800 gap-3">
+        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-lg text-white shadow-md shadow-blue-500/20">
+          <i class="fa-solid fa-chalkboard-user"></i>
+        </div>
+        <div>
+          <span class="font-extrabold text-base tracking-tight text-white block">Guru Panel</span>
+          <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">BilBul Matematika</span>
+        </div>
+      </div>
+
+      <!-- Realtime Status Indicator -->
+      <div class="px-6 py-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between text-xs">
+        <span class="text-slate-400 flex items-center gap-2">
+          <span class="relative flex h-2.5 w-2.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+          </span>
+          Live Realtime
+        </span>
+        <span class="text-[11px] font-semibold text-emerald-400">Aktif</span>
+      </div>
+
+      <!-- Nav Items -->
+      <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
+        <button id="nav-dashboard" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-blue-600 text-white shadow-sm">
+          <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+          <span>Dashboard</span>
+        </button>
+
+        <button id="nav-students" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-user-graduate w-5 text-center"></i>
+          <span>Kelola Siswa</span>
+        </button>
+
+        <button id="nav-progress" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-bolt w-5 text-center"></i>
+          <span>Progress Siswa (Live)</span>
+        </button>
+
+        <button id="nav-questions" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-database w-5 text-center"></i>
+          <span>Bank Soal (CMS)</span>
+        </button>
+
+        <button id="nav-materi" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
+          <i class="fa-solid fa-book-open w-5 text-center"></i>
+          <span>Kelola Materi</span>
+        </button>
+      </nav>
+
+      <!-- User Profile & Sign Out -->
+      <div class="p-4 border-t border-slate-800 bg-slate-900/90">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-9 h-9 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">
+            <i class="fa-solid fa-user-tie"></i>
+          </div>
+          <div class="overflow-hidden">
+            <div id="admin-user-name" class="font-bold text-sm text-white truncate">Guru Matematika</div>
+            <div id="admin-user-email" class="text-xs text-slate-400 truncate">guru@sekolah.sch.id</div>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <a href="../dashboard.html" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold text-center transition-colors">
+            <i class="fa-solid fa-eye mr-1"></i> Preview
+          </a>
+          <button id="btn-admin-logout" class="px-2 py-1.5 bg-red-500/20 hover:bg-red-500/30 text-red-400 rounded-lg text-xs font-semibold text-center transition-colors">
+            <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
+          </button>
+        </div>
+      </div>
+
+    </aside>
+
+    <!-- ==========================================================
+         MAIN VIEWPORT
+         ========================================================== -->
+    <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
+      
+      <!-- Topbar Header -->
+      <header class="h-20 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between flex-shrink-0">
+        <div>
+          <h1 id="page-title" class="text-2xl font-black text-slate-900 tracking-tight">
+            Dashboard Guru
+          </h1>
+          <p id="page-subtitle" class="text-xs font-medium text-slate-500">
+            Ringkasan aktivitas kelas dan pemantauan pembelajaran mandiri siswa
+          </p>
+        </div>
+        
+        <div class="flex items-center gap-4">
+          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-xl text-xs text-slate-600 font-medium">
+            <i class="fa-solid fa-calendar-days text-slate-400"></i>
+            <span id="current-date-display">Senin, 7 September 2026</span>
+          </div>
+          <button id="btn-refresh-data" class="px-3.5 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 font-semibold text-xs rounded-xl border border-blue-200 transition-colors flex items-center gap-1.5">
+            <i class="fa-solid fa-rotate"></i> Segarkan Data
+          </button>
+        </div>
+      </header>
+
+      <!-- Dynamic Content Body -->
+      <main class="flex-1 overflow-y-auto p-6 md:p-8">
+        
+        <!-- ==========================================================
+             TAB 1: DASHBOARD RINGKASAN
+             ========================================================== -->
+        <section id="section-dashboard" class="space-y-8">
+          <!-- Metric Stat Cards -->
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Siswa Terdaftar</span>
+                <div class="text-3xl font-black text-slate-900 mt-1" id="stat-total-students">0</div>
+                <div class="text-xs text-blue-600 font-semibold mt-1"><i class="fa-solid fa-circle-check mr-1"></i>Akun Aktif</div>
+              </div>
+              <div class="w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-users"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Rata-Rata Progress</span>
+                <div class="text-3xl font-black text-slate-900 mt-1" id="stat-avg-progress">0%</div>
+                <div class="text-xs text-emerald-600 font-semibold mt-1"><i class="fa-solid fa-arrow-trend-up mr-1"></i>Penguasaan Materi</div>
+              </div>
+              <div class="w-14 h-14 rounded-2xl bg-emerald-50 text-emerald-600 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-chart-line"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Rata-Rata Kuis</span>
+                <div class="text-3xl font-black text-slate-900 mt-1" id="stat-avg-quiz">0</div>
+                <div class="text-xs text-indigo-600 font-semibold mt-1"><i class="fa-solid fa-star mr-1"></i>Skor Evaluasi</div>
+              </div>
+              <div class="w-14 h-14 rounded-2xl bg-indigo-50 text-indigo-600 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-award"></i>
+              </div>
+            </div>
+
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex items-center justify-between">
+              <div>
+                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Bank Soal Aktif</span>
+                <div class="text-3xl font-black text-slate-900 mt-1" id="stat-total-questions">0</div>
+                <div class="text-xs text-amber-600 font-semibold mt-1"><i class="fa-solid fa-database mr-1"></i>Dinamis di Cloud</div>
+              </div>
+              <div class="w-14 h-14 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center text-2xl">
+                <i class="fa-solid fa-folder-open"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Quick Action & Recent Activity -->
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Quick Actions -->
+            <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col justify-between">
+              <div>
+                <h3 class="font-bold text-slate-900 text-base mb-4 flex items-center gap-2">
+                  <i class="fa-solid fa-bolt text-blue-600"></i> Aksi Cepat Guru
+                </h3>
+                <div class="space-y-3">
+                  <button id="btn-quick-add-student" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-blue-500 hover:bg-blue-50/50 transition-all flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-blue-100 text-blue-600 flex items-center justify-center flex-shrink-0">
+                      <i class="fa-solid fa-user-plus"></i>
+                    </div>
+                    <div>
+                      <div class="font-bold text-xs text-slate-800">Daftarkan Siswa Baru</div>
+                      <div class="text-[11px] text-slate-500">Buatkan kredensial login untuk siswa</div>
+                    </div>
+                  </button>
+
+                  <button id="btn-quick-add-question" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-indigo-500 hover:bg-indigo-50/50 transition-all flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-indigo-100 text-indigo-600 flex items-center justify-center flex-shrink-0">
+                      <i class="fa-solid fa-plus"></i>
+                    </div>
+                    <div>
+                      <div class="font-bold text-xs text-slate-800">Tambah Soal Baru</div>
+                      <div class="text-[11px] text-slate-500">Input soal tes awal, latihan, atau kuis</div>
+                    </div>
+                  </button>
+
+                  <button id="btn-quick-view-progress" class="w-full text-left p-3.5 rounded-xl border border-slate-200 hover:border-emerald-500 hover:bg-emerald-50/50 transition-all flex items-center gap-3">
+                    <div class="w-9 h-9 rounded-lg bg-emerald-100 text-emerald-600 flex items-center justify-center flex-shrink-0">
+                      <i class="fa-solid fa-satellite-dish"></i>
+                    </div>
+                    <div>
+                      <div class="font-bold text-xs text-slate-800">Monitor Realtime Live</div>
+                      <div class="text-[11px] text-slate-500">Lihat nilai siswa yang sedang mengerjakan</div>
+                    </div>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Teacher Note -->
+              <div class="mt-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-xs text-amber-800 leading-relaxed">
+                <i class="fa-solid fa-circle-info text-amber-600 mr-1"></i>
+                <strong>Perhatian:</strong> Siswa hanya bisa login dengan akun yang didaftarkan oleh Guru lewat panel ini.
+              </div>
+            </div>
+
+            <!-- Recent Activity Live Feed -->
+            <div class="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col">
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+                  <i class="fa-solid fa-clock-rotate-left text-indigo-600"></i> Aktivitas Siswa Terbaru
+                </h3>
+                <span class="text-xs font-semibold text-slate-400">Pembaruan Otomatis</span>
+              </div>
+              
+              <div class="flex-1 overflow-y-auto max-h-80 divide-y divide-slate-100" id="recent-activity-list">
+                <div class="py-12 text-center text-slate-400 text-sm">
+                  <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-blue-500"></i>
+                  <p>Memuat aktivitas kelas...</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ==========================================================
+             TAB 2: KELOLA SISWA
+             ========================================================== -->
+        <section id="section-students" class="hidden space-y-6">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900">Daftar Akun Siswa</h2>
+              <p class="text-xs text-slate-500">Semua akun siswa yang telah Anda buatkan kredensialnya</p>
+            </div>
+            <button id="btn-open-add-student-modal" class="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow transition-all flex items-center gap-2">
+              <i class="fa-solid fa-user-plus"></i> Tambah Siswa Baru
+            </button>
+          </div>
+
+          <!-- Students Table -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-slate-600">
+                <thead class="bg-slate-50 text-slate-700 font-bold uppercase text-xs border-b border-slate-200">
+                  <tr>
+                    <th class="px-6 py-4">No</th>
+                    <th class="px-6 py-4">Nama Siswa</th>
+                    <th class="px-6 py-4">Email Login</th>
+                    <th class="px-6 py-4">Tanggal Dibuat</th>
+                    <th class="px-6 py-4">Role</th>
+                    <th class="px-6 py-4 text-center">Aksi</th>
+                  </tr>
+                </thead>
+                <tbody id="students-table-body" class="divide-y divide-slate-100">
+                  <tr>
+                    <td colspan="6" class="px-6 py-10 text-center text-slate-400">
+                      Memuat daftar siswa...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ==========================================================
+             TAB 3: PROGRESS SISWA (REALTIME)
+             ========================================================== -->
+        <section id="section-progress" class="hidden space-y-6">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div>
+              <div class="flex items-center gap-2">
+                <h2 class="text-lg font-bold text-slate-900">Rekap Nilai & Progress Siswa</h2>
+                <span class="px-2.5 py-0.5 rounded-full bg-emerald-50 text-emerald-600 text-xs font-bold border border-emerald-200 flex items-center gap-1">
+                  <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span> Realtime
+                </span>
+              </div>
+              <p class="text-xs text-slate-500">Tabel diperbarui otomatis detik demi detik saat siswa menyelesaikan tes atau kuis</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <input type="text" id="search-student-progress" placeholder="Cari nama siswa..." class="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs w-52 focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <button id="btn-export-csv" class="px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 font-semibold text-xs rounded-xl transition-colors flex items-center gap-1.5">
+                <i class="fa-solid fa-file-excel text-emerald-600"></i> Ekspor CSV
+              </button>
+            </div>
+          </div>
+
+          <!-- Realtime Progress Table -->
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+            <div class="overflow-x-auto">
+              <table class="w-full text-left text-sm text-slate-600">
+                <thead class="bg-slate-50 text-slate-700 font-bold uppercase text-xs border-b border-slate-200">
+                  <tr>
+                    <th class="px-6 py-4">Nama Siswa</th>
+                    <th class="px-6 py-4 text-center">Tes Awal</th>
+                    <th class="px-6 py-4 text-center">Latihan Dasar</th>
+                    <th class="px-6 py-4 text-center">Latihan Campuran</th>
+                    <th class="px-6 py-4 text-center">Kuis Akhir</th>
+                    <th class="px-6 py-4 text-center">Penguasaan Materi</th>
+                    <th class="px-6 py-4 text-center">Lencana</th>
+                  </tr>
+                </thead>
+                <tbody id="progress-table-body" class="divide-y divide-slate-100">
+                  <tr>
+                    <td colspan="7" class="px-6 py-10 text-center text-slate-400">
+                      Memuat progres siswa...
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ==========================================================
+             TAB 4: KELOLA SOAL (CMS BANK SOAL)
+             ========================================================== -->
+        <section id="section-questions" class="hidden space-y-6">
+          
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <div>
+              <h2 class="text-lg font-bold text-slate-900">Bank Soal Dinamis (CMS)</h2>
+              <p class="text-xs text-slate-500">Tambah, ubah, atau sesuaikan soal yang muncul di ruang belajar siswa</p>
+            </div>
+
+            <div class="flex flex-wrap items-center gap-2">
+              <select id="filter-question-type" class="px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold text-slate-700">
+                <option value="all">Semua Kategori</option>
+                <option value="tes_awal">Tes Awal</option>
+                <option value="latihan_dasar">Latihan Dasar</option>
+                <option value="latihan_campuran">Latihan Campuran</option>
+                <option value="soal_cerita">Soal Cerita</option>
+                <option value="kuis">Kuis Akhir</option>
+              </select>
+
+              <button id="btn-open-add-question-modal" class="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white font-bold text-xs rounded-xl shadow transition-all flex items-center gap-1.5">
+                <i class="fa-solid fa-plus"></i> Tambah Soal Baru
+              </button>
+            </div>
+          </div>
+
+          <!-- Questions List Grid -->
+          <div id="questions-list-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="col-span-full py-12 text-center text-slate-400">
+              Memuat data soal dari Supabase...
+            </div>
+          </div>
+
+        </section>
+
+        <!-- ==========================================================
+             TAB 5: KELOLA MATERI (CMS MATERI)
+             ========================================================== -->
+        <section id="section-materi" class="hidden space-y-6">
+          
+          <div class="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+            <h2 class="text-lg font-bold text-slate-900">Kelola Uraian & Ringkasan Materi</h2>
+            <p class="text-xs text-slate-500 mt-1">Ubah judul atau ringkasan penjelasan submateri di platform siswa</p>
+          </div>
+
+          <div id="materi-cms-container" class="space-y-4">
+            <div class="py-10 text-center text-slate-400">Memuat materi...</div>
+          </div>
+
+        </section>
+
+      </main>
+
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       MODAL: TAMBAH SISWA BARU
+       ========================================================== -->
+  <div id="modal-add-student" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-user-plus text-blue-600"></i> Buat Akun Siswa Baru
+        </h3>
+        <button id="btn-close-student-modal" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="form-create-student" class="space-y-4">
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Nama Siswa</label>
+          <input type="text" id="new-student-name" required placeholder="Contoh: Ahmad Rizki" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Email Siswa</label>
+          <input type="email" id="new-student-email" required placeholder="rizki@kelas7.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+          <span class="text-[11px] text-slate-400">Gunakan format email bebas (misal: nama@kelas7.com).</span>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Kata Sandi Awal</label>
+          <div class="flex gap-2">
+            <input type="text" id="new-student-password" required value="siswa123" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <button type="button" id="btn-gen-pass" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl whitespace-nowrap">
+              Acak
+            </button>
+          </div>
+          <span class="text-[11px] text-slate-400">Minimal 6 karakter. Berikan sandi ini kepada siswa.</span>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" id="btn-submit-student" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow transition-colors flex items-center justify-center gap-2">
+            <span>Daftarkan Siswa</span>
+            <i class="fa-solid fa-check"></i>
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================
+       MODAL: TAMBAH / EDIT SOAL (CMS)
+       ========================================================== -->
+  <div id="modal-question" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
+    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+        <h3 id="modal-question-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
+          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Tambah Soal Baru
+        </h3>
+        <button id="btn-close-question-modal" class="text-slate-400 hover:text-slate-600">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="form-question" class="space-y-4">
+        <input type="hidden" id="q-id">
+
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Kategori Soal</label>
+            <select id="q-jenis" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
+              <option value="tes_awal">Tes Awal</option>
+              <option value="latihan_dasar">Latihan Dasar</option>
+              <option value="latihan_campuran">Latihan Campuran</option>
+              <option value="soal_cerita">Soal Cerita</option>
+              <option value="kuis">Kuis Akhir</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Judul / Topik</label>
+            <input type="text" id="q-judul" placeholder="Contoh: Penjumlahan" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Teks Pertanyaan</label>
+          <textarea id="q-pertanyaan" required rows="2" placeholder="Tuliskan pertanyaan di sini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+        </div>
+
+        <!-- Pilihan Jawaban (Untuk Pilihan Ganda) -->
+        <div id="q-choices-container">
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Pilihan Jawaban (A, B, C, D)</label>
+          <div class="grid grid-cols-2 gap-2">
+            <input type="text" id="q-opt-0" placeholder="Pilihan A" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm">
+            <input type="text" id="q-opt-1" placeholder="Pilihan B" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm">
+            <input type="text" id="q-opt-2" placeholder="Pilihan C" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm">
+            <input type="text" id="q-opt-3" placeholder="Pilihan D" class="px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg text-sm">
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Jawaban Benar</label>
+            <input type="text" id="q-jawaban-benar" required placeholder="Ketik teks jawaban yang benar persis" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold text-emerald-700">
+          </div>
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Urutan Tampil</label>
+            <input type="number" id="q-urutan" value="1" min="1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Pembahasan / Langkah Penyelesaian</label>
+          <textarea id="q-pembahasan" rows="2" placeholder="Jelaskan alasan atau langkah hitungnya..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+        </div>
+
+        <div class="pt-2 flex justify-end gap-3">
+          <button type="button" id="btn-cancel-q" class="px-4 py-2 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold">
+            Batal
+          </button>
+          <button type="submit" id="btn-save-q" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow">
+            Simpan Soal
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Admin JS Engine -->
+  <script type="module" src="admin.js"></script>
+
+</body>
+</html>

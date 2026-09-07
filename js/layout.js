@@ -1,4 +1,12 @@
 document.addEventListener('DOMContentLoaded', async () => {
+  // Lewati jika halaman menandai data-no-layout="true", atau halaman admin, login, dan landing page index.html
+  if (document.body.dataset.noLayout === 'true' || 
+      document.getElementById('no-app-layout') ||
+      window.location.pathname.includes('/admin/') ||
+      window.location.pathname.endsWith('/login.html')) {
+    return;
+  }
+
   // 1. Set up the basic layout shell if not present
   if (!document.getElementById('app-layout')) {
     const originalContent = document.body.innerHTML;

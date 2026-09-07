@@ -42,14 +42,22 @@
   <script src="js/layout.js"></script>
   <script type="module" src="js/main.js"></script>
   <script type="module">
-    import { SOAL_TES_AWAL } from './js/soal-data.js';
+    import { getQuestions } from './js/supabase-client.js';
     import { QuizEngine } from './js/quiz-engine.js';
     
-    window.mulaiTes = function() {
+    window.mulaiTes = async function() {
+      const btn = document.querySelector('#intro-container button');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = `<i class="fa-solid fa-spinner fa-spin mr-2"></i> Memuat Soal...`;
+      }
+
+      const questions = await getQuestions('tes_awal');
+      
       document.getElementById('intro-container').style.display = 'none';
       document.getElementById('quiz-container').style.display = 'block';
       
-      new QuizEngine('quiz-container', SOAL_TES_AWAL, 'tes_awal');
+      new QuizEngine('quiz-container', questions, 'tes_awal');
     };
 
     document.addEventListener('DOMContentLoaded', () => {
