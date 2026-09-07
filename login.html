@@ -117,28 +117,11 @@
         </button>
       </form>
 
-      <!-- Informasi Akun Bawaan Guru & Siswa -->
-      <div class="mt-8 pt-6 border-t border-slate-100 space-y-3">
-        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600">
-          <div class="font-bold text-slate-800 flex items-center justify-between mb-1">
-            <span class="flex items-center gap-1.5"><i class="fa-solid fa-chalkboard-user text-blue-600"></i> Akun Guru / Admin:</span>
-            <button type="button" id="btn-autofill-guru" class="text-[11px] text-blue-600 font-semibold hover:underline">
-              Gunakan Akun Ini
-            </button>
-          </div>
-          <div class="font-mono text-[11px] text-slate-500">
-            Email: <strong class="text-slate-700">guru@bilbul.sch.id</strong> | Sandi: <strong class="text-slate-700">guru123</strong>
-          </div>
-        </div>
-
-        <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100 text-xs text-blue-800">
-          <div class="font-bold flex items-center gap-1.5 mb-0.5">
-            <i class="fa-solid fa-user-graduate text-blue-600"></i> Akun Siswa:
-          </div>
-          <p class="text-[11px] text-blue-700 leading-relaxed">
-            Didaftarkan langsung oleh Guru melalui Admin Panel. Silakan hubungi Guru kelas untuk memperoleh email & kata sandi.
-          </p>
-        </div>
+      <!-- Catatan Siswa Sederhana -->
+      <div class="mt-8 pt-4 border-t border-slate-100 text-center">
+        <p class="text-xs text-slate-400">
+          Belum memiliki akun? Silakan hubungi Guru Matematika kelasmu.
+        </p>
       </div>
 
     </div>
@@ -162,14 +145,6 @@
     const errorMessage = document.getElementById('error-message');
     const successAlert = document.getElementById('success-alert');
     const successMessage = document.getElementById('success-message');
-    const btnAutofillGuru = document.getElementById('btn-autofill-guru');
-
-    // Tombol 1-klik isi akun guru
-    btnAutofillGuru?.addEventListener('click', () => {
-      emailInput.value = 'guru@bilbul.sch.id';
-      passwordInput.value = 'guru123';
-      emailInput.focus();
-    });
 
     // Toggle Password Visibility
     const togglePasswordBtn = document.getElementById('toggle-password');
