@@ -68,6 +68,21 @@
         </div>
       </div>
 
+      <!-- Info Alert untuk Guru: Akun Bawaan Sudah Dibuatkan -->
+      <div id="guru-info-banner" class="hidden mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed flex items-start gap-3">
+        <i class="fa-solid fa-key text-amber-600 text-base mt-0.5 flex-shrink-0"></i>
+        <div class="flex-1">
+          <strong class="text-amber-900 block font-bold text-sm">Akun Guru Siap Pakai:</strong>
+          <div class="mt-1.5 space-y-1 bg-white/70 p-2.5 rounded-lg border border-amber-200 font-mono text-xs">
+            <div>Email: <strong class="text-blue-700 select-all">guru@bilbul.sch.id</strong></div>
+            <div>Password: <strong class="text-blue-700 select-all">guru123</strong></div>
+          </div>
+          <p class="text-[11px] text-amber-700 mt-1.5">
+            <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Form di bawah otomatis terisi. Cukup klik tombol <strong>"Masuk ke Admin Panel Guru"</strong>.
+          </p>
+        </div>
+      </div>
+
       <!-- Alert Error Message -->
       <div id="error-alert" class="hidden mb-6 p-4 rounded-xl bg-red-50 border border-red-200 text-red-700 text-xs leading-relaxed flex items-start gap-2">
         <i class="fa-solid fa-triangle-exclamation text-red-600 text-sm mt-0.5 flex-shrink-0"></i>
@@ -211,14 +226,19 @@
     const successAlert = document.getElementById('success-alert');
     const successMessage = document.getElementById('success-message');
 
+    const guruInfoBanner = document.getElementById('guru-info-banner');
+
     // Toggle Tab Siswa / Guru
     tabSiswa.addEventListener('click', () => {
       currentRole = 'siswa';
       tabSiswa.className = 'py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all text-center flex items-center justify-center gap-2';
       tabGuru.className = 'py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-2';
       siswaInfoBanner.classList.remove('hidden');
+      guruInfoBanner.classList.add('hidden');
       guruRegisterBox.classList.add('hidden');
       btnText.textContent = 'Masuk ke Ruang Belajar';
+      emailInput.value = '';
+      passwordInput.value = '';
     });
 
     tabGuru.addEventListener('click', () => {
@@ -226,8 +246,12 @@
       tabGuru.className = 'py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all text-center flex items-center justify-center gap-2';
       tabSiswa.className = 'py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-2';
       siswaInfoBanner.classList.add('hidden');
+      guruInfoBanner.classList.remove('hidden');
       guruRegisterBox.classList.remove('hidden');
       btnText.textContent = 'Masuk ke Admin Panel Guru';
+      // Otomatis isikan akun guru bawaan
+      emailInput.value = 'guru@bilbul.sch.id';
+      passwordInput.value = 'guru123';
     });
 
     // Toggle Password Visibility

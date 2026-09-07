@@ -4,8 +4,9 @@
 -- Materi CMS, Realtime Subscriptions, dan Row Level Security
 -- ==========================================================
 
--- Aktifkan ekstensi UUID
+-- Aktifkan ekstensi UUID & pgcrypto
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
 -- 1. TABEL: users_metadata (Profil Pengguna & Role)
 -- Terhubung langsung dengan auth.users Supabase
@@ -257,3 +258,63 @@ VALUES
 ('MAT03', 'sifat-operasi', 'Sifat-Sifat Operasi Hitung', 'Kuasai sifat komutatif, asosiatif, distributif, elemen identitas, dan invers.', 3, '<p>Operasi hitung bilangan bulat memiliki beberapa sifat penting seperti komutatif dan distributif...</p>'),
 ('MAT04', 'operasi-campuran', 'Operasi Campuran (KABATAKU)', 'Aturan tingkatan operasi: tanda kurung, kali/bagi dari kiri, lalu tambah/kurang.', 4, '<p>Dalam operasi campuran, dahulukan tanda kurung, kemudian perkalian dan pembagian, lalu penjumlahan dan pengurangan...</p>')
 ON CONFLICT (id) DO NOTHING;
+
+-- ==========================================================
+-- SEED DATA: AKUN GURU BAWAAN (DEFAULT TEACHER ACCOUNT)
+-- Email: guru@bilbul.sch.id
+-- Password: guru123
+-- ==========================================================
+DO $$
+DECLARE
+  guru_uuid UUID := 'a0000000-0000-0000-0000-000000000001'::uuid;
+BEGIN
+  IF NOT EXISTS (SELECT 1 FROM auth.users WHERE email = 'guru@bilbul.sch.id') THEN
+    INSERT INTO auth.users (
+      instance_id,
+      id,
+      aud,
+      role,
+      email,
+      encrypted_password,
+      email_confirmed_at,
+      raw_app_meta_data,
+      raw_user_meta_data,
+      created_at,
+      updated_at,
+      confirmation_token,
+      recovery_token,
+      email_change_token_new,
+      email_change
+    ) VALUES (
+      '00000000-0000-0000-0000-000000000000',
+      guru_uuid,
+      'authenticated',
+      'authenticated',
+      'guru@bilbul.sch.id',
+      crypt('guru123', gen_salt('bf')),
+      NOW(),
+      '{"provider":"email","providers":["email"]}'::jsonb,
+      '{"name":"Bapak/Ibu Guru Matematika","role":"guru"}'::jsonb,
+      NOW(),
+      NOW(),
+      '',
+      '',
+      '',
+      ''
+    );
+
+    INSERT INTO public.users_metadata (
+      id,
+      email,
+      name,
+      role
+    ) VALUES (
+      guru_uuid,
+      'guru@bilbul.sch.id',
+      'Bapak/Ibu Guru Matematika',
+      'guru'
+    ) ON CONFLICT (id) DO UPDATE SET
+      role = 'guru',
+      name = 'Bapak/Ibu Guru Matematika';
+  END IF;
+END $$;

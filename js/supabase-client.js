@@ -42,10 +42,26 @@ try {
 export async function signIn(email, password) {
   if (!supabase) throw new Error("Koneksi database tidak tersedia.");
 
-  const { data, error } = await supabase.auth.signInWithPassword({
+  let { data, error } = await supabase.auth.signInWithPassword({
     email,
     password
   });
+
+  // Jika akun guru bawaan belum pernah terdaftar di Supabase Auth, buatkan otomatis sekarang juga!
+  if (error && email.toLowerCase() === 'guru@bilbul.sch.id' && password === 'guru123') {
+    try {
+      await signUpGuru('guru@bilbul.sch.id', 'guru123', 'Bapak/Ibu Guru Matematika');
+      // Coba login ulang seketika
+      const retry = await supabase.auth.signInWithPassword({
+        email: 'guru@bilbul.sch.id',
+        password: 'guru123'
+      });
+      data = retry.data;
+      error = retry.error;
+    } catch (createErr) {
+      console.warn("Auto-creation guru error:", createErr);
+    }
+  }
 
   if (error) throw error;
 
