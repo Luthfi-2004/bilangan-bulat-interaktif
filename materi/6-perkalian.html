@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 6 - Perkalian Bilangan Bulat</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>6. Perkalian Bilangan Bulat</h1>
+    
+    <div class="card">
+      <h3 class="text-primary">Konsep Perkalian</h3>
+      <p>Pada dasarnya, perkalian adalah <strong>penjumlahan berulang</strong>.</p>
+      <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius); font-size: 1.2rem; font-weight: 600; text-align: center; margin-bottom: 20px;">
+        3 × 4 = 4 + 4 + 4 = 12
+      </div>
+    </div>
+
+    <div class="grid grid-2">
+      <div class="card" style="border-top-color: var(--success);">
+        <h3 class="text-primary">Tanda Sama → Positif</h3>
+        <p>Jika dikalikan dengan tanda yang sama, hasilnya <strong>selalu positif</strong>.</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+            <span style="background: var(--success); color: white; padding: 2px 10px; border-radius: 20px;">(+) × (+) = (+)</span>
+            <span>4 × 3 = 12</span>
+          </li>
+          <li style="font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+            <span style="background: var(--success); color: white; padding: 2px 10px; border-radius: 20px;">(−) × (−) = (+)</span>
+            <span>−4 × −3 = 12</span>
+          </li>
+        </ul>
+        <div style="margin-top: 15px; font-size: 0.9rem; color: var(--text-light);">
+          *Mengapa negatif × negatif = positif? Bayangkan utang (-). Jika kita membatalkan (-) utang kita (-), maka uang kita bertambah (+).
+        </div>
+      </div>
+      
+      <div class="card" style="border-top-color: var(--danger);">
+        <h3 class="text-primary">Tanda Berbeda → Negatif</h3>
+        <p>Jika dikalikan dengan tanda yang berbeda, hasilnya <strong>selalu negatif</strong>.</p>
+        <ul style="list-style: none; padding: 0;">
+          <li style="margin-bottom: 10px; font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+            <span style="background: var(--danger); color: white; padding: 2px 10px; border-radius: 20px;">(−) × (+) = (−)</span>
+            <span>−4 × 3 = −12</span>
+          </li>
+          <li style="font-size: 1.1rem; display: flex; align-items: center; gap: 10px;">
+            <span style="background: var(--danger); color: white; padding: 2px 10px; border-radius: 20px;">(+) × (−) = (−)</span>
+            <span>4 × −3 = −12</span>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+    <div class="card">
+      <h3 class="text-center" style="margin-bottom: 20px;">Tabel Ringkasan Tanda Perkalian</h3>
+      <table style="width: 100%; max-width: 400px; margin: 0 auto; text-align: center; border-collapse: collapse;">
+        <thead>
+          <tr>
+            <th style="padding: 10px; border: 1px solid var(--gray-200); background: var(--bg-color);">×</th>
+            <th style="padding: 10px; border: 1px solid var(--gray-200); background: #e0f2fe; color: var(--primary);">+ (Positif)</th>
+            <th style="padding: 10px; border: 1px solid var(--gray-200); background: #fee2e2; color: var(--danger);">− (Negatif)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th style="padding: 10px; border: 1px solid var(--gray-200); background: #e0f2fe; color: var(--primary);">+ (Positif)</th>
+            <td style="padding: 10px; border: 1px solid var(--gray-200); font-weight: bold; font-size: 1.5rem; color: var(--success);">+</td>
+            <td style="padding: 10px; border: 1px solid var(--gray-200); font-weight: bold; font-size: 1.5rem; color: var(--danger);">−</td>
+          </tr>
+          <tr>
+            <th style="padding: 10px; border: 1px solid var(--gray-200); background: #fee2e2; color: var(--danger);">− (Negatif)</th>
+            <td style="padding: 10px; border: 1px solid var(--gray-200); font-weight: bold; font-size: 1.5rem; color: var(--danger);">−</td>
+            <td style="padding: 10px; border: 1px solid var(--gray-200); font-weight: bold; font-size: 1.5rem; color: var(--success);">+</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+      <a href="5-pengurangan.html" class="btn btn-outline">← Sebelumnya</a>
+      <a href="7-pembagian.html" class="btn btn-primary">Lanjut ke Materi 7 →</a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) contentContainer.innerHTML = pageContainer.innerHTML;
+      }, 100);
+    });
+  </script>
+</body>
+</html>

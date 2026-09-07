@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 9 - Penerapan Bilangan Bulat</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>9. Penerapan Bilangan Bulat</h1>
+    <p>Bilangan bulat negatif dan positif banyak sekali digunakan dalam kehidupan nyata untuk mewakili arah yang berlawanan.</p>
+    
+    <div class="grid grid-2">
+      <div class="card" style="text-align: center; border-top-color: var(--danger);">
+        <div style="font-size: 3rem;">🌡️</div>
+        <h3 class="text-primary">Suhu</h3>
+        <p>Di atas titik beku (0°C) adalah <strong>positif</strong>. <br>Di bawah titik beku (misal -5°C) adalah <strong>negatif</strong>.</p>
+      </div>
+      
+      <div class="card" style="text-align: center; border-top-color: var(--success);">
+        <div style="font-size: 3rem;">💰</div>
+        <h3 class="text-primary">Keuangan</h3>
+        <p>Keuntungan, pemasukan, atau tabungan bernilai <strong>positif</strong>. <br>Kerugian, pengeluaran, atau utang bernilai <strong>negatif</strong>.</p>
+      </div>
+      
+      <div class="card" style="text-align: center; border-top-color: var(--primary-light);">
+        <div style="font-size: 3rem;">🌊</div>
+        <h3 class="text-primary">Ketinggian Tempat</h3>
+        <p>Ketinggian gunung di atas permukaan laut bernilai <strong>positif</strong>. <br>Kedalaman kapal selam di bawah laut bernilai <strong>negatif</strong>.</p>
+      </div>
+      
+      <div class="card" style="text-align: center; border-top-color: var(--warning);">
+        <div style="font-size: 3rem;">🏢</div>
+        <h3 class="text-primary">Lantai Gedung</h3>
+        <p>Lantai di atas tanah (Lantai 1, 2, dst) adalah <strong>positif</strong>. <br>Lantai bawah tanah (Basement) adalah <strong>negatif</strong> (-1, -2).</p>
+      </div>
+    </div>
+    
+    <div class="alert alert-success" style="margin-top: 30px; text-align: center;">
+      <h3 style="margin-bottom: 10px;">Selamat! 🎉</h3>
+      <p>Kamu telah menyelesaikan semua materi Operasi Campuran Bilangan Bulat.</p>
+      <div style="margin-top: 20px;">
+        <a href="../latihan.html" class="btn btn-primary" style="font-size: 1.1rem; padding: 15px 30px;">Sekarang Uji Kemampuanmu di Latihan ✏️</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) contentContainer.innerHTML = pageContainer.innerHTML;
+      }, 100);
+    });
+  </script>
+</body>
+</html>

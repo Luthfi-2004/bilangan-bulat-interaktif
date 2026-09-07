@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tes Awal - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Layout akan dimuat dinamis -->
+  <div id="page-container" style="display: none;">
+    <h1>🧠 Tes Awal</h1>
+    <p>Kerjakan tes awal ini untuk mengetahui kemampuan awalmu sebelum mempelajari materi.</p>
+    
+    <div id="quiz-container">
+      <!-- Quiz engine akan merender soal di sini -->
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module">
+    import { SOAL_TES_AWAL } from './js/soal-data.js';
+    import { QuizEngine } from './js/quiz-engine.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+          
+          // Mulai Quiz Engine
+          new QuizEngine('quiz-container', SOAL_TES_AWAL, 'tes_awal');
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

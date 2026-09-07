@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 7 - Pembagian Bilangan Bulat</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>7. Pembagian Bilangan Bulat</h1>
+    
+    <div class="card">
+      <h3 class="text-primary">Kebalikan dari Perkalian</h3>
+      <p>Pembagian pada dasarnya adalah operasi kebalikan (invers) dari perkalian.</p>
+      <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius); font-size: 1.2rem; font-weight: 600; text-align: center; margin-bottom: 20px;">
+        12 ÷ 3 = 4 &nbsp;&nbsp; karena &nbsp;&nbsp; 4 × 3 = 12
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="text-primary">Aturan Tanda Pembagian</h3>
+      <p>Aturan tanda pada pembagian <strong>sama persis</strong> dengan aturan tanda pada perkalian!</p>
+      
+      <div class="grid grid-2" style="margin-top: 20px;">
+        <div style="background: #f0fdf4; padding: 15px; border-radius: var(--radius); border-left: 4px solid var(--success);">
+          <h4 style="color: var(--success); margin-bottom: 10px;">Tanda Sama = Positif</h4>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 5px;">12 ÷ 3 = <strong>4</strong></li>
+            <li>−12 ÷ (−3) = <strong>4</strong></li>
+          </ul>
+        </div>
+        
+        <div style="background: #fef2f2; padding: 15px; border-radius: var(--radius); border-left: 4px solid var(--danger);">
+          <h4 style="color: var(--danger); margin-bottom: 10px;">Tanda Beda = Negatif</h4>
+          <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 5px;">12 ÷ (−3) = <strong>−4</strong></li>
+            <li>−12 ÷ 3 = <strong>−4</strong></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    
+    <div class="alert alert-error" style="display: flex; align-items: flex-start; gap: 15px;">
+      <div style="font-size: 2rem;">⚠️</div>
+      <div>
+        <h4 style="margin-bottom: 5px;">Peringatan Penting!</h4>
+        <p style="margin: 0;">Suatu bilangan <strong>tidak dapat dibagi dengan 0</strong>. Hasilnya tidak terdefinisi (bukan bilangan bulat).</p>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+      <a href="6-perkalian.html" class="btn btn-outline">← Sebelumnya</a>
+      <a href="8-operasi-campuran.html" class="btn btn-primary">Lanjut ke Materi 8 →</a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) contentContainer.innerHTML = pageContainer.innerHTML;
+      }, 100);
+    });
+  </script>
+</body>
+</html>

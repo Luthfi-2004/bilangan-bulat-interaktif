@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Petunjuk Belajar - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <!-- Layout akan dimuat dinamis -->
+  <div id="page-container" style="display: none;">
+    <h1 style="margin-bottom: 20px;">📋 Petunjuk Belajar</h1>
+    
+    <div class="card">
+      <p style="font-size: 1.1rem;">Ikuti langkah-langkah berikut untuk menguasai materi <strong>Operasi Campuran Bilangan Bulat</strong> secara maksimal:</p>
+      
+      <ol style="padding-left: 20px; line-height: 1.8; font-size: 1.05rem;">
+        <li style="margin-bottom: 10px;">
+          <strong>🧠 Tes Awal:</strong> Kerjakan tes diagnostik awal untuk mengetahui seberapa jauh pemahamanmu sebelum mempelajari materi. Skor berapapun tidak masalah!
+        </li>
+        <li style="margin-bottom: 10px;">
+          <strong>📚 Materi:</strong> Pelajari modul materi secara berurutan, mulai dari pengenalan bilangan bulat hingga operasi hitung campuran yang lebih kompleks.
+        </li>
+        <li style="margin-bottom: 10px;">
+          <strong>✏️ Latihan:</strong> Setelah paham materinya, kerjakan latihan mandiri untuk memperkuat konsep yang baru saja kamu pelajari.
+        </li>
+        <li style="margin-bottom: 10px;">
+          <strong>📖 Soal Cerita:</strong> Coba terapkan pemahamanmu ke dalam masalah kontekstual kehidupan sehari-hari (seperti suhu atau lantai gedung).
+        </li>
+        <li style="margin-bottom: 10px;">
+          <strong>🎮 Game:</strong> Mainkan game interaktif untuk melatih kecepatan dan ketepatanmu dalam berhitung!
+        </li>
+        <li style="margin-bottom: 10px;">
+          <strong>📝 Kuis:</strong> Uji kompetensi akhirmu dengan menjawab 15 soal secara acak untuk membuktikan kepiawaianmu.
+        </li>
+        <li style="margin-bottom: 10px;">
+          <strong>📊 Hasil & 🏆 Pencapaian:</strong> Pantau terus rekap nilai, progres penguasaan materi, dan kumpulkan semua badge penghargaan yang tersedia.
+        </li>
+      </ol>
+      
+      <div style="margin-top: 30px;" class="text-center">
+        <a href="tes-awal.html" class="btn btn-primary">Mulai Langkah Pertama →</a>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

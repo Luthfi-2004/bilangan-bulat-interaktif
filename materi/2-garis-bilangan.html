@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 2 - Garis Bilangan</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>2. Garis Bilangan</h1>
+    
+    <div class="card">
+      <h3 class="text-primary">Fungsi Garis Bilangan</h3>
+      <p>Garis bilangan sangat berguna untuk membantu kita membandingkan nilai bilangan bulat.</p>
+      
+      <div class="alert alert-info" style="margin: 20px 0;">
+        <ul style="padding-left: 20px; line-height: 1.8;">
+          <li>Semakin ke <strong>kanan</strong> posisinya, nilainya semakin <strong>besar</strong>.</li>
+          <li>Semakin ke <strong>kiri</strong> posisinya, nilainya semakin <strong>kecil</strong>.</li>
+        </ul>
+      </div>
+
+      <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.1rem;">
+          <strong>3 &gt; −5</strong> <br> <span class="text-muted">(3 lebih besar dari -5)</span>
+        </div>
+        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.1rem;">
+          <strong>−4 &lt; −1</strong> <br> <span class="text-muted">(-4 lebih kecil dari -1)</span>
+        </div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+      <a href="1-definisi.html" class="btn btn-outline">← Sebelumnya</a>
+      <a href="3-penjumlahan.html" class="btn btn-primary">Lanjut ke Materi 3 →</a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

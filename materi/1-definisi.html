@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 1 - Definisi Bilangan Bulat</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>1. Definisi Bilangan Bulat</h1>
+    
+    <div class="card">
+      <h3 class="text-primary">Pengertian</h3>
+      <p>Bilangan bulat adalah bilangan yang terdiri dari bilangan bulat negatif, nol, dan bilangan bulat positif.</p>
+      
+      <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius); text-align: center; font-size: 1.2rem; margin: 20px 0; font-family: monospace;">
+        ..., −5, −4, −3, −2, −1, <strong>0</strong>, 1, 2, 3, 4, 5, ...
+      </div>
+
+      <ul style="padding-left: 20px; line-height: 1.8;">
+        <li><span class="text-primary" style="font-weight: 600;">Bilangan positif</span> — berada di sebelah kanan 0.</li>
+        <li><span style="color: var(--danger); font-weight: 600;">Bilangan negatif</span> — berada di sebelah kiri 0.</li>
+        <li><strong>Nol</strong> — bukan bilangan positif dan bukan bilangan negatif.</li>
+      </ul>
+    </div>
+
+    <div class="card">
+      <h3 class="text-primary">Garis Bilangan Interaktif</h3>
+      <p>Cobalah klik angka di bawah ini untuk melihat nilainya:</p>
+      
+      <div id="number-line-container"></div>
+      
+      <div id="nilai-mutlak-info" style="margin-top: 20px; text-align: center; font-size: 1.2rem; font-weight: 600; min-height: 40px; padding: 10px; border: 2px dashed var(--gray-200); border-radius: var(--radius);">
+        Klik angka pada garis bilangan.
+      </div>
+    </div>
+    
+    <div class="card">
+      <h3 class="text-primary">Nilai Mutlak</h3>
+      <p>Nilai mutlak (dilambangkan dengan garis vertikal |...|) adalah jarak suatu bilangan dari 0 pada garis bilangan. Jarak selalu bernilai positif atau nol.</p>
+      <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
+        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.2rem; font-weight: 600;">|−5| = 5</div>
+        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.2rem; font-weight: 600;">|5| = 5</div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
+      <a href="2-garis-bilangan.html" class="btn btn-primary">Lanjut ke Materi 2 →</a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script type="module">
+    import { NumberLine } from '../js/number-line.js';
+    
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+          
+          // Inisialisasi Number Line
+          const infoBox = document.getElementById('nilai-mutlak-info');
+          new NumberLine('number-line-container', {
+            min: -7,
+            max: 7,
+            initial: 0,
+            onChange: (val) => {
+              if (infoBox) {
+                const jenis = val === 0 ? "Nol" : (val > 0 ? "Positif" : "Negatif");
+                infoBox.innerHTML = \`Angka: <span style="color: var(--primary);">\${val}</span> (\${jenis}) <br> Nilai Mutlak: <span style="color: var(--secondary);">|\${val}| = \${Math.abs(val)}</span>\`;
+              }
+            }
+          });
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

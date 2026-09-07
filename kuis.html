@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kuis - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <h1>📝 Kuis Akhir</h1>
+    <p>Buktikan pemahamanmu dengan menjawab 15 soal evaluasi akhir ini. Nilai kuis ini akan menentukan seberapa baik kamu menguasai materi.</p>
+    
+    <div id="intro-container" class="card text-center" style="margin-top: 30px;">
+      <h3 style="margin-bottom: 20px;">Siap untuk memulai kuis?</h3>
+      <p style="margin-bottom: 30px;">Kuis ini terdiri dari soal-soal penjumlahan, pengurangan, perkalian, pembagian, serta operasi campuran.</p>
+      <button class="btn btn-primary" onclick="mulaiKuis()" style="font-size: 1.2rem; padding: 15px 30px;">Mulai Kuis Sekarang →</button>
+    </div>
+
+    <div id="quiz-container" style="display: none;">
+      <!-- Quiz engine merender di sini -->
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module">
+    import { SOAL_KUIS } from './js/soal-data.js';
+    import { QuizEngine } from './js/quiz-engine.js';
+    
+    window.mulaiKuis = function() {
+      document.getElementById('intro-container').style.display = 'none';
+      document.getElementById('quiz-container').style.display = 'block';
+      
+      new QuizEngine('quiz-container', SOAL_KUIS, 'kuis');
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

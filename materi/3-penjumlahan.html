@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 3 - Penjumlahan Bilangan Bulat</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>3. Penjumlahan Bilangan Bulat</h1>
+    
+    <div class="card">
+      <h3 class="text-primary">Penjumlahan Menggunakan Garis Bilangan</h3>
+      <p>Aturan langkah pada garis bilangan:</p>
+      <ul style="padding-left: 20px; line-height: 1.8; margin-bottom: 20px;">
+        <li>Bilangan positif berarti <strong>bergerak ke kanan</strong>.</li>
+        <li>Bilangan negatif berarti <strong>bergerak ke kiri</strong>.</li>
+      </ul>
+
+      <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius); margin-bottom: 15px;">
+        <strong>Contoh 1:</strong> <code>3 + 4 = 7</code> <br>
+        <span class="text-muted">Mulai dari titik 3, lalu bergerak 4 langkah ke kanan. Hasilnya 7.</span>
+      </div>
+      
+      <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius);">
+        <strong>Contoh 2:</strong> <code>−2 + 5 = 3</code> <br>
+        <span class="text-muted">Mulai dari titik -2, lalu bergerak 5 langkah ke kanan. Hasilnya 3.</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="text-primary">Aturan Penjumlahan Langsung</h3>
+      
+      <div class="grid grid-2">
+        <div style="border: 1px solid var(--gray-200); padding: 20px; border-radius: var(--radius);">
+          <h4 style="color: var(--success);">Tanda Sama</h4>
+          <p>Jika kedua bilangan memiliki tanda yang sama, <strong>jumlahkan</strong> bilangannya dan gunakan tanda yang sama dengan kedua bilangan tersebut.</p>
+          <div style="font-weight: 600; font-size: 1.1rem; margin-top: 10px;">
+            −4 + (−3) = −7<br>
+            2 + 5 = 7
+          </div>
+        </div>
+        
+        <div style="border: 1px solid var(--gray-200); padding: 20px; border-radius: var(--radius);">
+          <h4 style="color: var(--warning);">Tanda Berbeda</h4>
+          <p><strong>Kurangkan</strong> nilai yang lebih besar dengan yang lebih kecil, kemudian gunakan tanda dari bilangan dengan nilai mutlak lebih besar.</p>
+          <div style="font-weight: 600; font-size: 1.1rem; margin-top: 10px;">
+            8 + (−3) = 5 <span class="text-muted" style="font-size: 0.9rem; font-weight: normal;">(8 > 3, tanda ikut 8 yang positif)</span><br>
+            −8 + 3 = −5 <span class="text-muted" style="font-size: 0.9rem; font-weight: normal;">(|-8| > 3, tanda ikut negatif)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Quiz -->
+    <div class="card" style="background: #f0fdf4; border-color: var(--success);">
+      <h3 style="color: var(--success);">⚡ Mini Quiz</h3>
+      <div id="mini-quiz-container">
+        <p>Berapakah hasil dari <strong>-6 + 10</strong>?</p>
+        <div style="display: flex; gap: 10px; margin-top: 15px;" id="btn-group-mini">
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'salah')">-16</button>
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'salah')">-4</button>
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'benar')">4</button>
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'salah')">16</button>
+        </div>
+        <div id="mini-quiz-feedback" style="margin-top: 15px; font-weight: 600; display: none;"></div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+      <a href="2-garis-bilangan.html" class="btn btn-outline">← Sebelumnya</a>
+      <a href="4-sifat-penjumlahan.html" class="btn btn-primary">Lanjut ke Materi 4 →</a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    // Global function untuk mini quiz
+    window.checkMiniQuiz = function(btn, status) {
+      const btns = document.querySelectorAll('#btn-group-mini .btn');
+      btns.forEach(b => {
+        b.disabled = true;
+        b.style.opacity = '0.5';
+      });
+      
+      const feedback = document.getElementById('mini-quiz-feedback');
+      feedback.style.display = 'block';
+      
+      if (status === 'benar') {
+        btn.style.backgroundColor = 'var(--success)';
+        btn.style.color = 'white';
+        btn.style.opacity = '1';
+        feedback.innerHTML = "✅ Tepat sekali! Tanda berbeda, kurangi nilainya (10 - 6 = 4). Tanda mengikuti angka terbesar (10 adalah positif).";
+        feedback.style.color = 'var(--success)';
+      } else {
+        btn.style.backgroundColor = 'var(--danger)';
+        btn.style.color = 'white';
+        btn.style.opacity = '1';
+        feedback.innerHTML = "❌ Kurang tepat. Coba perhatikan aturan 'Tanda Berbeda' di atas.";
+        feedback.style.color = 'var(--danger)';
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

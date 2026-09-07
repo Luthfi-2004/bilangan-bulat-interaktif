@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi Bilangan Bulat</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <h1>📚 Daftar Materi</h1>
+    <p>Pelajari materi secara berurutan untuk pemahaman yang lebih baik.</p>
+    
+    <div class="grid grid-2" style="margin-top: 30px;">
+      <a href="1-definisi.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: var(--primary-light); cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">1. Definisi Bilangan Bulat</h3>
+          <p class="text-muted">Mengenal bilangan positif, negatif, nol, dan nilai mutlak.</p>
+        </div>
+      </a>
+      
+      <a href="2-garis-bilangan.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: var(--primary-light); cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">2. Garis Bilangan</h3>
+          <p class="text-muted">Memahami posisi bilangan dan membandingkan ukurannya.</p>
+        </div>
+      </a>
+      
+      <a href="3-penjumlahan.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: var(--success); cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">3. Penjumlahan Bilangan Bulat</h3>
+          <p class="text-muted">Konsep menjumlahkan dengan garis bilangan dan aturan tanda.</p>
+        </div>
+      </a>
+      
+      <a href="4-sifat-penjumlahan.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: var(--success); cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">4. Sifat-sifat Penjumlahan</h3>
+          <p class="text-muted">Sifat Komutatif, Asosiatif, Tertutup, Identitas, Invers.</p>
+        </div>
+      </a>
+      
+      <a href="5-pengurangan.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: var(--danger); cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">5. Pengurangan Bilangan Bulat</h3>
+          <p class="text-muted">Mengubah bentuk pengurangan menjadi penjumlahan.</p>
+        </div>
+      </a>
+      
+      <a href="6-perkalian.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: var(--secondary); cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">6. Perkalian Bilangan Bulat</h3>
+          <p class="text-muted">Aturan perkalian tanda sama dan tanda berbeda.</p>
+        </div>
+      </a>
+      
+      <a href="7-pembagian.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: var(--secondary); cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">7. Pembagian Bilangan Bulat</h3>
+          <p class="text-muted">Kebalikan dari perkalian dan pembagian dengan bilangan nol.</p>
+        </div>
+      </a>
+      
+      <a href="8-operasi-campuran.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: #8b5cf6; cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">8. Operasi Hitung Campuran</h3>
+          <p class="text-muted">Materi inti: Memahami urutan pengerjaan operasi hitung.</p>
+        </div>
+      </a>
+      
+      <a href="9-penerapan.html" style="text-decoration: none; color: inherit;">
+        <div class="card" style="border-top-color: #ec4899; cursor: pointer; transition: transform 0.2s;">
+          <h3 class="card-title">9. Penerapan Bilangan Bulat</h3>
+          <p class="text-muted">Penerapan dalam kehidupan sehari-hari (Suhu, Kedalaman, dll).</p>
+        </div>
+      </a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

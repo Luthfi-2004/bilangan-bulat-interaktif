@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Latihan - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <h1>✏️ Latihan</h1>
+    <p>Pilih kategori latihan di bawah ini untuk menguji pemahamanmu.</p>
+    
+    <div id="latihan-menu" class="grid grid-2" style="margin-top: 30px;">
+      <div class="card" style="border-top-color: var(--primary-light); cursor: pointer;" onclick="mulaiLatihan('dasar')">
+        <h3 class="card-title">A. Operasi Dasar</h3>
+        <p>Latihan penjumlahan, pengurangan, perkalian, dan pembagian dasar (7 soal).</p>
+        <button class="btn btn-outline" style="width: 100%; margin-top: 15px;">Mulai Latihan Dasar</button>
+      </div>
+      
+      <div class="card" style="border-top-color: var(--secondary); cursor: pointer;" onclick="mulaiLatihan('campuran')">
+        <h3 class="card-title">B. Operasi Campuran</h3>
+        <p>Latihan hitung campuran yang lebih menantang (5 soal pilihan).</p>
+        <button class="btn btn-outline" style="width: 100%; margin-top: 15px;">Mulai Latihan Campuran</button>
+      </div>
+    </div>
+    
+    <div id="quiz-container" style="display: none;">
+      <!-- Quiz engine akan merender soal di sini -->
+    </div>
+    
+    <div id="back-btn-container" style="display: none; margin-bottom: 20px;">
+      <button class="btn btn-outline" onclick="kembaliKeMenu()">← Kembali ke Menu Latihan</button>
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module">
+    import { SOAL_LATIHAN_DASAR, SOAL_LATIHAN_CAMPURAN } from './js/soal-data.js';
+    import { QuizEngine } from './js/quiz-engine.js';
+    
+    window.mulaiLatihan = function(kategori) {
+      document.getElementById('latihan-menu').style.display = 'none';
+      document.getElementById('quiz-container').style.display = 'block';
+      document.getElementById('back-btn-container').style.display = 'block';
+      
+      let soal = [];
+      let jenis = '';
+      if (kategori === 'dasar') {
+        soal = SOAL_LATIHAN_DASAR;
+        jenis = 'latihan_dasar';
+      } else {
+        soal = SOAL_LATIHAN_CAMPURAN;
+        jenis = 'latihan_campuran';
+      }
+      
+      new QuizEngine('quiz-container', soal, jenis, (skor) => {
+        // Callback saat selesai
+      });
+    };
+    
+    window.kembaliKeMenu = function() {
+      document.getElementById('latihan-menu').style.display = 'grid';
+      document.getElementById('quiz-container').style.display = 'none';
+      document.getElementById('back-btn-container').style.display = 'none';
+      document.getElementById('quiz-container').innerHTML = ''; // bersihkan state
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

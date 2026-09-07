@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Game - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <h1>🎮 Game Area</h1>
+    <p>Perkuat pemahamanmu melalui permainan interaktif!</p>
+    
+    <div id="game-menu" class="grid grid-2" style="margin-top: 30px;">
+      <div class="card" style="text-align: center; cursor: pointer;" onclick="mulaiGame('tantangan')">
+        <div style="font-size: 3rem; margin-bottom: 15px;">⏱️</div>
+        <h3 class="card-title" style="justify-content: center;">Tantangan Operasi</h3>
+        <p>Jawab operasi campuran dengan waktu 15 detik! Benar = +10 poin, Salah = Game Over.</p>
+        <button class="btn btn-primary" style="margin-top: 15px;">Mainkan Sekarang</button>
+      </div>
+      
+      <div class="card" style="text-align: center; cursor: pointer;" onclick="mulaiGame('benar_salah')">
+        <div style="font-size: 3rem; margin-bottom: 15px;">✅❌</div>
+        <h3 class="card-title" style="justify-content: center;">Benar atau Salah</h3>
+        <p>Tebak pernyataan perkalian/pembagian yang muncul, apakah benar atau salah.</p>
+        <button class="btn btn-primary" style="margin-top: 15px;">Mainkan Sekarang</button>
+      </div>
+    </div>
+    
+    <div id="game-container" class="card text-center" style="display: none; padding: 40px 20px;">
+      <div id="game-header" style="display: flex; justify-content: space-between; margin-bottom: 30px; font-weight: 700; font-size: 1.2rem;">
+        <span id="game-score" style="color: var(--primary);">Skor: 0</span>
+        <span id="game-timer" style="color: var(--danger);">Waktu: 15s</span>
+      </div>
+      
+      <div id="game-question" style="font-size: 3rem; font-weight: 800; margin: 30px 0; font-family: monospace;">
+        <!-- Soal -->
+      </div>
+      
+      <div id="game-controls" style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <!-- Tombol akan dirender via JS -->
+      </div>
+      
+      <div id="game-over" style="display: none; margin-top: 30px;">
+        <h2 style="color: var(--danger); font-size: 2rem;">GAME OVER</h2>
+        <p id="game-over-msg" style="font-size: 1.2rem; margin-top: 10px;"></p>
+        <button class="btn btn-primary" style="margin-top: 20px;" onclick="kembaliKeMenu()">Kembali ke Menu Game</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script>
+    // Logic Game Sederhana
+    let currentMode = '';
+    let score = 0;
+    let timer = 15;
+    let intervalId = null;
+    let correctAnswer = null;
+    
+    window.mulaiGame = function(mode) {
+      currentMode = mode;
+      score = 0;
+      
+      document.getElementById('game-menu').style.display = 'none';
+      document.getElementById('game-container').style.display = 'block';
+      document.getElementById('game-over').style.display = 'none';
+      document.getElementById('game-controls').style.display = 'flex';
+      document.getElementById('game-score').textContent = 'Skor: 0';
+      
+      if (mode === 'tantangan') {
+        document.getElementById('game-timer').style.display = 'block';
+        nextTantangan();
+      } else if (mode === 'benar_salah') {
+        document.getElementById('game-timer').style.display = 'none'; // Tanpa waktu ketat
+        nextBenarSalah();
+      }
+    };
+    
+    function startTimer() {
+      timer = 15;
+      document.getElementById('game-timer').textContent = \`Waktu: \${timer}s\`;
+      clearInterval(intervalId);
+      
+      intervalId = setInterval(() => {
+        timer--;
+        document.getElementById('game-timer').textContent = \`Waktu: \${timer}s\`;
+        if (timer <= 0) {
+          gameOver("Waktu habis!");
+        }
+      }, 1000);
+    }
+    
+    function nextTantangan() {
+      // Generate soal sederhana acak (misal: a + b * c)
+      const ops = ['+', '-'];
+      const op = ops[Math.floor(Math.random() * ops.length)];
+      
+      const a = Math.floor(Math.random() * 20) - 10;
+      const b = Math.floor(Math.random() * 10) - 5;
+      const c = Math.floor(Math.random() * 5) + 1; // 1 to 5
+      
+      let soalStr = "";
+      
+      if (op === '+') {
+        soalStr = \`\${a} + \${b} × \${c}\`;
+        correctAnswer = a + (b * c);
+      } else {
+        soalStr = \`\${a} − (\${b} × \${c})\`;
+        correctAnswer = a - (b * c);
+      }
+      
+      document.getElementById('game-question').textContent = soalStr + " = ?";
+      
+      // Generate 3 random options + 1 correct
+      let options = [correctAnswer];
+      while(options.length < 4) {
+        let wr = correctAnswer + (Math.floor(Math.random() * 20) - 10);
+        if (wr !== correctAnswer && !options.includes(wr)) options.push(wr);
+      }
+      
+      // Shuffle options
+      options.sort(() => Math.random() - 0.5);
+      
+      const controls = document.getElementById('game-controls');
+      controls.innerHTML = '';
+      options.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'btn btn-outline';
+        btn.style.fontSize = '1.5rem';
+        btn.style.padding = '15px 30px';
+        btn.textContent = opt;
+        btn.onclick = () => cekJawaban(opt);
+        controls.appendChild(btn);
+      });
+      
+      startTimer();
+    }
+    
+    function nextBenarSalah() {
+      // Pernyataan
+      const a = Math.floor(Math.random() * 10) - 5; // -5 to 4
+      const b = Math.floor(Math.random() * 10) - 5; 
+      
+      const isCorrect = Math.random() > 0.5;
+      const trueAns = a * b;
+      const displayAns = isCorrect ? trueAns : trueAns + (Math.random() > 0.5 ? 2 : -2);
+      
+      const aStr = a < 0 ? \`(\${a})\` : a;
+      const bStr = b < 0 ? \`(\${b})\` : b;
+      
+      document.getElementById('game-question').innerHTML = \`\${aStr} × \${bStr} = \${displayAns}\`;
+      correctAnswer = isCorrect;
+      
+      const controls = document.getElementById('game-controls');
+      controls.innerHTML = \`
+        <button class="btn btn-success" style="font-size: 1.5rem; padding: 15px 40px; background: var(--success); color: white;" onclick="cekJawaban(true)">BENAR</button>
+        <button class="btn btn-danger" style="font-size: 1.5rem; padding: 15px 40px; background: var(--danger); color: white;" onclick="cekJawaban(false)">SALAH</button>
+      \`;
+    }
+    
+    function cekJawaban(jawabanUser) {
+      if (jawabanUser === correctAnswer) {
+        score += 10;
+        document.getElementById('game-score').textContent = 'Skor: ' + score;
+        
+        // Simpan skor ke DB (async but we don't block)
+        if (currentMode === 'tantangan') nextTantangan();
+        else nextBenarSalah();
+      } else {
+        gameOver("Jawabanmu salah!");
+      }
+    }
+    
+    function gameOver(msg) {
+      clearInterval(intervalId);
+      document.getElementById('game-controls').style.display = 'none';
+      document.getElementById('game-over').style.display = 'block';
+      document.getElementById('game-over-msg').innerHTML = \`\${msg}<br>Skor Akhirmu: <strong>\${score}</strong>\`;
+      
+      // Dalam implementasi nyata, simpan highscore ke badge_engine / db
+    }
+    
+    window.kembaliKeMenu = function() {
+      document.getElementById('game-menu').style.display = 'grid';
+      document.getElementById('game-container').style.display = 'none';
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Soal Cerita - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <h1>📖 Soal Cerita</h1>
+    <p>Terapkan konsep bilangan bulat pada permasalahan kehidupan sehari-hari.</p>
+    
+    <div id="soal-cerita-container" style="margin-top: 30px;">
+      <!-- Dirender via JS -->
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module">
+    import { SOAL_CERITA } from './js/soal-data.js';
+    
+    window.togglePembahasan = function(id) {
+      const el = document.getElementById('pembahasan-' + id);
+      const btn = document.getElementById('btn-pembahasan-' + id);
+      if (el.style.display === 'none') {
+        el.style.display = 'block';
+        btn.innerHTML = 'Sembunyikan Pembahasan ▲';
+      } else {
+        el.style.display = 'none';
+        btn.innerHTML = 'Lihat Pembahasan ▼';
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+          
+          const scContainer = document.getElementById('soal-cerita-container');
+          if (scContainer) {
+            let html = '';
+            SOAL_CERITA.forEach((soal, index) => {
+              html += \`
+                <div class="card" style="border-top-color: var(--primary);">
+                  <div style="display: flex; gap: 15px; align-items: flex-start;">
+                    <div style="background: var(--primary); color: white; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; border-radius: 50%; font-weight: bold; flex-shrink: 0;">\${index + 1}</div>
+                    <div style="width: 100%;">
+                      <h3 style="margin-bottom: 15px;">\${soal.judul}</h3>
+                      <p style="font-size: 1.1rem; line-height: 1.6;">\${soal.pertanyaan}</p>
+                      
+                      <button id="btn-pembahasan-\${soal.id}" class="btn btn-outline" style="margin-top: 15px;" onclick="togglePembahasan('\${soal.id}')">Lihat Pembahasan ▼</button>
+                      
+                      <div id="pembahasan-\${soal.id}" style="display: none; margin-top: 20px; background: #f8fafc; padding: 20px; border-radius: var(--radius); border: 1px solid var(--gray-200);">
+                        <p style="font-weight: 600; color: var(--primary);">Jawaban Akhir: \${soal.jawaban}</p>
+                        <p style="margin-top: 10px;"><strong>Langkah Penyelesaian:</strong><br> \${soal.pembahasan}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              \`;
+            });
+            scContainer.innerHTML = html;
+          }
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

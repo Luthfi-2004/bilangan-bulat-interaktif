@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pencapaian - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <h1>🏆 Pencapaian</h1>
+    <p>Kumpulkan semua lencana (badge) ini dengan menyelesaikan berbagai aktivitas belajar!</p>
+    
+    <div id="badge-container" class="badge-grid" style="margin-top: 30px;">
+      <!-- Dirender via JS -->
+      <div style="text-align: center; grid-column: 1 / -1; padding: 50px;">
+        <em>Memuat data lencana...</em>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module">
+    import { BADGES, checkAndUnlockBadges } from './js/badge-engine.js';
+    import { getStudentBadges } from './js/supabase-client.js';
+    
+    async function renderBadges() {
+      const student = window.getCurrentStudent();
+      let unlockedIds = [];
+      
+      if (student) {
+        // Cek dan unlock jika ada yang baru
+        await checkAndUnlockBadges(student.id);
+        // Ambil data terbaru
+        unlockedIds = await getStudentBadges(student.id);
+      }
+      
+      const container = document.getElementById('badge-container');
+      if (!container) return;
+      
+      let html = '';
+      BADGES.forEach(b => {
+        const isUnlocked = unlockedIds.includes(b.id);
+        html += \`
+          <div class="card badge-item \${isUnlocked ? 'unlocked' : ''}">
+            <div class="badge-icon">\${b.icon}</div>
+            <div class="badge-name" style="color: var(--primary-dark);">\${b.nama}</div>
+            <div style="font-size: 0.8rem; margin-top: 10px; color: var(--text-light);">\${b.deskripsi}</div>
+            \${isUnlocked ? '<div style="margin-top: 10px; color: var(--success); font-weight: bold; font-size: 0.8rem;">TERBUKA</div>' : '<div style="margin-top: 10px; color: var(--text-light); font-size: 0.8rem;">TERKUNCI</div>'}
+          </div>
+        \`;
+      });
+      
+      container.innerHTML = html;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+          renderBadges();
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

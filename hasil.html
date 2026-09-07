@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hasil - Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <h1>📊 Hasil Belajar</h1>
+    <p>Pantau perkembangan belajarmu di sini.</p>
+    
+    <div id="not-logged-in" style="display: none; margin-top: 30px;" class="card text-center">
+      <h3>Masuk Dulu Yuk!</h3>
+      <p>Kamu belum memasukkan nama. Klik ikon profil di atas untuk mulai menyimpan nilai.</p>
+    </div>
+    
+    <div id="results-dashboard" style="display: none; margin-top: 30px;">
+      
+      <div class="grid grid-2">
+        <div class="card">
+          <h3 class="text-primary">Skor Kuis & Latihan</h3>
+          <ul id="score-list" style="list-style: none; padding: 0;">
+            <!-- Dirender via JS -->
+            <li style="color: var(--text-light); text-align: center; padding: 20px;">Belum ada data nilai.</li>
+          </ul>
+        </div>
+        
+        <div class="card">
+          <h3 class="text-primary">Rekomendasi Belajar</h3>
+          <div id="recommendation-box" style="background: var(--bg-color); padding: 20px; border-radius: var(--radius); line-height: 1.6;">
+            <!-- Dirender via JS -->
+            Ayo mulai kerjakan Tes Awal atau pelajari materi pertama!
+          </div>
+          
+          <div style="margin-top: 20px; text-align: center;">
+            <a href="pencapaian.html" class="btn btn-outline" style="width: 100%;">Lihat Lencana (Badge) 🏆</a>
+          </div>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script type="module">
+    import { getTestResults } from './js/supabase-client.js';
+    
+    async function loadResults() {
+      const student = window.getCurrentStudent();
+      if (!student) {
+        document.getElementById('not-logged-in').style.display = 'block';
+        return;
+      }
+      
+      document.getElementById('results-dashboard').style.display = 'block';
+      
+      const results = await getTestResults(student.id);
+      const scoreList = document.getElementById('score-list');
+      
+      if (results && results.length > 0) {
+        let html = '';
+        let highestKuis = 0;
+        let hasTesAwal = false;
+        
+        results.forEach(r => {
+          const isKuis = r.jenis === 'kuis';
+          const isTesAwal = r.jenis === 'tes_awal';
+          
+          if (isKuis && r.skor > highestKuis) highestKuis = r.skor;
+          if (isTesAwal) hasTesAwal = true;
+          
+          const title = r.jenis.replace('_', ' ').toUpperCase();
+          const colorClass = r.skor >= 80 ? 'var(--success)' : (r.skor >= 60 ? 'var(--warning)' : 'var(--danger)');
+          
+          html += \`
+            <li style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--gray-200);">
+              <div>
+                <strong>\${title}</strong><br>
+                <span style="font-size: 0.8rem; color: var(--text-light);">\${new Date(r.created_at).toLocaleDateString('id-ID')}</span>
+              </div>
+              <div style="font-size: 1.5rem; font-weight: bold; color: \${colorClass};">\${r.skor}</div>
+            </li>
+          \`;
+        });
+        
+        scoreList.innerHTML = html;
+        
+        // Setup rekomendasi sederhana
+        const recBox = document.getElementById('recommendation-box');
+        if (!hasTesAwal) {
+          recBox.innerHTML = "Sebaiknya kamu mengerjakan <strong>Tes Awal</strong> terlebih dahulu untuk melihat kemampuan dasarmu.";
+        } else if (highestKuis >= 90) {
+          recBox.innerHTML = "🎉 <strong>Luar Biasa!</strong> Pemahamanmu tentang bilangan bulat sudah sangat baik. Pertahankan prestasimu!";
+        } else if (highestKuis >= 70) {
+          recBox.innerHTML = "👍 <strong>Bagus!</strong> Kamu sudah memahami sebagian besar materi. Coba kerjakan ulang bagian latihan campuran untuk mendapat nilai maksimal.";
+        } else if (results.length > 0) {
+          recBox.innerHTML = "💪 <strong>Jangan Menyerah!</strong> Matematika itu butuh latihan. Mari baca ulang materi <em>Operasi Hitung Campuran</em> secara perlahan.";
+        }
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+          loadResults();
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

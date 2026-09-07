@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 4 - Sifat-sifat Penjumlahan</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>4. Sifat-sifat Penjumlahan</h1>
+    <p>Operasi penjumlahan bilangan bulat memiliki 5 sifat penting.</p>
+    
+    <div class="grid grid-2">
+      <div class="card">
+        <h4 class="text-primary">1. Sifat Tertutup</h4>
+        <p>Penjumlahan antara bilangan bulat <strong>selalu menghasilkan</strong> bilangan bulat juga.</p>
+        <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+          <strong>Contoh:</strong> 3 + 5 = 8 <br>
+          <span class="text-muted">(8 adalah bilangan bulat)</span>
+        </div>
+      </div>
+      
+      <div class="card">
+        <h4 class="text-primary">2. Sifat Komutatif (Pertukaran)</h4>
+        <p>Urutan bilangan tidak mengubah hasil penjumlahan: <strong>a + b = b + a</strong></p>
+        <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+          <strong>Contoh:</strong> 3 + 5 = 5 + 3 = 8
+        </div>
+      </div>
+      
+      <div class="card">
+        <h4 class="text-primary">3. Sifat Asosiatif (Pengelompokan)</h4>
+        <p>Cara mengelompokkan tidak mengubah hasil: <strong>(a + b) + c = a + (b + c)</strong></p>
+        <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+          <strong>Contoh:</strong> (2 + 3) + 4 = 5 + 4 = 9<br>
+          Sama dengan: 2 + (3 + 4) = 2 + 7 = 9
+        </div>
+      </div>
+      
+      <div class="card">
+        <h4 class="text-primary">4. Unsur Identitas</h4>
+        <p>Bilangan 0 adalah identitas penjumlahan. Ditambah 0, hasilnya bilangan itu sendiri: <strong>a + 0 = a</strong></p>
+        <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+          <strong>Contoh:</strong> 7 + 0 = 7
+        </div>
+      </div>
+      
+      <div class="card">
+        <h4 class="text-primary">5. Invers Penjumlahan</h4>
+        <p>Setiap bilangan punya lawan (invers). Jika dijumlahkan hasilnya 0: <strong>a + (−a) = 0</strong></p>
+        <div style="background: var(--bg-color); padding: 10px; border-radius: 8px;">
+          <strong>Contoh:</strong> 5 + (−5) = 0
+        </div>
+      </div>
+    </div>
+
+    <!-- Mini Quiz -->
+    <div class="card" style="background: #eff6ff; border-color: var(--primary);">
+      <h3 style="color: var(--primary);">⚡ Mini Quiz</h3>
+      <div id="mini-quiz-container">
+        <p>Pernyataan <strong>(4 + 2) + 1 = 4 + (2 + 1)</strong> merupakan contoh dari sifat...</p>
+        <div style="display: flex; gap: 10px; margin-top: 15px; flex-wrap: wrap;" id="btn-group-mini">
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'salah')">Komutatif</button>
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'benar')">Asosiatif</button>
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'salah')">Identitas</button>
+          <button class="btn btn-outline" onclick="checkMiniQuiz(this, 'salah')">Tertutup</button>
+        </div>
+        <div id="mini-quiz-feedback" style="margin-top: 15px; font-weight: 600; display: none;"></div>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+      <a href="3-penjumlahan.html" class="btn btn-outline">← Sebelumnya</a>
+      <a href="5-pengurangan.html" class="btn btn-primary">Lanjut ke Materi 5 →</a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    window.checkMiniQuiz = function(btn, status) {
+      const btns = document.querySelectorAll('#btn-group-mini .btn');
+      btns.forEach(b => { b.disabled = true; b.style.opacity = '0.5'; });
+      const feedback = document.getElementById('mini-quiz-feedback');
+      feedback.style.display = 'block';
+      if (status === 'benar') {
+        btn.style.backgroundColor = 'var(--success)'; btn.style.color = 'white'; btn.style.opacity = '1';
+        feedback.innerHTML = "✅ Benar! Itu adalah sifat Asosiatif (Pengelompokan).";
+        feedback.style.color = 'var(--success)';
+      } else {
+        btn.style.backgroundColor = 'var(--danger)'; btn.style.color = 'white'; btn.style.opacity = '1';
+        feedback.innerHTML = "❌ Kurang tepat. Tanda kurung menunjukkan pengelompokan (Asosiatif).";
+        feedback.style.color = 'var(--danger)';
+      }
+    };
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) contentContainer.innerHTML = pageContainer.innerHTML;
+      }, 100);
+    });
+  </script>
+</body>
+</html>

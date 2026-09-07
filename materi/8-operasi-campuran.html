@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Materi 8 - Operasi Hitung Campuran</title>
+  <link rel="stylesheet" href="../css/style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    .step-box { background: var(--bg-color); padding: 15px; border-radius: var(--radius); margin-bottom: 10px; display: none; }
+    .step-box.visible { display: block; animation: fadeIn 0.5s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+  </style>
+</head>
+<body>
+  <div id="page-container" style="display: none;">
+    <div style="margin-bottom: 20px;">
+      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
+    </div>
+
+    <h1>8. Operasi Hitung Campuran</h1>
+    <p>Ini adalah materi inti kita! Operasi hitung campuran menggunakan lebih dari satu jenis operasi hitung.</p>
+    
+    <div class="card" style="border-top-color: #8b5cf6;">
+      <h3 style="color: #8b5cf6;">Urutan Pengerjaan Wajib (Hierarki Operasi)</h3>
+      <ol style="padding-left: 20px; line-height: 2; font-size: 1.1rem; font-weight: 500;">
+        <li>Tanda kurung <code>( )</code> atau <code>[ ]</code> dikerjakan <strong>pertama</strong>.</li>
+        <li>Perkalian <code>×</code> dan Pembagian <code>÷</code> dikerjakan <strong>kedua</strong>.</li>
+        <li>Penjumlahan <code>+</code> dan Pengurangan <code>−</code> dikerjakan <strong>terakhir</strong>.</li>
+      </ol>
+      <div class="alert alert-info" style="margin-top: 15px;">
+        💡 <strong>Catatan:</strong> Jika tingkat operasinya sama (misalnya ada perkalian dan pembagian sekaligus), maka kerjakan dari <strong>kiri ke kanan</strong>.
+      </div>
+    </div>
+
+    <div class="card">
+      <h3 class="text-primary">Latihan Langkah demi Langkah</h3>
+      <p>Pilih contoh soal di bawah ini, lalu klik tombol "Langkah Selanjutnya" untuk melihat cara penyelesaiannya.</p>
+      
+      <!-- Soal Selector -->
+      <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
+        <button class="btn btn-outline" onclick="loadSoal(1)">Contoh 1</button>
+        <button class="btn btn-outline" onclick="loadSoal(2)">Contoh 2</button>
+        <button class="btn btn-outline" onclick="loadSoal(3)">Contoh 3</button>
+        <button class="btn btn-outline" onclick="loadSoal(4)">Contoh 4 (Kompleks)</button>
+      </div>
+
+      <!-- Container Soal -->
+      <div id="soal-display" style="font-size: 1.5rem; font-weight: 700; text-align: center; margin: 20px 0; padding: 20px; border: 2px dashed var(--primary-light); border-radius: var(--radius);">
+        Pilih contoh soal di atas
+      </div>
+
+      <!-- Container Langkah -->
+      <div id="steps-container"></div>
+      
+      <div style="text-align: center; margin-top: 20px;">
+        <button class="btn btn-primary" id="btn-next-step" style="display: none;" onclick="showNextStep()">Tampilkan Langkah</button>
+      </div>
+    </div>
+
+    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
+      <a href="7-pembagian.html" class="btn btn-outline">← Sebelumnya</a>
+      <a href="9-penerapan.html" class="btn btn-primary">Lanjut ke Materi 9 →</a>
+    </div>
+  </div>
+
+  <script src="../js/layout.js"></script>
+  <script type="module" src="../js/main.js"></script>
+  <script>
+    const dataSoal = {
+      1: { soal: "8 + 3 × 2", steps: ["Kerjakan perkalian dulu: 3 × 2 = 6", "= 8 + 6", "= 14"] },
+      2: { soal: "20 − 12 ÷ 3", steps: ["Kerjakan pembagian dulu: 12 ÷ 3 = 4", "= 20 − 4", "= 16"] },
+      3: { soal: "5 + (−3) × 4", steps: ["Kerjakan perkalian dulu: (−3) × 4 = −12", "= 5 + (−12)", "= −7"] },
+      4: { soal: "15 − [6 + (−3)] × 2", steps: ["Kerjakan tanda kurung dulu: [6 + (−3)] = 3", "= 15 − 3 × 2", "Kerjakan perkalian: 3 × 2 = 6", "= 15 − 6", "= 9"] }
+    };
+
+    let currentSteps = [];
+    let currentStepIndex = 0;
+
+    window.loadSoal = function(id) {
+      const data = dataSoal[id];
+      document.getElementById('soal-display').innerHTML = data.soal;
+      
+      const container = document.getElementById('steps-container');
+      container.innerHTML = '';
+      currentSteps = data.steps;
+      currentStepIndex = 0;
+      
+      currentSteps.forEach((text, i) => {
+        const div = document.createElement('div');
+        div.className = 'step-box';
+        div.id = 'step-' + i;
+        div.innerHTML = `<strong>Langkah ${i+1}:</strong> ${text}`;
+        container.appendChild(div);
+      });
+      
+      const btn = document.getElementById('btn-next-step');
+      btn.style.display = 'inline-block';
+      btn.innerHTML = 'Langkah 1';
+      btn.disabled = false;
+    };
+
+    window.showNextStep = function() {
+      if (currentStepIndex < currentSteps.length) {
+        document.getElementById('step-' + currentStepIndex).classList.add('visible');
+        currentStepIndex++;
+        
+        const btn = document.getElementById('btn-next-step');
+        if (currentStepIndex >= currentSteps.length) {
+          btn.innerHTML = 'Selesai';
+          btn.disabled = true;
+        } else {
+          btn.innerHTML = `Langkah ${currentStepIndex + 1}`;
+        }
+      }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const pageContainer = document.getElementById('page-container');
+        if (contentContainer && pageContainer) {
+          contentContainer.innerHTML = pageContainer.innerHTML;
+          loadSoal(1); // Load default soal
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>

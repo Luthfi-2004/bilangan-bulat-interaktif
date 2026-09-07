@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operasi Campuran Bilangan Bulat</title>
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+
+  <!-- Layout will be dynamically injected by js/layout.js -->
+
+  <div id="home-content" style="display:none;">
+    <!-- Bagian ini akan dimuat ke dalam main content area oleh script di bawah -->
+    <div class="text-center" style="padding: 40px 20px; background: linear-gradient(135deg, var(--primary), var(--primary-light)); color: white; border-radius: var(--radius); margin-bottom: 30px; box-shadow: var(--shadow-lg);">
+      <h1 style="color: white; font-size: 2.5rem; margin-bottom: 10px;">OPERASI CAMPURAN BILANGAN BULAT</h1>
+      <p style="font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9;">“Kenali Bilangannya, Kuasai Operasinya!”</p>
+      
+      <div style="max-width: 600px; margin: 0 auto 30px; font-size: 1.1rem; line-height: 1.6;">
+        Website pembelajaran interaktif untuk membantu siswa kelas VII memahami bilangan bulat dan operasi hitung campuran dengan cara yang mudah dan menyenangkan.
+      </div>
+      
+      <div style="display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+        <a href="tes-awal.html" class="btn btn-secondary" style="font-size: 1.1rem; padding: 12px 24px;">🚀 Mulai Belajar (Tes Awal)</a>
+        <a href="materi/index.html" class="btn btn-outline" style="background: rgba(255,255,255,0.1); border-color: white; color: white; font-size: 1.1rem; padding: 12px 24px;">📚 Lihat Materi</a>
+      </div>
+    </div>
+
+    <h2 class="text-center" style="margin-bottom: 25px;">Yang Akan Kamu Pelajari</h2>
+    
+    <div class="grid grid-2">
+      <div class="card" style="border-top-color: #3b82f6;">
+        <h3 class="card-title">🔢 Bilangan Bulat</h3>
+        <p>Mengenal bilangan positif, negatif, nol, dan garis bilangan secara interaktif.</p>
+      </div>
+      
+      <div class="card" style="border-top-color: #10b981;">
+        <h3 class="card-title">➕ Operasi Hitung</h3>
+        <p>Penjumlahan, pengurangan, perkalian, dan pembagian bilangan bulat.</p>
+      </div>
+      
+      <div class="card" style="border-top-color: #f59e0b;">
+        <h3 class="card-title">🧮 Operasi Campuran</h3>
+        <p>Memahami urutan pengerjaan operasi yang tepat (Kurung, Kali/Bagi, Tambah/Kurang).</p>
+      </div>
+      
+      <div class="card" style="border-top-color: #ef4444;">
+        <h3 class="card-title">🎯 Uji Kemampuan</h3>
+        <p>Latihan interaktif, soal cerita, game seru, kuis, dan evaluasi hasil belajarmu.</p>
+      </div>
+    </div>
+
+    <h2 class="text-center" style="margin-top: 40px; margin-bottom: 25px;">Alur Belajar</h2>
+    
+    <div class="card text-center">
+      <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 15px; align-items: center; font-weight: 600;">
+        <span class="text-primary">🧠 Tes Awal</span>
+        <span class="text-muted">→</span>
+        <span class="text-primary">📚 Materi</span>
+        <span class="text-muted">→</span>
+        <span class="text-primary">✏️ Latihan</span>
+        <span class="text-muted">→</span>
+        <span class="text-primary">📖 Soal Cerita</span>
+        <span class="text-muted">→</span>
+        <span class="text-primary">🎮 Game</span>
+        <span class="text-muted">→</span>
+        <span class="text-primary">📝 Kuis</span>
+        <span class="text-muted">→</span>
+        <span class="text-primary">📊 Hasil</span>
+        <span class="text-muted">→</span>
+        <span class="text-secondary">🏆 Pencapaian</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/layout.js"></script>
+  <script type="module" src="js/main.js"></script>
+  <script>
+    // Memindahkan konten home ke dalam layout yang dibuat layout.js
+    document.addEventListener('DOMContentLoaded', () => {
+      setTimeout(() => {
+        const contentContainer = document.getElementById('app-content');
+        const homeContent = document.getElementById('home-content');
+        if (contentContainer && homeContent) {
+          contentContainer.innerHTML = homeContent.innerHTML;
+        }
+      }, 100);
+    });
+  </script>
+</body>
+</html>
