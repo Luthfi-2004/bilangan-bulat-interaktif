@@ -90,72 +90,287 @@
       font-size: 0.75rem;
       letter-spacing: 0.05em;
     }
+
+    /* ============================================================
+       RESPONSIVE ADMIN SIDEBAR
+       ============================================================ */
+    #admin-sidebar {
+      width: 256px;
+      flex-shrink: 0;
+      transition: width 0.3s cubic-bezier(.4,0,.2,1),
+                  transform 0.3s cubic-bezier(.4,0,.2,1),
+                  box-shadow 0.3s;
+      overflow: hidden;
+      z-index: 40;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    /* Desktop collapse button */
+    #admin-sidebar-collapse-btn {
+      position: absolute;
+      right: -13px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 26px; height: 26px;
+      background: #1e293b;
+      border: 1.5px solid #334155;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 50;
+      color: #94a3b8;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+      transition: all 0.2s;
+    }
+    #admin-sidebar-collapse-btn:hover {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+    #admin-sidebar-collapse-btn i {
+      font-size: 10px;
+      transition: transform 0.3s;
+    }
+    #admin-sidebar.collapsed #admin-sidebar-collapse-btn i {
+      transform: rotate(180deg);
+    }
+
+    /* Desktop: collapsed state */
+    @media (min-width: 1024px) {
+      #admin-sidebar-collapse-btn { display: flex; }
+      #admin-hamburger { display: none !important; }
+
+      #admin-sidebar.collapsed {
+        width: 72px;
+      }
+      #admin-sidebar.collapsed .sidebar-text,
+      #admin-sidebar.collapsed .brand-sub,
+      #admin-sidebar.collapsed .user-info,
+      #admin-sidebar.collapsed .btn-grid {
+        opacity: 0;
+        width: 0;
+        overflow: hidden;
+        pointer-events: none;
+        white-space: nowrap;
+      }
+      #admin-sidebar.collapsed .brand-logo {
+        margin: 0 auto;
+      }
+      #admin-sidebar.collapsed .brand-header {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+      }
+      #admin-sidebar.collapsed .realtime-bar {
+        justify-content: center;
+        padding-left: 0;
+        padding-right: 0;
+        font-size: 0;
+      }
+      #admin-sidebar.collapsed .realtime-bar .rt-dot {
+        margin: 0 auto;
+      }
+      #admin-sidebar.collapsed .admin-nav-item {
+        justify-content: center;
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+        gap: 0;
+      }
+      #admin-sidebar.collapsed .admin-nav-item span {
+        width: 0;
+        overflow: hidden;
+        opacity: 0;
+        white-space: nowrap;
+        pointer-events: none;
+        transition: opacity 0.25s, width 0.25s;
+      }
+      #admin-sidebar.collapsed .user-footer {
+        justify-content: center;
+        padding: 0.75rem 0;
+      }
+      /* Tooltip on collapsed */
+      #admin-sidebar.collapsed .admin-nav-item {
+        position: relative;
+      }
+      #admin-sidebar.collapsed .nav-tooltip {
+        position: absolute;
+        left: 72px;
+        background: #1e293b;
+        color: white;
+        padding: 4px 10px;
+        border-radius: 6px;
+        font-size: 0.78rem;
+        font-weight: 500;
+        white-space: nowrap;
+        opacity: 0;
+        pointer-events: none;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        z-index: 100;
+        border: 1px solid #334155;
+        transition: opacity 0.15s;
+      }
+      #admin-sidebar.collapsed .admin-nav-item:hover .nav-tooltip {
+        opacity: 1;
+      }
+    }
+
+    /* Tablet (768-1023px) */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #admin-sidebar-collapse-btn { display: none !important; }
+      #admin-hamburger { display: flex !important; }
+      #admin-sidebar {
+        position: fixed !important;
+        top: 0; left: 0;
+        height: 100% !important;
+        transform: translateX(-100%);
+        box-shadow: none;
+      }
+      #admin-sidebar.open {
+        transform: translateX(0);
+        box-shadow: 8px 0 32px rgba(0,0,0,0.4);
+      }
+    }
+
+    /* Mobile (<768px) */
+    @media (max-width: 767px) {
+      #admin-sidebar-collapse-btn { display: none !important; }
+      #admin-hamburger { display: flex !important; }
+      #admin-sidebar {
+        position: fixed !important;
+        top: 0; left: 0;
+        height: 100% !important;
+        width: 272px !important;
+        transform: translateX(-100%);
+        box-shadow: none;
+      }
+      #admin-sidebar.open {
+        transform: translateX(0);
+        box-shadow: 8px 0 32px rgba(0,0,0,0.5);
+      }
+    }
+
+    /* Overlay */
+    #admin-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.55);
+      backdrop-filter: blur(2px);
+      z-index: 30;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s;
+    }
+    #admin-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    /* Hamburger button */
+    #admin-hamburger {
+      width: 38px; height: 38px;
+      border-radius: 9px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      color: #475569;
+      cursor: pointer;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-right: 0.75rem;
+    }
+    #admin-hamburger:hover {
+      background: #2563eb;
+      color: white;
+      border-color: #2563eb;
+    }
+
+    /* Content padding adjustments */
+    @media (max-width: 767px) {
+      .admin-main-content { padding: 1rem !important; }
+      .admin-topbar { padding-left: 1rem !important; padding-right: 1rem !important; }
+    }
   </style>
 </head>
 <body data-no-layout="true" class="bg-slate-50 text-slate-800 font-sans antialiased">
 
-  <div class="flex h-screen overflow-hidden">
+  <div class="flex h-screen overflow-hidden" style="position:relative;">
+    <!-- Overlay mobile/tablet -->
+    <div id="admin-overlay"></div>
     
     <!-- ==========================================================
          SIDEBAR ADMIN
          ========================================================== -->
-    <aside class="w-64 bg-slate-900 text-white flex flex-col flex-shrink-0 border-r border-slate-800">
+    <aside id="admin-sidebar" class="bg-slate-900 text-white border-r border-slate-800">
       
       <!-- Brand -->
-      <div class="h-20 flex items-center px-6 border-b border-slate-800 gap-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-lg text-white shadow-md shadow-blue-500/20">
+      <div class="brand-header h-20 flex items-center px-6 border-b border-slate-800 gap-3" style="position:relative;">
+        <div class="brand-logo w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-lg text-white shadow-md shadow-blue-500/20 flex-shrink-0">
           <i class="fa-solid fa-chalkboard-user"></i>
         </div>
-        <div>
-          <span class="font-extrabold text-base tracking-tight text-white block">Guru Panel</span>
-          <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">BilBul Matematika</span>
+        <div class="sidebar-text">
+          <span class="font-extrabold text-base tracking-tight text-white block brand-name">Guru Panel</span>
+          <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider brand-sub">BilBul Matematika</span>
         </div>
+        <!-- Desktop collapse button -->
+        <button id="admin-sidebar-collapse-btn" title="Perkecil/Perbesar Sidebar">
+          <i class="fa-solid fa-chevron-left"></i>
+        </button>
       </div>
 
       <!-- Realtime Status Indicator -->
-      <div class="px-6 py-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between text-xs">
-        <span class="text-slate-400 flex items-center gap-2">
-          <span class="relative flex h-2.5 w-2.5">
+      <div class="realtime-bar px-4 py-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between text-xs overflow-hidden">
+        <span class="text-slate-400 flex items-center gap-2 rt-dot">
+          <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
             <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
             <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
           </span>
-          Live Realtime
+          <span class="sidebar-text whitespace-nowrap">Live Realtime</span>
         </span>
-        <span class="text-[11px] font-semibold text-emerald-400">Aktif</span>
+        <span class="text-[11px] font-semibold text-emerald-400 sidebar-text">Aktif</span>
       </div>
 
       <!-- Nav Items -->
-      <nav class="flex-1 px-4 py-6 space-y-1.5 overflow-y-auto">
-        <button id="nav-dashboard" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-blue-600 text-white shadow-sm">
-          <i class="fa-solid fa-chart-pie w-5 text-center"></i>
+      <nav class="flex-1 px-3 py-5 space-y-1 overflow-y-auto no-scrollbar">
+        <button id="nav-dashboard" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-blue-600 text-white shadow-sm" style="position:relative;">
+          <i class="fa-solid fa-chart-pie w-5 text-center flex-shrink-0"></i>
           <span>Dashboard</span>
+          <span class="nav-tooltip">Dashboard</span>
         </button>
 
-        <button id="nav-students" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
-          <i class="fa-solid fa-user-graduate w-5 text-center"></i>
+        <button id="nav-students" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
+          <i class="fa-solid fa-user-graduate w-5 text-center flex-shrink-0"></i>
           <span>Kelola Siswa</span>
+          <span class="nav-tooltip">Kelola Siswa</span>
         </button>
 
-        <button id="nav-progress" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
-          <i class="fa-solid fa-bolt w-5 text-center"></i>
+        <button id="nav-progress" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
+          <i class="fa-solid fa-bolt w-5 text-center flex-shrink-0"></i>
           <span>Progress Siswa (Live)</span>
+          <span class="nav-tooltip">Progress Siswa</span>
         </button>
 
-        <button id="nav-questions" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
-          <i class="fa-solid fa-database w-5 text-center"></i>
+        <button id="nav-questions" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
+          <i class="fa-solid fa-database w-5 text-center flex-shrink-0"></i>
           <span>Bank Soal (CMS)</span>
+          <span class="nav-tooltip">Bank Soal</span>
         </button>
 
-        <button id="nav-materi" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800">
-          <i class="fa-solid fa-book-open w-5 text-center"></i>
+        <button id="nav-materi" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
+          <i class="fa-solid fa-book-open w-5 text-center flex-shrink-0"></i>
           <span>Kelola Materi</span>
+          <span class="nav-tooltip">Kelola Materi</span>
         </button>
       </nav>
 
       <!-- User Profile & Sign Out -->
-      <div class="p-4 border-t border-slate-800 bg-slate-900/90">
-        <div class="flex items-center gap-3 mb-3">
-          <div class="w-9 h-9 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm">
+      <div class="p-4 border-t border-slate-800 bg-slate-900/90 user-footer overflow-hidden">
+        <div class="flex items-center gap-3 mb-3 user-info">
+          <div class="w-9 h-9 rounded-full bg-blue-500/20 text-blue-400 flex items-center justify-center font-bold text-sm flex-shrink-0">
             <i class="fa-solid fa-user-tie"></i>
           </div>
           <div class="overflow-hidden">
@@ -163,7 +378,7 @@
             <div id="admin-user-email" class="text-xs text-slate-400 truncate">guru@sekolah.sch.id</div>
           </div>
         </div>
-        <div class="grid grid-cols-2 gap-2">
+        <div class="grid grid-cols-2 gap-2 btn-grid">
           <a href="../dashboard.html" class="px-2 py-1.5 bg-slate-800 hover:bg-slate-700 text-slate-300 rounded-lg text-xs font-semibold text-center transition-colors">
             <i class="fa-solid fa-eye mr-1"></i> Preview
           </a>
@@ -181,23 +396,29 @@
     <div class="flex-1 flex flex-col h-full overflow-hidden bg-slate-50">
       
       <!-- Topbar Header -->
-      <header class="h-20 bg-white border-b border-slate-200/80 px-8 flex items-center justify-between flex-shrink-0">
-        <div>
-          <h1 id="page-title" class="text-2xl font-black text-slate-900 tracking-tight">
-            Dashboard Guru
-          </h1>
-          <p id="page-subtitle" class="text-xs font-medium text-slate-500">
-            Ringkasan aktivitas kelas dan pemantauan pembelajaran mandiri siswa
-          </p>
+      <header class="admin-topbar h-16 md:h-20 bg-white border-b border-slate-200/80 px-4 md:px-8 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center">
+          <!-- Hamburger (tablet & mobile) -->
+          <button id="admin-hamburger" aria-label="Buka menu" title="Buka/Tutup Menu">
+            <i class="fa-solid fa-bars" style="font-size:1.1rem;"></i>
+          </button>
+          <div>
+            <h1 id="page-title" class="text-lg md:text-2xl font-black text-slate-900 tracking-tight leading-none">
+              Dashboard Guru
+            </h1>
+            <p id="page-subtitle" class="text-xs font-medium text-slate-500 hidden sm:block">
+              Ringkasan aktivitas kelas dan pemantauan pembelajaran mandiri siswa
+            </p>
+          </div>
         </div>
         
-        <div class="flex items-center gap-4">
-          <div class="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-xl text-xs text-slate-600 font-medium">
+        <div class="flex items-center gap-2 md:gap-4">
+          <div class="hidden md:flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-xl text-xs text-slate-600 font-medium">
             <i class="fa-solid fa-calendar-days text-slate-400"></i>
             <span id="current-date-display">Senin, 7 September 2026</span>
           </div>
-          <button id="btn-refresh-data" class="px-3.5 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 font-semibold text-xs rounded-xl border border-blue-200 transition-colors flex items-center gap-1.5">
-            <i class="fa-solid fa-rotate"></i> Segarkan Data
+          <button id="btn-refresh-data" class="px-3 py-2 bg-blue-50 text-blue-600 hover:bg-blue-100 font-semibold text-xs rounded-xl border border-blue-200 transition-colors flex items-center gap-1.5">
+            <i class="fa-solid fa-rotate"></i> <span class="hidden sm:inline">Segarkan Data</span>
           </button>
         </div>
       </header>
@@ -702,6 +923,79 @@
 
   <!-- Admin JS Engine -->
   <script type="module" src="admin.js"></script>
+
+  <!-- Responsive Sidebar Controller -->
+  <script>
+    (function() {
+      const sidebar  = document.getElementById('admin-sidebar');
+      const overlay  = document.getElementById('admin-overlay');
+      const hamburger = document.getElementById('admin-hamburger');
+      const collapseBtn = document.getElementById('admin-sidebar-collapse-btn');
+
+      if (!sidebar) return;
+
+      const isDesktop = () => window.innerWidth >= 1024;
+      const COLLAPSE_KEY = 'bilbul_admin_sidebar_collapsed';
+
+      // --- Mobile / Tablet drawer ---
+      function openDrawer() {
+        sidebar.classList.add('open');
+        if (overlay) overlay.classList.add('active');
+        document.body.style.overflow = 'hidden';
+      }
+      function closeDrawer() {
+        sidebar.classList.remove('open');
+        if (overlay) overlay.classList.remove('active');
+        document.body.style.overflow = '';
+      }
+
+      // --- Desktop collapse ---
+      function applyCollapse(collapsed) {
+        sidebar.classList.toggle('collapsed', collapsed);
+        try { localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0'); } catch(_) {}
+      }
+
+      // Restore saved collapse state
+      if (isDesktop()) {
+        try {
+          if (localStorage.getItem(COLLAPSE_KEY) === '1') applyCollapse(true);
+        } catch(_) {}
+      }
+
+      // Event bindings
+      if (hamburger) hamburger.onclick = () =>
+        sidebar.classList.contains('open') ? closeDrawer() : openDrawer();
+
+      if (collapseBtn) collapseBtn.onclick = () =>
+        applyCollapse(!sidebar.classList.contains('collapsed'));
+
+      if (overlay) overlay.onclick = closeDrawer;
+
+      // Close drawer on resize to desktop
+      window.addEventListener('resize', () => {
+        if (isDesktop()) { closeDrawer(); document.body.style.overflow = ''; }
+      });
+
+      // Swipe gesture (mobile)
+      let tx = 0, ty = 0;
+      document.addEventListener('touchstart', e => {
+        tx = e.touches[0].clientX; ty = e.touches[0].clientY;
+      }, { passive: true });
+      document.addEventListener('touchend', e => {
+        if (isDesktop()) return;
+        const dx = e.changedTouches[0].clientX - tx;
+        const dy = e.changedTouches[0].clientY - ty;
+        if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+        if (dx > 0 && tx < 30) openDrawer();
+        else if (dx < 0 && sidebar.classList.contains('open')) closeDrawer();
+      }, { passive: true });
+
+      // Close drawer saat nav item diklik
+      sidebar.addEventListener('click', e => {
+        if (!isDesktop() && e.target.closest('button')) closeDrawer();
+      });
+    })();
+  </script>
 
 </body>
 </html>
