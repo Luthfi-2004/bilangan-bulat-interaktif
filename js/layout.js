@@ -13,9 +13,6 @@ const SIDEBAR_HTML = `
     <span class="sb-brand-name">BilBul</span>
     <span class="sb-brand-sub">Matematika Kelas VII</span>
   </div>
-  <button id="sidebar-toggle-desktop" class="sb-collapse-btn" title="Perkecil Sidebar">
-    <i class="fa-solid fa-chevron-left"></i>
-  </button>
 </div>
 
 <nav class="sb-nav" id="sidebar-menu-wrap">
@@ -140,7 +137,7 @@ function injectLayoutStyles() {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding: 0 14px;
+      padding: 0 16px;
       height: 64px;
       border-bottom: 1px solid #f1f5f9;
       flex-shrink: 0;
@@ -157,11 +154,9 @@ function injectLayoutStyles() {
     }
     .sb-brand-info {
       display: flex; flex-direction: column;
-      overflow: hidden;
-      transition: opacity 0.25s, width 0.3s, max-width 0.3s;
-      white-space: nowrap;
-      min-width: 0;
-      flex: 1;
+      overflow: hidden; white-space: nowrap;
+      transition: opacity 0.25s;
+      min-width: 0; flex: 1;
     }
     .sb-brand-name {
       font-size: 1rem; font-weight: 800;
@@ -174,22 +169,32 @@ function injectLayoutStyles() {
       color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;
     }
 
-    /* ============ COLLAPSE BUTTON — inline in brand row ============ */
-    .sb-collapse-btn {
-      width: 28px; height: 28px;
-      border-radius: 8px;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer;
-      color: #94a3b8; font-size: 10px;
-      transition: all 0.2s;
+    /* ============ DRAG RESIZE HANDLE ============ */
+    #sb-resizer {
+      width: 5px;
       flex-shrink: 0;
-      margin-left: auto;
+      cursor: col-resize;
+      position: relative;
+      z-index: 20;
+      background: transparent;
+      transition: background 0.2s;
     }
-    .sb-collapse-btn:hover { background:#2563eb; color:white; border-color:#2563eb; box-shadow:0 2px 8px rgba(37,99,235,0.3); }
-    .sb-collapse-btn i { transition: transform 0.3s; }
-    #app-sidebar.sb-collapsed .sb-collapse-btn i { transform: rotate(180deg); }
+    #sb-resizer::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0;
+      left: 1px; width: 3px;
+      background: transparent;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+    #sb-resizer:hover::after,
+    #sb-resizer.dragging::after {
+      background: #2563eb;
+    }
+    @media (max-width: 1023px) {
+      #sb-resizer { display: none; }
+    }
 
     /* ============ NAV ============ */
     .sb-nav {
@@ -243,21 +248,21 @@ function injectLayoutStyles() {
 
     /* ============ COLLAPSED STATE (Desktop) ============ */
     @media (min-width: 1024px) {
-      #app-sidebar.sb-collapsed { width: 64px; }
-      #app-sidebar.sb-collapsed .sb-brand-info { opacity:0; width:0; max-width:0; pointer-events:none; }
-      #app-sidebar.sb-collapsed .sb-collapse-btn { margin-left: 0; }
-      #app-sidebar.sb-collapsed .sb-brand { justify-content: space-between; padding: 0 14px; }
+      /* Sidebar collapsed: icon-only mode when width < 80px */
+      #app-sidebar.sb-collapsed { width: 64px !important; }
+      #app-sidebar.sb-collapsed .sb-brand-info { opacity:0; pointer-events:none; }
       #app-sidebar.sb-collapsed .sb-section-label { opacity:0; height:0; padding:0; pointer-events:none; }
       #app-sidebar.sb-collapsed .sb-text { opacity:0; width:0; pointer-events:none; }
       #app-sidebar.sb-collapsed .sb-link { justify-content: center; padding-left:0; padding-right:0; gap:0; }
+      #app-sidebar.sb-collapsed .sb-brand { justify-content: center; }
 
       /* Tooltip on hover when collapsed */
       #app-sidebar.sb-collapsed .sb-link::after {
         content: attr(data-label);
-        position: absolute; left: 68px;
+        position: absolute; left: 70px;
         background: #1e293b; color: white;
-        padding: 5px 11px; border-radius: 7px;
-        font-size: 0.78rem; font-weight: 500;
+        padding: 5px 12px; border-radius: 8px;
+        font-size: 0.8rem; font-weight: 500;
         white-space: nowrap; pointer-events: none;
         opacity: 0; z-index: 200;
         box-shadow: 0 4px 16px rgba(0,0,0,0.2);
@@ -329,7 +334,6 @@ function injectLayoutStyles() {
     /* ============ DESKTOP ============ */
     @media (min-width: 1024px) {
       .tb-hamburger { display: none !important; }
-      .sb-collapse-btn { display: flex; }
     }
 
     /* ============ MAIN AREA ============ */
@@ -397,6 +401,7 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div id="app-layout">
         <div id="sidebar-overlay"></div>
         <aside id="app-sidebar">${SIDEBAR_HTML}</aside>
+        <div id="sb-resizer" title="Tarik untuk mengubah lebar sidebar"></div>
         <div id="app-main">
           <header id="app-topbar" style="height:64px;flex-shrink:0;border-bottom:1px solid #e2e8f0;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;">
             ${TOPBAR_HTML}
@@ -413,6 +418,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   addTooltipLabels();
   fixSubfolderLinks();
   initLayoutInteractivity();
+  initResizer();
   setupSpaRouter();
 
   window.dispatchEvent(new CustomEvent('spa:navigated', { detail: { url: window.location.href, initial: true } }));
@@ -434,11 +440,9 @@ function initLayoutInteractivity() {
   const sidebar   = document.getElementById('app-sidebar');
   const overlay   = document.getElementById('sidebar-overlay');
   const hamburger = document.getElementById('menu-toggle-btn');
-  const collapseBtn = document.getElementById('sidebar-toggle-desktop');
   if (!sidebar) return;
 
   const isDesktop = () => window.innerWidth >= 1024;
-  const COLLAPSE_KEY = 'bilbul_sidebar_collapsed';
 
   function openDrawer() {
     sidebar.classList.add('sb-open');
@@ -451,17 +455,7 @@ function initLayoutInteractivity() {
     document.body.style.overflow = '';
   }
 
-  function applyCollapse(v) {
-    sidebar.classList.toggle('sb-collapsed', v);
-    try { localStorage.setItem(COLLAPSE_KEY, v ? '1' : '0'); } catch(_) {}
-  }
-
-  if (isDesktop()) {
-    try { if (localStorage.getItem(COLLAPSE_KEY) === '1') applyCollapse(true); } catch(_) {}
-  }
-
   if (hamburger) hamburger.onclick = () => sidebar.classList.contains('sb-open') ? closeDrawer() : openDrawer();
-  if (collapseBtn) collapseBtn.onclick = () => applyCollapse(!sidebar.classList.contains('sb-collapsed'));
   if (overlay) overlay.onclick = closeDrawer;
 
   window.addEventListener('resize', () => { if (isDesktop()) { closeDrawer(); document.body.style.overflow = ''; } });
@@ -480,6 +474,87 @@ function initLayoutInteractivity() {
   sidebar.addEventListener('click', e => { if (!isDesktop() && e.target.closest('a')) closeDrawer(); });
 
   updateActiveSidebarLink(window.location.pathname);
+}
+
+// 4b. Drag-to-resize sidebar (desktop only)
+function initResizer() {
+  const resizer = document.getElementById('sb-resizer');
+  const sidebar = document.getElementById('app-sidebar');
+  if (!resizer || !sidebar) return;
+
+  const MIN_W   = 64;   // icon-only
+  const MAX_W   = 320;  // max expanded
+  const SNAP_W  = 80;   // snap to collapsed below this
+  const DEF_W   = 240;  // default expanded width
+  const WIDTH_KEY = 'bilbul_sidebar_width';
+
+  // Restore saved width
+  if (window.innerWidth >= 1024) {
+    try {
+      const saved = parseInt(localStorage.getItem(WIDTH_KEY));
+      if (saved && saved >= MIN_W && saved <= MAX_W) {
+        sidebar.style.width = saved + 'px';
+        sidebar.classList.toggle('sb-collapsed', saved <= SNAP_W);
+      }
+    } catch(_) {}
+  }
+
+  let dragging = false, startX = 0, startW = 0;
+
+  resizer.addEventListener('mousedown', e => {
+    if (window.innerWidth < 1024) return;
+    dragging = true;
+    startX = e.clientX;
+    startW = sidebar.offsetWidth;
+    resizer.classList.add('dragging');
+    document.body.style.cursor = 'col-resize';
+    document.body.style.userSelect = 'none';
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', e => {
+    if (!dragging) return;
+    const dx = e.clientX - startX;
+    let newW = Math.max(MIN_W, Math.min(MAX_W, startW + dx));
+
+    if (newW <= SNAP_W) {
+      // Snap ke icon-only
+      sidebar.style.width = MIN_W + 'px';
+      sidebar.classList.add('sb-collapsed');
+    } else {
+      sidebar.style.width = newW + 'px';
+      sidebar.classList.remove('sb-collapsed');
+    }
+  });
+
+  document.addEventListener('mouseup', e => {
+    if (!dragging) return;
+    dragging = false;
+    resizer.classList.remove('dragging');
+    document.body.style.cursor = '';
+    document.body.style.userSelect = '';
+    // Snap outward: kalau drag sedikit dari collapsed, langsung ke default
+    const w = sidebar.offsetWidth;
+    if (w > SNAP_W && w < 120) {
+      sidebar.style.width = DEF_W + 'px';
+      sidebar.classList.remove('sb-collapsed');
+    }
+    try { localStorage.setItem(WIDTH_KEY, sidebar.offsetWidth); } catch(_) {}
+  });
+
+  // Double-click resizer → toggle collapsed/expanded
+  resizer.addEventListener('dblclick', () => {
+    if (window.innerWidth < 1024) return;
+    const isCollapsed = sidebar.classList.contains('sb-collapsed');
+    if (isCollapsed) {
+      sidebar.style.width = DEF_W + 'px';
+      sidebar.classList.remove('sb-collapsed');
+    } else {
+      sidebar.style.width = MIN_W + 'px';
+      sidebar.classList.add('sb-collapsed');
+    }
+    try { localStorage.setItem(WIDTH_KEY, sidebar.offsetWidth); } catch(_) {}
+  });
 }
 
 // 5. Active link

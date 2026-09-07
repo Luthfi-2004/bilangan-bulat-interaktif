@@ -240,6 +240,22 @@
       #admin-sidebar.open { transform: translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.5); }
       .admin-main-content { padding: 1rem !important; }
     }
+
+    /* ====== DRAG RESIZE HANDLE ====== */
+    #admin-resizer {
+      width: 5px; flex-shrink: 0;
+      cursor: col-resize; position: relative; z-index: 20;
+      background: transparent;
+    }
+    #admin-resizer::after {
+      content: ''; position: absolute;
+      top: 0; bottom: 0; left: 1px; width: 3px;
+      background: transparent; border-radius: 3px;
+      transition: background 0.2s;
+    }
+    #admin-resizer:hover::after,
+    #admin-resizer.dragging::after { background: #3b82f6; }
+    @media (max-width: 1023px) { #admin-resizer { display: none; } }
   </style>
 </head>
 <body data-no-layout="true" class="bg-slate-50 text-slate-800 font-sans antialiased">
@@ -262,10 +278,6 @@
           <span class="font-extrabold text-base tracking-tight text-white">Guru Panel</span>
           <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">BilBul Matematika</span>
         </div>
-        <!-- Collapse button — sejajar di baris brand -->
-        <button id="admin-sidebar-collapse-btn" title="Perkecil/Perbesar Sidebar">
-          <i class="fa-solid fa-chevron-left"></i>
-        </button>
       </div>
 
       <!-- Realtime Status Indicator -->
@@ -335,6 +347,9 @@
       </div>
 
     </aside>
+
+    <!-- Drag Resize Handle -->
+    <div id="admin-resizer" title="Tarik untuk mengubah lebar sidebar"></div>
 
     <!-- ==========================================================
          MAIN VIEWPORT
@@ -940,6 +955,79 @@
       sidebar.addEventListener('click', e => {
         if (!isDesktop() && e.target.closest('button')) closeDrawer();
       });
+
+      // ====== DRAG-TO-RESIZE (Desktop) ======
+      const resizer  = document.getElementById('admin-resizer');
+      const MIN_W    = 68;   // icon-only
+      const MAX_W    = 320;
+      const SNAP_W   = 90;   // snap to collapsed below this
+      const DEF_W    = 248;  // default expanded
+      const WIDTH_KEY = 'bilbul_admin_sidebar_width';
+
+      // Restore saved width
+      if (isDesktop()) {
+        try {
+          const saved = parseInt(localStorage.getItem(WIDTH_KEY));
+          if (saved && saved >= MIN_W && saved <= MAX_W) {
+            sidebar.style.width = saved + 'px';
+            sidebar.classList.toggle('collapsed', saved <= SNAP_W);
+          }
+        } catch(_) {}
+      }
+
+      if (resizer) {
+        let dragging = false, startX = 0, startW = 0;
+
+        resizer.addEventListener('mousedown', e => {
+          if (!isDesktop()) return;
+          dragging = true; startX = e.clientX; startW = sidebar.offsetWidth;
+          resizer.classList.add('dragging');
+          document.body.style.cursor = 'col-resize';
+          document.body.style.userSelect = 'none';
+          e.preventDefault();
+        });
+
+        document.addEventListener('mousemove', e => {
+          if (!dragging) return;
+          const dx = e.clientX - startX;
+          const newW = Math.max(MIN_W, Math.min(MAX_W, startW + dx));
+          if (newW <= SNAP_W) {
+            sidebar.style.width = MIN_W + 'px';
+            sidebar.classList.add('collapsed');
+          } else {
+            sidebar.style.width = newW + 'px';
+            sidebar.classList.remove('collapsed');
+          }
+        });
+
+        document.addEventListener('mouseup', () => {
+          if (!dragging) return;
+          dragging = false;
+          resizer.classList.remove('dragging');
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+          const w = sidebar.offsetWidth;
+          if (w > SNAP_W && w < 130) {
+            sidebar.style.width = DEF_W + 'px';
+            sidebar.classList.remove('collapsed');
+          }
+          try { localStorage.setItem(WIDTH_KEY, sidebar.offsetWidth); } catch(_) {}
+        });
+
+        // Double-click: toggle collapsed/expanded
+        resizer.addEventListener('dblclick', () => {
+          if (!isDesktop()) return;
+          const isCollapsed = sidebar.classList.contains('collapsed');
+          if (isCollapsed) {
+            sidebar.style.width = DEF_W + 'px';
+            sidebar.classList.remove('collapsed');
+          } else {
+            sidebar.style.width = MIN_W + 'px';
+            sidebar.classList.add('collapsed');
+          }
+          try { localStorage.setItem(WIDTH_KEY, sidebar.offsetWidth); } catch(_) {}
+        });
+      }
     })();
   </script>
 
