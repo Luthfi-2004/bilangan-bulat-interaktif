@@ -25,6 +25,22 @@
   };
 })();
 
+// Cegah BFCache me-restore halaman belajar siswa setelah logout
+window.addEventListener('pageshow', (event) => {
+  const path = window.location.pathname;
+  if (path.endsWith('/index.html') || path === '/' || path.endsWith('/login.html') || path.includes('/admin/')) {
+    return;
+  }
+  if (event.persisted || (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0]?.type === "back_forward")) {
+    const cached = localStorage.getItem('math_current_user');
+    if (!cached) {
+      const isMateri = path.includes('/materi/');
+      const target = isMateri ? '../login.html?logout=true' : 'login.html?logout=true';
+      window.location.replace(target);
+    }
+  }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
   // Lewati jika halaman menandai data-no-layout="true", atau halaman admin, login, dan landing page index.html
   if (document.body.dataset.noLayout === 'true' || 

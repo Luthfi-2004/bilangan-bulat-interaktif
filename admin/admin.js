@@ -76,39 +76,28 @@ if (typeof window !== 'undefined') {
 // ==========================================================
 // INISIALISASI & AUTH GUARD
 // ==========================================================
+
+// Cegah akses kembali via tombol Back browser (BFCache)
+window.addEventListener('pageshow', async (event) => {
+  if (event.persisted || (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0]?.type === "back_forward")) {
+    const user = await getCurrentUser();
+    if (!user || user.role !== 'guru') {
+      window.location.replace('../login.html?logout=true');
+    }
+  }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
   // 1. Cek sesi login
   currentUser = await getCurrentUser();
   if (!currentUser) {
-    if (typeof Swal !== 'undefined') {
-      await Swal.fire({
-        icon: 'warning',
-        title: 'Sesi Belum Masuk',
-        text: 'Silakan login terlebih dahulu sebagai Guru.',
-        confirmButtonText: 'Ke Halaman Login',
-        confirmButtonColor: '#2563eb'
-      });
-    } else {
-      alert("Silakan login terlebih dahulu sebagai Guru.");
-    }
-    window.location.href = '../login.html';
+    window.location.replace('../login.html?logout=true');
     return;
   }
 
   // Jika bukan guru, tolak akses dan arahkan ke dashboard belajar siswa
   if (currentUser.role !== 'guru') {
-    if (typeof Swal !== 'undefined') {
-      await Swal.fire({
-        icon: 'error',
-        title: 'Akses Ditolak',
-        text: 'Halaman ini khusus untuk Pendidik / Guru.',
-        confirmButtonText: 'Ke Ruang Belajar',
-        confirmButtonColor: '#2563eb'
-      });
-    } else {
-      alert("Akses ditolak. Halaman ini khusus untuk Pendidik / Guru.");
-    }
-    window.location.href = '../dashboard.html';
+    window.location.replace('../dashboard.html');
     return;
   }
 
@@ -785,7 +774,7 @@ function setupEventListeners() {
 
     if (confirmed) {
       await signOut();
-      window.location.href = '../login.html';
+      window.location.replace('../login.html?logout=true');
     }
   });
 

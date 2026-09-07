@@ -116,10 +116,36 @@ export async function signUpGuru(email, password, name) {
  * Logout pengguna saat ini
  */
 export async function signOut() {
-  localStorage.removeItem('math_current_user');
-  localStorage.removeItem('math_student'); // Kompatibilitas versi lama
+  try {
+    localStorage.removeItem('math_current_user');
+    localStorage.removeItem('math_student');
+
+    // Hapus seluruh token Supabase (sb-*-auth-token) dan cache terkait dari localStorage
+    const keysToRemove = [];
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && (key.startsWith('sb-') || key.includes('supabase') || key.startsWith('math_'))) {
+        keysToRemove.push(key);
+      }
+    }
+    keysToRemove.forEach(k => localStorage.removeItem(k));
+
+    sessionStorage.clear();
+  } catch (err) {
+    console.warn("Storage cleanup error:", err);
+  }
+
   if (supabase) {
-    await supabase.auth.signOut();
+    try {
+      await supabase.auth.signOut({ scope: 'local' });
+    } catch (e) {
+      console.warn("Supabase local signOut error:", e);
+    }
+    try {
+      await supabase.auth.signOut();
+    } catch (e) {
+      console.warn("Supabase server signOut error:", e);
+    }
   }
 }
 

@@ -110,11 +110,21 @@
   <script type="module">
     import { getCurrentUser } from './js/supabase-client.js';
 
+    // Cegah akses kembali via tombol Back browser (BFCache)
+    window.addEventListener('pageshow', async (event) => {
+      if (event.persisted || (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0]?.type === "back_forward")) {
+        const user = await getCurrentUser();
+        if (!user) {
+          window.location.replace('login.html?logout=true');
+        }
+      }
+    });
+
     document.addEventListener('DOMContentLoaded', async () => {
       // Auth Guard: Pastikan user sudah login
       const user = await getCurrentUser();
       if (!user) {
-        window.location.href = 'login.html';
+        window.location.replace('login.html?logout=true');
         return;
       }
 

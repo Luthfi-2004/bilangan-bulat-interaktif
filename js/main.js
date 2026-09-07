@@ -1,5 +1,21 @@
 import { getCurrentUser, signOut } from './supabase-client.js';
 
+// Tangani Back/Forward Cache (BFCache) agar browser tidak memulihkan halaman dari memori saat logout
+window.addEventListener('pageshow', async (event) => {
+  const path = window.location.pathname;
+  if (path.endsWith('/index.html') || path === '/' || path.endsWith('/login.html') || path.includes('/admin/')) {
+    return;
+  }
+  if (event.persisted || (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0]?.type === "back_forward")) {
+    const user = await getCurrentUser();
+    if (!user) {
+      const isSubfolder = path.includes('/materi/');
+      const loginPath = isSubfolder ? '../login.html?logout=true' : 'login.html?logout=true';
+      window.location.replace(loginPath);
+    }
+  }
+});
+
 document.addEventListener('DOMContentLoaded', async () => {
   // Lewati pemeriksaan jika di landing page promosi, login page, atau admin
   const path = window.location.pathname;
@@ -12,8 +28,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!currentUser) {
     // Siswa belum login, arahkan ke login.html
     const isSubfolder = path.includes('/materi/');
-    const loginPath = isSubfolder ? '../login.html' : 'login.html';
-    window.location.href = loginPath;
+    const loginPath = isSubfolder ? '../login.html?logout=true' : 'login.html?logout=true';
+    window.location.replace(loginPath);
     return;
   }
 
@@ -77,7 +93,7 @@ function updateProfileUI(user) {
 
     if (confirmed) {
       await signOut();
-      window.location.href = loginPath;
+      window.location.replace(loginPath + '?logout=true');
     }
   });
 }

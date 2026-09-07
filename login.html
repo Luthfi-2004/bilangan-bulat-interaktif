@@ -206,12 +206,18 @@
 
     // Cek jika pengguna sudah memiliki sesi login aktif
     document.addEventListener('DOMContentLoaded', async () => {
+      // Jika URL memiliki parameter ?logout=true, jangan lakukan auto-redirect
+      const urlParams = new URLSearchParams(window.location.search);
+      if (urlParams.get('logout') === 'true') {
+        return;
+      }
+
       const user = await getCurrentUser();
       if (user) {
         if (user.role === 'guru') {
-          window.location.href = 'admin/index.html';
+          window.location.replace('admin/index.html');
         } else {
-          window.location.href = 'dashboard.html';
+          window.location.replace('dashboard.html');
         }
       }
     });
