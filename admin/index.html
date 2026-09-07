@@ -92,207 +92,153 @@
     }
 
     /* ============================================================
-       RESPONSIVE ADMIN SIDEBAR
+       ADMIN SIDEBAR — RESPONSIVE SYSTEM (CLEAN)
        ============================================================ */
     #admin-sidebar {
-      width: 256px;
-      flex-shrink: 0;
+      width: 248px; flex-shrink: 0;
       transition: width 0.3s cubic-bezier(.4,0,.2,1),
                   transform 0.3s cubic-bezier(.4,0,.2,1),
                   box-shadow 0.3s;
-      overflow: hidden;
-      z-index: 40;
-      display: flex;
-      flex-direction: column;
+      overflow: hidden; z-index: 40;
+      display: flex; flex-direction: column;
       position: relative;
     }
 
-    /* Desktop collapse button */
+    /* Brand */
+    .brand-header {
+      display: flex; align-items: center; gap: 12px;
+      height: 72px; padding: 0 18px;
+      border-bottom: 1px solid rgba(255,255,255,0.07);
+      flex-shrink: 0; overflow: hidden;
+    }
+    .sidebar-text {
+      display: flex; flex-direction: column;
+      overflow: hidden; white-space: nowrap;
+      transition: opacity 0.25s, width 0.3s;
+      flex: 1; min-width: 0;
+    }
+
+    /* Realtime bar */
+    .realtime-bar {
+      overflow: hidden; transition: padding 0.3s;
+    }
+
+    /* Nav buttons */
+    .admin-nav-item {
+      position: relative; overflow: hidden;
+      transition: all 0.18s;
+    }
+    .admin-nav-item span:first-of-type {
+      white-space: nowrap; overflow: hidden;
+      transition: opacity 0.2s, width 0.3s;
+    }
+
+    /* Desktop collapse button — inline in brand row */
     #admin-sidebar-collapse-btn {
-      position: absolute;
-      right: -13px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 26px; height: 26px;
-      background: #1e293b;
-      border: 1.5px solid #334155;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      z-index: 50;
-      color: #94a3b8;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.3);
-      transition: all 0.2s;
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.12);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; color: #64748b; font-size: 10px;
+      transition: all 0.2s; flex-shrink: 0;
+      margin-left: auto;
     }
-    #admin-sidebar-collapse-btn:hover {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
-    }
-    #admin-sidebar-collapse-btn i {
-      font-size: 10px;
-      transition: transform 0.3s;
-    }
-    #admin-sidebar.collapsed #admin-sidebar-collapse-btn i {
-      transform: rotate(180deg);
-    }
+    #admin-sidebar-collapse-btn:hover { background:#2563eb; color:white; border-color:#2563eb; }
+    #admin-sidebar-collapse-btn i { transition: transform 0.3s; }
+    #admin-sidebar.collapsed #admin-sidebar-collapse-btn i { transform: rotate(180deg); }
 
-    /* Desktop: collapsed state */
-    @media (min-width: 1024px) {
-      #admin-sidebar-collapse-btn { display: flex; }
-      #admin-hamburger { display: none !important; }
-
-      #admin-sidebar.collapsed {
-        width: 72px;
-      }
-      #admin-sidebar.collapsed .sidebar-text,
-      #admin-sidebar.collapsed .brand-sub,
-      #admin-sidebar.collapsed .user-info,
-      #admin-sidebar.collapsed .btn-grid {
-        opacity: 0;
-        width: 0;
-        overflow: hidden;
-        pointer-events: none;
-        white-space: nowrap;
-      }
-      #admin-sidebar.collapsed .brand-logo {
-        margin: 0 auto;
-      }
-      #admin-sidebar.collapsed .brand-header {
-        justify-content: center;
-        padding-left: 0;
-        padding-right: 0;
-      }
-      #admin-sidebar.collapsed .realtime-bar {
-        justify-content: center;
-        padding-left: 0;
-        padding-right: 0;
-        font-size: 0;
-      }
-      #admin-sidebar.collapsed .realtime-bar .rt-dot {
-        margin: 0 auto;
-      }
-      #admin-sidebar.collapsed .admin-nav-item {
-        justify-content: center;
-        padding-left: 0 !important;
-        padding-right: 0 !important;
-        gap: 0;
-      }
-      #admin-sidebar.collapsed .admin-nav-item span {
-        width: 0;
-        overflow: hidden;
-        opacity: 0;
-        white-space: nowrap;
-        pointer-events: none;
-        transition: opacity 0.25s, width 0.25s;
-      }
-      #admin-sidebar.collapsed .user-footer {
-        justify-content: center;
-        padding: 0.75rem 0;
-      }
-      /* Tooltip on collapsed */
-      #admin-sidebar.collapsed .admin-nav-item {
-        position: relative;
-      }
-      #admin-sidebar.collapsed .nav-tooltip {
-        position: absolute;
-        left: 72px;
-        background: #1e293b;
-        color: white;
-        padding: 4px 10px;
-        border-radius: 6px;
-        font-size: 0.78rem;
-        font-weight: 500;
-        white-space: nowrap;
-        opacity: 0;
-        pointer-events: none;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-        z-index: 100;
-        border: 1px solid #334155;
-        transition: opacity 0.15s;
-      }
-      #admin-sidebar.collapsed .admin-nav-item:hover .nav-tooltip {
-        opacity: 1;
-      }
+    /* Hamburger button */
+    #admin-hamburger {
+      display: none;
+      width: 36px; height: 36px; border-radius: 9px;
+      background: #f1f5f9; border: 1px solid #e2e8f0;
+      color: #475569; cursor: pointer;
+      align-items: center; justify-content: center;
+      transition: all 0.2s; flex-shrink: 0;
+      font-size: 1rem; margin-right: 10px;
     }
-
-    /* Tablet (768-1023px) */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      #admin-sidebar-collapse-btn { display: none !important; }
-      #admin-hamburger { display: flex !important; }
-      #admin-sidebar {
-        position: fixed !important;
-        top: 0; left: 0;
-        height: 100% !important;
-        transform: translateX(-100%);
-        box-shadow: none;
-      }
-      #admin-sidebar.open {
-        transform: translateX(0);
-        box-shadow: 8px 0 32px rgba(0,0,0,0.4);
-      }
-    }
-
-    /* Mobile (<768px) */
-    @media (max-width: 767px) {
-      #admin-sidebar-collapse-btn { display: none !important; }
-      #admin-hamburger { display: flex !important; }
-      #admin-sidebar {
-        position: fixed !important;
-        top: 0; left: 0;
-        height: 100% !important;
-        width: 272px !important;
-        transform: translateX(-100%);
-        box-shadow: none;
-      }
-      #admin-sidebar.open {
-        transform: translateX(0);
-        box-shadow: 8px 0 32px rgba(0,0,0,0.5);
-      }
-    }
+    #admin-hamburger:hover { background: #2563eb; color: white; border-color: #2563eb; }
 
     /* Overlay */
     #admin-overlay {
       position: fixed; inset: 0;
-      background: rgba(0,0,0,0.55);
-      backdrop-filter: blur(2px);
-      z-index: 30;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity 0.3s;
+      background: rgba(0,0,0,0.55); backdrop-filter: blur(3px);
+      z-index: 30; opacity: 0; pointer-events: none; transition: opacity 0.3s;
     }
-    #admin-overlay.active {
-      opacity: 1;
-      pointer-events: auto;
+    #admin-overlay.active { opacity: 1; pointer-events: auto; }
+
+    /* User footer */
+    .user-info, .btn-grid {
+      transition: opacity 0.25s, max-height 0.3s;
     }
 
-    /* Hamburger button */
-    #admin-hamburger {
-      width: 38px; height: 38px;
-      border-radius: 9px;
-      background: #f1f5f9;
-      border: 1px solid #e2e8f0;
-      color: #475569;
-      cursor: pointer;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
-      margin-right: 0.75rem;
-    }
-    #admin-hamburger:hover {
-      background: #2563eb;
-      color: white;
-      border-color: #2563eb;
+    /* ====== DESKTOP (>=1024px) ====== */
+    @media (min-width: 1024px) {
+      #admin-hamburger { display: none !important; }
+      #admin-sidebar-collapse-btn { display: flex; }
+
+      #admin-sidebar.collapsed { width: 68px; }
+
+      #admin-sidebar.collapsed .sidebar-text,
+      #admin-sidebar.collapsed .user-info,
+      #admin-sidebar.collapsed .btn-grid {
+        opacity: 0; width: 0; overflow: hidden; pointer-events: none;
+      }
+      #admin-sidebar.collapsed #admin-sidebar-collapse-btn { margin-left: 0; }
+      #admin-sidebar.collapsed .brand-header { justify-content: space-between; padding: 0 18px; }
+      #admin-sidebar.collapsed .realtime-bar {
+        justify-content: center; padding-left: 0; padding-right: 0;
+      }
+      #admin-sidebar.collapsed .realtime-bar .sidebar-text { display: none; }
+      #admin-sidebar.collapsed .admin-nav-item {
+        justify-content: center !important;
+        padding-left: 0 !important; padding-right: 0 !important;
+        gap: 0 !important;
+      }
+      #admin-sidebar.collapsed .admin-nav-item span:first-of-type {
+        opacity: 0; width: 0; pointer-events: none;
+      }
+
+      /* CSS Tooltip via data-label */
+      #admin-sidebar.collapsed .admin-nav-item::after {
+        content: attr(data-label);
+        position: absolute; left: 72px;
+        background: #1e293b; color: white;
+        padding: 5px 11px; border-radius: 7px;
+        font-size: 0.78rem; font-weight: 500;
+        white-space: nowrap; pointer-events: none;
+        opacity: 0; z-index: 200;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+        border: 1px solid #334155;
+        transition: opacity 0.15s;
+      }
+      #admin-sidebar.collapsed .admin-nav-item:hover::after { opacity: 1; }
     }
 
-    /* Content padding adjustments */
+    /* ====== TABLET (768-1023px) ====== */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      #admin-sidebar-collapse-btn { display: none !important; }
+      #admin-hamburger { display: flex !important; }
+      #admin-sidebar {
+        position: fixed !important; top: 0; left: 0;
+        height: 100% !important; transform: translateX(-100%);
+        box-shadow: none;
+      }
+      #admin-sidebar.open { transform: translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.4); }
+    }
+
+    /* ====== MOBILE (<768px) ====== */
     @media (max-width: 767px) {
+      #admin-sidebar-collapse-btn { display: none !important; }
+      #admin-hamburger { display: flex !important; }
+      #admin-sidebar {
+        position: fixed !important; top: 0; left: 0;
+        height: 100% !important; width: 260px !important;
+        transform: translateX(-100%); box-shadow: none;
+      }
+      #admin-sidebar.open { transform: translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.5); }
       .admin-main-content { padding: 1rem !important; }
-      .admin-topbar { padding-left: 1rem !important; padding-right: 1rem !important; }
     }
   </style>
 </head>
@@ -308,15 +254,15 @@
     <aside id="admin-sidebar" class="bg-slate-900 text-white border-r border-slate-800">
       
       <!-- Brand -->
-      <div class="brand-header h-20 flex items-center px-6 border-b border-slate-800 gap-3" style="position:relative;">
+      <div class="brand-header">
         <div class="brand-logo w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center font-black text-lg text-white shadow-md shadow-blue-500/20 flex-shrink-0">
           <i class="fa-solid fa-chalkboard-user"></i>
         </div>
         <div class="sidebar-text">
-          <span class="font-extrabold text-base tracking-tight text-white block brand-name">Guru Panel</span>
-          <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider brand-sub">BilBul Matematika</span>
+          <span class="font-extrabold text-base tracking-tight text-white">Guru Panel</span>
+          <span class="text-[10px] text-blue-400 font-bold uppercase tracking-wider">BilBul Matematika</span>
         </div>
-        <!-- Desktop collapse button -->
+        <!-- Collapse button — sejajar di baris brand -->
         <button id="admin-sidebar-collapse-btn" title="Perkecil/Perbesar Sidebar">
           <i class="fa-solid fa-chevron-left"></i>
         </button>
@@ -335,35 +281,35 @@
       </div>
 
       <!-- Nav Items -->
-      <nav class="flex-1 px-3 py-5 space-y-1 overflow-y-auto no-scrollbar">
-        <button id="nav-dashboard" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all bg-blue-600 text-white shadow-sm" style="position:relative;">
-          <i class="fa-solid fa-chart-pie w-5 text-center flex-shrink-0"></i>
+      <nav class="flex-1 px-3 py-4 overflow-y-auto" style="scrollbar-width:none;">
+        <button id="nav-dashboard" data-label="Dashboard"
+          class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all bg-blue-600 text-white shadow-md mb-1">
+          <i class="fa-solid fa-chart-pie flex-shrink-0" style="width:18px;text-align:center;"></i>
           <span>Dashboard</span>
-          <span class="nav-tooltip">Dashboard</span>
         </button>
 
-        <button id="nav-students" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
-          <i class="fa-solid fa-user-graduate w-5 text-center flex-shrink-0"></i>
+        <button id="nav-students" data-label="Kelola Siswa"
+          class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800 mb-1">
+          <i class="fa-solid fa-user-graduate flex-shrink-0" style="width:18px;text-align:center;"></i>
           <span>Kelola Siswa</span>
-          <span class="nav-tooltip">Kelola Siswa</span>
         </button>
 
-        <button id="nav-progress" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
-          <i class="fa-solid fa-bolt w-5 text-center flex-shrink-0"></i>
-          <span>Progress Siswa (Live)</span>
-          <span class="nav-tooltip">Progress Siswa</span>
+        <button id="nav-progress" data-label="Progress Siswa"
+          class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800 mb-1">
+          <i class="fa-solid fa-bolt flex-shrink-0" style="width:18px;text-align:center;"></i>
+          <span>Progress Siswa</span>
         </button>
 
-        <button id="nav-questions" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
-          <i class="fa-solid fa-database w-5 text-center flex-shrink-0"></i>
+        <button id="nav-questions" data-label="Bank Soal"
+          class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800 mb-1">
+          <i class="fa-solid fa-database flex-shrink-0" style="width:18px;text-align:center;"></i>
           <span>Bank Soal (CMS)</span>
-          <span class="nav-tooltip">Bank Soal</span>
         </button>
 
-        <button id="nav-materi" class="admin-nav-item w-full flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800" style="position:relative;">
-          <i class="fa-solid fa-book-open w-5 text-center flex-shrink-0"></i>
+        <button id="nav-materi" data-label="Kelola Materi"
+          class="admin-nav-item w-full flex items-center gap-3 px-3.5 py-3 rounded-xl text-sm font-semibold transition-all text-slate-400 hover:text-white hover:bg-slate-800 mb-1">
+          <i class="fa-solid fa-book-open flex-shrink-0" style="width:18px;text-align:center;"></i>
           <span>Kelola Materi</span>
-          <span class="nav-tooltip">Kelola Materi</span>
         </button>
       </nav>
 

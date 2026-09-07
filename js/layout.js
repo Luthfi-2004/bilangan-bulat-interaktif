@@ -1,461 +1,510 @@
-﻿// ==========================================================
+// ==========================================================
 // LAYOUT ENGINE & CLIENT-SIDE SPA ROUTER
 // Media Pembelajaran Operasi Campuran Bilangan Bulat
 // ==========================================================
 
-// ---- HTML KOMPONEN INLINE (tidak bergantung fetch/server) ----
-
+// ---- SIDEBAR HTML SISWA (Premium Design) ----
 const SIDEBAR_HTML = `
-<div class="sidebar-brand" style="position:relative;">
-  <i class="fa-solid fa-calculator text-blue-600 text-xl flex-shrink-0"></i>
-  <span class="sidebar-brand-text" style="margin-left:0.5rem;font-size:1.125rem;font-weight:700;background:linear-gradient(to right,#2563eb,#4f46e5);-webkit-background-clip:text;-webkit-text-fill-color:transparent;">BilBul</span>
-  <button id="sidebar-toggle-desktop" title="Perkecil/Perbesar Sidebar">
+<div class="sb-brand">
+  <div class="sb-logo">
+    <i class="fa-solid fa-calculator"></i>
+  </div>
+  <div class="sb-brand-info">
+    <span class="sb-brand-name">BilBul</span>
+    <span class="sb-brand-sub">Matematika Kelas VII</span>
+  </div>
+  <button id="sidebar-toggle-desktop" class="sb-collapse-btn" title="Perkecil Sidebar">
     <i class="fa-solid fa-chevron-left"></i>
   </button>
 </div>
-<nav class="flex-1 overflow-y-auto py-4 no-scrollbar">
-  <ul id="sidebar-menu" style="list-style:none;margin:0;padding:0;">
-    <li><a href="./dashboard.html" data-path="/dashboard.html" class="nav-link"><i class="fa-solid fa-house"></i><span class="sidebar-label">Beranda Belajar</span></a></li>
-    <li><a href="./petunjuk.html" data-path="/petunjuk.html" class="nav-link"><i class="fa-solid fa-circle-info"></i><span class="sidebar-label">Petunjuk</span></a></li>
-    <li><a href="./tes-awal.html" data-path="/tes-awal.html" class="nav-link"><i class="fa-solid fa-clipboard-list"></i><span class="sidebar-label">Tes Awal</span></a></li>
-    <li><a href="./materi/index.html" data-path="/materi/" class="nav-link"><i class="fa-solid fa-book-open"></i><span class="sidebar-label">Materi</span></a></li>
-    <li><a href="./latihan.html" data-path="/latihan.html" class="nav-link"><i class="fa-solid fa-pen-to-square"></i><span class="sidebar-label">Latihan</span></a></li>
-    <li><a href="./soal-cerita.html" data-path="/soal-cerita.html" class="nav-link"><i class="fa-solid fa-comment-dots"></i><span class="sidebar-label">Soal Cerita</span></a></li>
-    <li><a href="./game.html" data-path="/game.html" class="nav-link"><i class="fa-solid fa-gamepad"></i><span class="sidebar-label">Game</span></a></li>
-    <li><a href="./kuis.html" data-path="/kuis.html" class="nav-link"><i class="fa-solid fa-stopwatch"></i><span class="sidebar-label">Kuis Akhir</span></a></li>
-    <li><a href="./hasil.html" data-path="/hasil.html" class="nav-link"><i class="fa-solid fa-chart-line"></i><span class="sidebar-label">Hasil Belajar</span></a></li>
-    <li><a href="./pencapaian.html" data-path="/pencapaian.html" class="nav-link"><i class="fa-solid fa-trophy"></i><span class="sidebar-label">Pencapaian</span></a></li>
+
+<nav class="sb-nav" id="sidebar-menu-wrap">
+  <div class="sb-section-label">Menu Utama</div>
+  <ul id="sidebar-menu">
+    <li>
+      <a href="./dashboard.html" data-path="/dashboard.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-house"></i></span>
+        <span class="sb-text">Beranda</span>
+      </a>
+    </li>
+    <li>
+      <a href="./petunjuk.html" data-path="/petunjuk.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-circle-info"></i></span>
+        <span class="sb-text">Petunjuk</span>
+      </a>
+    </li>
+    <li>
+      <a href="./tes-awal.html" data-path="/tes-awal.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-clipboard-list"></i></span>
+        <span class="sb-text">Tes Awal</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="sb-section-label">Belajar</div>
+  <ul id="sidebar-menu-belajar">
+    <li>
+      <a href="./materi/index.html" data-path="/materi/" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-book-open"></i></span>
+        <span class="sb-text">Materi</span>
+      </a>
+    </li>
+    <li>
+      <a href="./latihan.html" data-path="/latihan.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-pen-to-square"></i></span>
+        <span class="sb-text">Latihan</span>
+      </a>
+    </li>
+    <li>
+      <a href="./soal-cerita.html" data-path="/soal-cerita.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-comment-dots"></i></span>
+        <span class="sb-text">Soal Cerita</span>
+      </a>
+    </li>
+    <li>
+      <a href="./game.html" data-path="/game.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-gamepad"></i></span>
+        <span class="sb-text">Game Edukasi</span>
+      </a>
+    </li>
+    <li>
+      <a href="./kuis.html" data-path="/kuis.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-stopwatch"></i></span>
+        <span class="sb-text">Kuis Akhir</span>
+      </a>
+    </li>
+  </ul>
+
+  <div class="sb-section-label">Progres</div>
+  <ul id="sidebar-menu-progres">
+    <li>
+      <a href="./hasil.html" data-path="/hasil.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-chart-line"></i></span>
+        <span class="sb-text">Hasil Belajar</span>
+      </a>
+    </li>
+    <li>
+      <a href="./pencapaian.html" data-path="/pencapaian.html" class="sb-link">
+        <span class="sb-icon"><i class="fa-solid fa-trophy"></i></span>
+        <span class="sb-text">Pencapaian</span>
+      </a>
+    </li>
   </ul>
 </nav>
 `;
 
+// ---- TOPBAR HTML SISWA ----
 const TOPBAR_HTML = `
-<div style="display:flex;align-items:center;justify-content:space-between;height:100%;padding:0 1rem;">
-  <div style="display:flex;align-items:center;gap:0.75rem;">
-    <button id="menu-toggle-btn" aria-label="Toggle menu" title="Buka/Tutup Menu">
-      <i class="fa-solid fa-bars" style="font-size:1.1rem;"></i>
+<div class="tb-inner">
+  <div class="tb-left">
+    <button id="menu-toggle-btn" class="tb-hamburger" aria-label="Buka menu">
+      <i class="fa-solid fa-bars"></i>
     </button>
-    <span id="topbar-greeting" style="font-size:0.875rem;color:#64748b;font-weight:500;" class="hidden-mobile">Selamat datang di Media Pembelajaran Interaktif!</span>
-    <span style="font-size:0.875rem;font-weight:700;color:#1e293b;" class="visible-mobile">BilBul</span>
+    <span class="tb-title-mobile">BilBul</span>
+    <span class="tb-greeting">Selamat datang di Media Pembelajaran Interaktif!</span>
   </div>
-  <div id="student-profile" style="display:flex;align-items:center;gap:0.5rem;">
-    <!-- Injected by main.js -->
-  </div>
+  <div id="student-profile" class="tb-profile"></div>
 </div>
 `;
 
 const FOOTER_HTML = `
-<div style="text-align:center;font-size:0.8rem;color:#94a3b8;">
-  &copy; 2024 Media Pembelajaran Operasi Campuran Bilangan Bulat. Dibuat untuk Kelas VII.
+<div style="text-align:center;font-size:0.78rem;color:#94a3b8;padding:0.5rem 0;">
+  &copy; 2024 Media Pembelajaran Operasi Campuran Bilangan Bulat &mdash; Kelas VII SMP
 </div>
 `;
 
-// ---- INLINE STYLES untuk sidebar responsif (fallback jika CSS terlambat load) ----
-function injectResponsiveStyles() {
-  if (document.getElementById('layout-responsive-styles')) return;
-  const style = document.createElement('style');
-  style.id = 'layout-responsive-styles';
-  style.textContent = `
-    /* --- TOPBAR GREETING --- */
-    .hidden-mobile { display: inline; }
-    .visible-mobile { display: none; }
-    @media (max-width: 767px) {
-      .hidden-mobile { display: none; }
-      .visible-mobile { display: inline; }
+// ---- ALL-IN-ONE CSS (injected once, no conflicts) ----
+function injectLayoutStyles() {
+  if (document.getElementById('sb-layout-styles')) return;
+  const el = document.createElement('style');
+  el.id = 'sb-layout-styles';
+  el.textContent = `
+    /* ============ RESET & BASE ============ */
+    #app-layout { display:flex; height:100vh; overflow:hidden; position:relative; background:#f8fafc; }
+
+    /* ============ SIDEBAR WRAPPER ============ */
+    #app-sidebar {
+      width: 240px;
+      flex-shrink: 0;
+      background: white;
+      border-right: 1px solid #e2e8f0;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+      z-index: 40;
+      transition: width 0.3s cubic-bezier(.4,0,.2,1), transform 0.3s cubic-bezier(.4,0,.2,1), box-shadow 0.3s;
     }
 
-    /* --- SIDEBAR BRAND --- */
-    .sidebar-brand {
-      display: flex; align-items: center;
-      height: 64px; padding: 0 1.25rem;
-      border-bottom: 1px solid #e2e8f0;
-      flex-shrink: 0; overflow: hidden;
-      transition: padding 0.3s ease;
+    /* ============ BRAND HEADER ============ */
+    .sb-brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 14px;
+      height: 64px;
+      border-bottom: 1px solid #f1f5f9;
+      flex-shrink: 0;
+      overflow: hidden;
     }
-    .sidebar-brand-text {
-      display: inline-block; white-space: nowrap;
-      overflow: hidden; transition: opacity 0.25s ease, width 0.3s ease;
-      width: auto;
+    .sb-logo {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, #2563eb, #4f46e5);
+      border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 15px;
+      flex-shrink: 0;
+      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+    }
+    .sb-brand-info {
+      display: flex; flex-direction: column;
+      overflow: hidden;
+      transition: opacity 0.25s, width 0.3s, max-width 0.3s;
+      white-space: nowrap;
+      min-width: 0;
+      flex: 1;
+    }
+    .sb-brand-name {
+      font-size: 1rem; font-weight: 800;
+      background: linear-gradient(to right, #2563eb, #4f46e5);
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      line-height: 1.2;
+    }
+    .sb-brand-sub {
+      font-size: 0.6rem; font-weight: 600;
+      color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;
     }
 
-    /* --- NAV LINKS --- */
-    .nav-link {
-      display: flex; align-items: center;
-      padding: 0.75rem 1.25rem;
-      color: #475569; text-decoration: none;
-      transition: background 0.2s, color 0.2s, padding 0.3s;
+    /* ============ COLLAPSE BUTTON — inline in brand row ============ */
+    .sb-collapse-btn {
+      width: 28px; height: 28px;
+      border-radius: 8px;
+      background: #f1f5f9;
+      border: 1px solid #e2e8f0;
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer;
+      color: #94a3b8; font-size: 10px;
+      transition: all 0.2s;
+      flex-shrink: 0;
+      margin-left: auto;
+    }
+    .sb-collapse-btn:hover { background:#2563eb; color:white; border-color:#2563eb; box-shadow:0 2px 8px rgba(37,99,235,0.3); }
+    .sb-collapse-btn i { transition: transform 0.3s; }
+    #app-sidebar.sb-collapsed .sb-collapse-btn i { transform: rotate(180deg); }
+
+    /* ============ NAV ============ */
+    .sb-nav {
+      flex: 1; overflow-y: auto; padding: 12px 10px 16px;
+      scrollbar-width: none;
+    }
+    .sb-nav::-webkit-scrollbar { display: none; }
+    .sb-nav ul { list-style: none; margin: 0; padding: 0; }
+
+    .sb-section-label {
+      font-size: 0.6rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 0.1em;
+      color: #cbd5e1; padding: 12px 10px 4px;
       white-space: nowrap; overflow: hidden;
-      position: relative; gap: 0.75rem;
-    }
-    .nav-link:hover { background: #f8fafc; color: #2563eb; }
-    .nav-link.active {
-      background: #eff6ff; color: #2563eb;
-      font-weight: 600; border-right: 3px solid #2563eb;
-    }
-    .nav-link i {
-      width: 1.25rem; text-align: center;
-      font-size: 1.05rem; flex-shrink: 0;
-      transition: margin 0.3s;
+      transition: opacity 0.2s, height 0.3s;
     }
 
-    /* --- DESKTOP TOGGLE BUTTON --- */
-    #sidebar-toggle-desktop {
-      position: absolute; right: -13px; top: 50%;
-      transform: translateY(-50%);
-      width: 26px; height: 26px;
-      background: white; border: 1.5px solid #e2e8f0;
-      border-radius: 50%; display: flex;
-      align-items: center; justify-content: center;
-      cursor: pointer; z-index: 50; color: #64748b;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-      transition: all 0.2s; flex-shrink: 0;
+    /* ============ NAV LINKS ============ */
+    .sb-link {
+      display: flex; align-items: center; gap: 10px;
+      padding: 9px 10px;
+      border-radius: 10px;
+      color: #64748b; text-decoration: none;
+      font-size: 0.875rem; font-weight: 500;
+      transition: all 0.18s;
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      position: relative;
     }
-    #sidebar-toggle-desktop:hover {
-      background: #2563eb; color: white; border-color: #2563eb;
+    .sb-link:hover {
+      background: #f1f5f9; color: #1e40af;
     }
-    #sidebar-toggle-desktop i {
-      font-size: 10px; transition: transform 0.3s;
+    .sb-link.active {
+      background: linear-gradient(135deg, #eff6ff, #eef2ff);
+      color: #2563eb; font-weight: 600;
+      box-shadow: inset 3px 0 0 #2563eb;
     }
-    #app-sidebar.sidebar-collapsed #sidebar-toggle-desktop i {
-      transform: rotate(180deg);
+    .sb-icon {
+      width: 32px; height: 32px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      flex-shrink: 0;
+      background: transparent;
+      transition: background 0.18s, color 0.18s;
+    }
+    .sb-link:hover .sb-icon { background: #dbeafe; color: #2563eb; }
+    .sb-link.active .sb-icon { background: #dbeafe; color: #2563eb; }
+    .sb-text { overflow: hidden; transition: opacity 0.2s, width 0.3s; }
+
+    /* ============ COLLAPSED STATE (Desktop) ============ */
+    @media (min-width: 1024px) {
+      #app-sidebar.sb-collapsed { width: 64px; }
+      #app-sidebar.sb-collapsed .sb-brand-info { opacity:0; width:0; max-width:0; pointer-events:none; }
+      #app-sidebar.sb-collapsed .sb-collapse-btn { margin-left: 0; }
+      #app-sidebar.sb-collapsed .sb-brand { justify-content: space-between; padding: 0 14px; }
+      #app-sidebar.sb-collapsed .sb-section-label { opacity:0; height:0; padding:0; pointer-events:none; }
+      #app-sidebar.sb-collapsed .sb-text { opacity:0; width:0; pointer-events:none; }
+      #app-sidebar.sb-collapsed .sb-link { justify-content: center; padding-left:0; padding-right:0; gap:0; }
+
+      /* Tooltip on hover when collapsed */
+      #app-sidebar.sb-collapsed .sb-link::after {
+        content: attr(data-label);
+        position: absolute; left: 68px;
+        background: #1e293b; color: white;
+        padding: 5px 11px; border-radius: 7px;
+        font-size: 0.78rem; font-weight: 500;
+        white-space: nowrap; pointer-events: none;
+        opacity: 0; z-index: 200;
+        box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+        transition: opacity 0.15s;
+        border: 1px solid #334155;
+      }
+      #app-sidebar.sb-collapsed .sb-link:hover::after { opacity: 1; }
     }
 
-    /* --- HAMBURGER BUTTON --- */
-    #menu-toggle-btn {
-      width: 38px; height: 38px; border-radius: 9px;
+    /* ============ HAMBURGER BUTTON ============ */
+    .tb-hamburger {
+      display: none;
+      width: 36px; height: 36px; border-radius: 9px;
       background: #f1f5f9; border: 1px solid #e2e8f0;
       color: #475569; cursor: pointer;
-      display: none; align-items: center; justify-content: center;
+      align-items: center; justify-content: center;
       transition: all 0.2s; flex-shrink: 0;
+      font-size: 1rem;
     }
-    #menu-toggle-btn:hover { background: #2563eb; color: white; border-color: #2563eb; }
+    .tb-hamburger:hover { background:#2563eb; color:white; border-color:#2563eb; }
 
-    /* --- SIDEBAR BASE (semua ukuran) --- */
-    #app-sidebar {
-      width: 248px; flex-shrink: 0;
-      transition: width 0.3s cubic-bezier(.4,0,.2,1),
-                  transform 0.3s cubic-bezier(.4,0,.2,1),
-                  box-shadow 0.3s;
-      overflow: hidden; z-index: 40;
-      display: flex; flex-direction: column;
+    /* ============ TOPBAR ============ */
+    .tb-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      height: 100%; padding: 0 1.25rem;
     }
+    .tb-left { display: flex; align-items: center; gap: 10px; }
+    .tb-greeting { font-size: 0.875rem; color: #64748b; font-weight: 500; }
+    .tb-title-mobile { font-size: 0.9rem; font-weight: 800; color: #1e293b; display: none; }
+    .tb-profile { display: flex; align-items: center; gap: 8px; }
 
-    /* --- DESKTOP (>=1024px) --- */
-    @media (min-width: 1024px) {
-      #menu-toggle-btn { display: none !important; }
-      #sidebar-toggle-desktop { display: flex; }
-
-      #app-sidebar.sidebar-collapsed { width: 68px; }
-      #app-sidebar.sidebar-collapsed .sidebar-label { opacity: 0; width: 0; overflow: hidden; pointer-events: none; }
-      #app-sidebar.sidebar-collapsed .sidebar-brand-text { opacity: 0; width: 0; overflow: hidden; }
-      #app-sidebar.sidebar-collapsed .sidebar-brand { padding-left: 0; padding-right: 0; justify-content: center; }
-      #app-sidebar.sidebar-collapsed .nav-link { justify-content: center; padding-left: 0; padding-right: 0; gap: 0; }
-      #app-sidebar.sidebar-collapsed .nav-link i { margin: 0; width: auto; }
-
-      /* Tooltip saat collapsed */
-      #app-sidebar.sidebar-collapsed .nav-link { position: relative; }
-      #app-sidebar.sidebar-collapsed .sidebar-label {
-        position: absolute !important; left: 72px;
-        background: #1e293b; color: white;
-        padding: 4px 10px; border-radius: 6px;
-        font-size: 0.78rem; font-weight: 500;
-        white-space: nowrap; opacity: 0 !important;
-        pointer-events: none;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        z-index: 100;
-        width: auto !important; overflow: visible !important;
-        transition: opacity 0.15s !important;
-      }
-      #app-sidebar.sidebar-collapsed .nav-link:hover .sidebar-label {
-        opacity: 1 !important;
-      }
-    }
-
-    /* --- TABLET (768-1023px) --- */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      #menu-toggle-btn { display: flex !important; }
-      #sidebar-toggle-desktop { display: none !important; }
-      #app-sidebar {
-        position: fixed !important; top: 0; left: 0;
-        height: 100% !important; transform: translateX(-100%);
-        box-shadow: none; z-index: 40;
-      }
-      #app-sidebar.sidebar-open {
-        transform: translateX(0);
-        box-shadow: 8px 0 32px rgba(0,0,0,0.15);
-      }
-    }
-
-    /* --- MOBILE (<768px) --- */
-    @media (max-width: 767px) {
-      #menu-toggle-btn { display: flex !important; }
-      #sidebar-toggle-desktop { display: none !important; }
-      #app-sidebar {
-        position: fixed !important; top: 0; left: 0;
-        height: 100% !important; width: 272px !important;
-        transform: translateX(-100%);
-        box-shadow: none; z-index: 40;
-      }
-      #app-sidebar.sidebar-open {
-        transform: translateX(0);
-        box-shadow: 8px 0 32px rgba(0,0,0,0.2);
-      }
-    }
-
-    /* --- OVERLAY --- */
+    /* ============ OVERLAY ============ */
     #sidebar-overlay {
       position: fixed; inset: 0;
-      background: rgba(15,23,42,0.45);
-      backdrop-filter: blur(2px);
-      z-index: 30; opacity: 0;
-      pointer-events: none;
+      background: rgba(15,23,42,0.5);
+      backdrop-filter: blur(3px);
+      z-index: 30; opacity: 0; pointer-events: none;
       transition: opacity 0.3s;
     }
-    #sidebar-overlay.active { opacity: 1; pointer-events: auto; }
+    #sidebar-overlay.active { opacity:1; pointer-events:auto; }
 
-    /* --- APP CONTENT PADDING --- */
-    #app-content { padding: 1.5rem; }
-    @media (min-width: 1024px) { #app-content { padding: 2rem; } }
-    @media (max-width: 767px) { #app-content { padding: 1rem; } }
+    /* ============ TABLET (768-1023px) ============ */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .sb-collapse-btn { display: none !important; }
+      .tb-hamburger { display: flex !important; }
+      .tb-greeting { display: none; }
+      .tb-title-mobile { display: block; }
+      #app-sidebar {
+        position: fixed !important; top:0; left:0; height:100% !important;
+        transform: translateX(-100%); box-shadow: none;
+      }
+      #app-sidebar.sb-open { transform:translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.15); }
+    }
 
-    /* --- SCROLLBAR --- */
-    .no-scrollbar::-webkit-scrollbar { display: none; }
-    .no-scrollbar { -ms-overflow-style:none; scrollbar-width:none; }
+    /* ============ MOBILE (<768px) ============ */
+    @media (max-width: 767px) {
+      .sb-collapse-btn { display: none !important; }
+      .tb-hamburger { display: flex !important; }
+      .tb-greeting { display: none; }
+      .tb-title-mobile { display: block; }
+      #app-sidebar {
+        position: fixed !important; top:0; left:0; height:100% !important;
+        width: 260px !important; transform: translateX(-100%); box-shadow: none;
+      }
+      #app-sidebar.sb-open { transform:translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.2); }
+      #app-content { padding: 1rem !important; }
+    }
+
+    /* ============ DESKTOP ============ */
+    @media (min-width: 1024px) {
+      .tb-hamburger { display: none !important; }
+      .sb-collapse-btn { display: flex; }
+    }
+
+    /* ============ MAIN AREA ============ */
+    #app-main { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
+    #app-content { flex:1; overflow-y:auto; padding:2rem; transition:opacity 0.15s; }
+    @media (max-width:1023px) { #app-content { padding: 1.25rem; } }
+    @media (max-width:767px)  { #app-content { padding: 1rem; } }
   `;
-  document.head.appendChild(style);
+  document.head.appendChild(el);
 }
 
-// 1. Auto-inject SweetAlert2 jika belum tersedia di dokumen
+// Tambahkan data-label untuk tooltip collapsed
+function addTooltipLabels() {
+  document.querySelectorAll('.sb-link').forEach(link => {
+    const text = link.querySelector('.sb-text');
+    if (text) link.setAttribute('data-label', text.textContent.trim());
+  });
+}
+
+// 1. Auto-inject SweetAlert2 jika belum tersedia
 (function ensureSweetAlert() {
   if (typeof window.Swal === 'undefined' && !document.querySelector('script[src*="sweetalert2"]')) {
     const script = document.createElement('script');
     script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
     document.head.appendChild(script);
   }
-
-  // Override window.alert agar dialog bawaan browser tidak pernah muncul
   const origAlert = window.alert;
   window.alert = function (message) {
     if (typeof Swal !== 'undefined') {
       return Swal.fire({
-        title: 'Pemberitahuan',
-        text: String(message),
-        icon: 'info',
+        title: 'Pemberitahuan', text: String(message), icon: 'info',
         confirmButtonColor: '#2563eb',
-        customClass: {
-          popup: 'rounded-2xl shadow-xl font-sans',
-          confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm'
-        }
+        customClass: { popup: 'rounded-2xl shadow-xl font-sans', confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm' }
       });
     }
     return origAlert(message);
   };
 })();
 
-// 2. Cegah BFCache me-restore sesi belajar siswa setelah logout
+// 2. Cegah BFCache
 window.addEventListener('pageshow', (event) => {
   const path = window.location.pathname;
-  if (path.endsWith('/index.html') || path === '/' || path.endsWith('/login.html') || path.includes('/admin/')) {
-    return;
-  }
+  if (path.endsWith('/index.html') || path === '/' || path.endsWith('/login.html') || path.includes('/admin/')) return;
   if (event.persisted || (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0]?.type === "back_forward")) {
     const cached = localStorage.getItem('math_current_user');
     if (!cached) {
       const isMateri = path.includes('/materi/');
-      const target = isMateri ? '../login.html?logout=true' : 'login.html?logout=true';
-      window.location.replace(target);
+      window.location.replace(isMateri ? '../login.html?logout=true' : 'login.html?logout=true');
     }
   }
 });
 
-// Helper: apakah path ini di sub-folder /materi/?
-function getAppBasePath() {
-  return window.location.pathname.includes('/materi/') ? '../' : './';
-}
-
-// 3. Layout Initialization on DOMContentLoaded
+// 3. Layout Initialization
 document.addEventListener('DOMContentLoaded', async () => {
-  // Lewati jika halaman ditandai bebas layout, login, admin, atau landing
-  if (document.body.dataset.noLayout === 'true' || 
+  if (document.body.dataset.noLayout === 'true' ||
       document.getElementById('no-app-layout') ||
       window.location.pathname.includes('/admin/') ||
-      window.location.pathname.endsWith('/login.html')) {
-    return;
-  }
+      window.location.pathname.endsWith('/login.html')) return;
 
-  // Inject style responsif ke <head>
-  injectResponsiveStyles();
+  injectLayoutStyles();
 
-  // Bangun shell layout satu kali
   if (!document.getElementById('app-layout')) {
     const originalContent = document.body.innerHTML;
     document.body.innerHTML = `
-      <div id="app-layout" style="display:flex;height:100vh;overflow:hidden;position:relative;background:#f8fafc;">
-        <!-- Overlay untuk mobile/tablet -->
+      <div id="app-layout">
         <div id="sidebar-overlay"></div>
-        
-        <!-- Sidebar -->
-        <aside id="app-sidebar" style="border-right:1px solid #e2e8f0;background:white;">
-          ${SIDEBAR_HTML}
-        </aside>
-        
-        <!-- Main Area -->
-        <div id="app-main" style="flex:1;display:flex;flex-direction:column;min-width:0;overflow:hidden;">
-          <!-- Topbar -->
-          <header id="app-topbar" style="height:64px;flex-shrink:0;border-bottom:1px solid #e2e8f0;background:rgba(255,255,255,0.92);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;">
+        <aside id="app-sidebar">${SIDEBAR_HTML}</aside>
+        <div id="app-main">
+          <header id="app-topbar" style="height:64px;flex-shrink:0;border-bottom:1px solid #e2e8f0;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;">
             ${TOPBAR_HTML}
           </header>
-          
-          <!-- Konten Dinamis -->
-          <main id="app-content" style="flex:1;overflow-y:auto;transition:opacity 0.15s;">
-            ${originalContent}
-          </main>
-          
-          <!-- Footer -->
-          <footer id="app-footer" style="flex-shrink:0;background:white;border-top:1px solid #e2e8f0;padding:0.75rem 1rem;">
-            ${FOOTER_HTML}
-          </footer>
+          <main id="app-content">${originalContent}</main>
+          <footer id="app-footer" style="flex-shrink:0;background:white;border-top:1px solid #f1f5f9;">${FOOTER_HTML}</footer>
         </div>
       </div>
     `;
-
-    // Pastikan container halaman awal langsung tampil
     const hiddenWrap = document.querySelector('#app-content #page-container, #app-content #home-content');
-    if (hiddenWrap) {
-      hiddenWrap.style.display = 'block';
-    }
+    if (hiddenWrap) hiddenWrap.style.display = 'block';
   }
 
-  // Fix href untuk materi subfolder
-  const isSubfolder = window.location.pathname.includes('/materi/');
-  if (isSubfolder) {
-    document.querySelectorAll('#sidebar-menu a[data-path]').forEach(link => {
-      const dataPath = link.getAttribute('data-path');
-      if (dataPath) {
-        const clean = dataPath.startsWith('/') ? dataPath.substring(1) : dataPath;
-        link.setAttribute('href', '../' + clean);
-      }
-    });
-  }
-
+  addTooltipLabels();
+  fixSubfolderLinks();
   initLayoutInteractivity();
   setupSpaRouter();
 
-  // Trigger profil di topbar
   window.dispatchEvent(new CustomEvent('spa:navigated', { detail: { url: window.location.href, initial: true } }));
 });
 
-// 4. Interaktivitas UI Layout (Responsive Sidebar)
-function initLayoutInteractivity() {
-  const sidebar = document.getElementById('app-sidebar');
-  const overlay = document.getElementById('sidebar-overlay');
-  const menuToggleBtn = document.getElementById('menu-toggle-btn');
-  const desktopToggleBtn = document.getElementById('sidebar-toggle-desktop');
+// Fix href untuk subfolder /materi/
+function fixSubfolderLinks() {
+  const isSubfolder = window.location.pathname.includes('/materi/');
+  document.querySelectorAll('.sb-link[data-path]').forEach(link => {
+    const p = link.getAttribute('data-path');
+    if (!p) return;
+    const clean = p.startsWith('/') ? p.substring(1) : p;
+    link.setAttribute('href', (isSubfolder ? '../' : './') + clean);
+  });
+}
 
+// 4. Responsive Sidebar Interactivity
+function initLayoutInteractivity() {
+  const sidebar   = document.getElementById('app-sidebar');
+  const overlay   = document.getElementById('sidebar-overlay');
+  const hamburger = document.getElementById('menu-toggle-btn');
+  const collapseBtn = document.getElementById('sidebar-toggle-desktop');
   if (!sidebar) return;
 
   const isDesktop = () => window.innerWidth >= 1024;
+  const COLLAPSE_KEY = 'bilbul_sidebar_collapsed';
 
-  function openSidebar() {
-    sidebar.classList.add('sidebar-open');
+  function openDrawer() {
+    sidebar.classList.add('sb-open');
     if (overlay) overlay.classList.add('active');
     document.body.style.overflow = 'hidden';
   }
-
-  function closeSidebar() {
-    sidebar.classList.remove('sidebar-open');
+  function closeDrawer() {
+    sidebar.classList.remove('sb-open');
     if (overlay) overlay.classList.remove('active');
     document.body.style.overflow = '';
   }
 
-  function toggleMobile() {
-    sidebar.classList.contains('sidebar-open') ? closeSidebar() : openSidebar();
+  function applyCollapse(v) {
+    sidebar.classList.toggle('sb-collapsed', v);
+    try { localStorage.setItem(COLLAPSE_KEY, v ? '1' : '0'); } catch(_) {}
   }
 
-  // --- Desktop collapse ---
-  const COLLAPSE_KEY = 'bilbul_sidebar_collapsed';
-
-  function applyCollapse(collapsed) {
-    sidebar.classList.toggle('sidebar-collapsed', collapsed);
-    try { localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0'); } catch(_) {}
-  }
-
-  // Restore state dari localStorage
   if (isDesktop()) {
-    try {
-      if (localStorage.getItem(COLLAPSE_KEY) === '1') applyCollapse(true);
-    } catch(_) {}
+    try { if (localStorage.getItem(COLLAPSE_KEY) === '1') applyCollapse(true); } catch(_) {}
   }
 
-  // Hamburger (mobile & tablet)
-  if (menuToggleBtn) menuToggleBtn.onclick = toggleMobile;
+  if (hamburger) hamburger.onclick = () => sidebar.classList.contains('sb-open') ? closeDrawer() : openDrawer();
+  if (collapseBtn) collapseBtn.onclick = () => applyCollapse(!sidebar.classList.contains('sb-collapsed'));
+  if (overlay) overlay.onclick = closeDrawer;
 
-  // Desktop collapse toggle
-  if (desktopToggleBtn) {
-    desktopToggleBtn.onclick = () => applyCollapse(!sidebar.classList.contains('sidebar-collapsed'));
-  }
+  window.addEventListener('resize', () => { if (isDesktop()) { closeDrawer(); document.body.style.overflow = ''; } });
 
-  // Klik overlay → tutup drawer
-  if (overlay) overlay.onclick = closeSidebar;
-
-  // Resize ke desktop → bersihkan state mobile
-  window.addEventListener('resize', () => {
-    if (isDesktop()) { closeSidebar(); document.body.style.overflow = ''; }
-  });
-
-  // Swipe gesture (mobile)
   let tx = 0, ty = 0;
-  document.addEventListener('touchstart', e => {
-    tx = e.touches[0].clientX; ty = e.touches[0].clientY;
-  }, { passive: true });
+  document.addEventListener('touchstart', e => { tx = e.touches[0].clientX; ty = e.touches[0].clientY; }, { passive: true });
   document.addEventListener('touchend', e => {
     if (isDesktop()) return;
     const dx = e.changedTouches[0].clientX - tx;
     const dy = e.changedTouches[0].clientY - ty;
     if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
-    if (dx > 0 && tx < 30) openSidebar();
-    else if (dx < 0 && sidebar.classList.contains('sidebar-open')) closeSidebar();
+    if (dx > 0 && tx < 30) openDrawer();
+    else if (dx < 0 && sidebar.classList.contains('sb-open')) closeDrawer();
   }, { passive: true });
 
-  // Klik link → tutup drawer di mobile/tablet
-  sidebar.addEventListener('click', e => {
-    if (!isDesktop() && e.target.closest('a')) closeSidebar();
-  });
+  sidebar.addEventListener('click', e => { if (!isDesktop() && e.target.closest('a')) closeDrawer(); });
 
   updateActiveSidebarLink(window.location.pathname);
 }
 
-// 5. Update link aktif di sidebar
+// 5. Active link
 function updateActiveSidebarLink(targetPath) {
-  const menuLinks = document.querySelectorAll('#sidebar-menu a');
   const currentPath = targetPath || window.location.pathname;
+  const isSubfolder = currentPath.includes('/materi/');
 
-  menuLinks.forEach(link => {
+  document.querySelectorAll('.sb-link').forEach(link => {
     const dataPath = link.getAttribute('data-path');
     let isActive = false;
-
     if (dataPath) {
-      if (dataPath === '/dashboard.html' && (currentPath.endsWith('/dashboard.html') || currentPath.endsWith('dashboard.html'))) {
-        isActive = true;
-      } else if (dataPath === '/materi/' && currentPath.includes('/materi/')) {
-        isActive = true;
-      } else if (dataPath !== '/dashboard.html' && currentPath.includes(dataPath.replace(/^\//, ''))) {
-        isActive = true;
-      }
+      if (dataPath === '/dashboard.html' && (currentPath.endsWith('/dashboard.html') || currentPath.endsWith('dashboard.html'))) isActive = true;
+      else if (dataPath === '/materi/' && currentPath.includes('/materi/')) isActive = true;
+      else if (dataPath !== '/dashboard.html' && currentPath.includes(dataPath.replace(/^\//, ''))) isActive = true;
     }
-
     link.classList.toggle('active', isActive);
 
-    // Fix href untuk subfolder
-    const isSubfolder = window.location.pathname.includes('/materi/');
     if (dataPath) {
-      const cleanPath = dataPath.startsWith('/') ? dataPath.substring(1) : dataPath;
-      link.setAttribute('href', (isSubfolder ? '../' : './') + cleanPath);
+      const clean = dataPath.startsWith('/') ? dataPath.substring(1) : dataPath;
+      link.setAttribute('href', (isSubfolder ? '../' : './') + clean);
     }
   });
 }
 
-// 6. CLIENT-SIDE SPA ROUTER
+// 6. SPA Router
 function setupSpaRouter() {
   document.addEventListener('click', (e) => {
     const anchor = e.target.closest('a');
@@ -463,112 +512,65 @@ function setupSpaRouter() {
     if (e.defaultPrevented || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     if (anchor.target && anchor.target !== '_self') return;
     if (anchor.hasAttribute('download')) return;
-
     const href = anchor.getAttribute('href');
     if (!href || href.startsWith('#') || href.startsWith('javascript:') || href.startsWith('mailto:') || href.startsWith('tel:')) return;
-
     try {
       const targetUrl = new URL(href, window.location.href);
       if (targetUrl.origin !== window.location.origin) return;
-
-      const targetPath = targetUrl.pathname;
-      if (targetPath.includes('/admin/') || 
-          targetPath.endsWith('/login.html') || 
-          (targetPath.endsWith('/index.html') && !targetPath.includes('/materi/')) ||
-          targetPath === '/' || 
-          targetUrl.searchParams.has('logout')) {
-        return;
-      }
-
+      const tp = targetUrl.pathname;
+      if (tp.includes('/admin/') || tp.endsWith('/login.html') || (tp.endsWith('/index.html') && !tp.includes('/materi/')) || tp === '/' || targetUrl.searchParams.has('logout')) return;
       e.preventDefault();
-
-      // Tutup sidebar mobile saat navigasi
       const sidebar = document.getElementById('app-sidebar');
       if (sidebar && window.innerWidth < 1024) {
-        sidebar.classList.remove('sidebar-open');
-        const overlay = document.getElementById('sidebar-overlay');
-        if (overlay) overlay.classList.remove('active');
+        sidebar.classList.remove('sb-open');
+        const ov = document.getElementById('sidebar-overlay');
+        if (ov) ov.classList.remove('active');
         document.body.style.overflow = '';
       }
-
       spaNavigate(targetUrl.href, true);
     } catch (_) {}
   });
-
-  window.addEventListener('popstate', () => {
-    spaNavigate(window.location.href, false);
-  });
+  window.addEventListener('popstate', () => spaNavigate(window.location.href, false));
 }
 
-/**
- * Navigasi SPA Halus tanpa reload browser
- */
 async function spaNavigate(url, pushState = true) {
   const contentContainer = document.getElementById('app-content');
   if (!contentContainer) { window.location.href = url; return; }
-
   contentContainer.style.opacity = '0.35';
-
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
-
     const html = await response.text();
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, 'text/html');
-
     if (doc.title) document.title = doc.title;
-
+    const pageContainer = doc.getElementById('page-container') || doc.getElementById('home-content') || doc.getElementById('app-content') || doc.querySelector('main');
     let newContent = '';
-    const pageContainer = doc.getElementById('page-container') || 
-                         doc.getElementById('home-content') || 
-                         doc.getElementById('app-content') || 
-                         doc.querySelector('main');
-
-    if (pageContainer) {
-      pageContainer.style.display = 'block';
-      newContent = pageContainer.innerHTML;
-    } else {
-      newContent = doc.body.innerHTML;
-    }
-
+    if (pageContainer) { pageContainer.style.display = 'block'; newContent = pageContainer.innerHTML; }
+    else { newContent = doc.body.innerHTML; }
     contentContainer.innerHTML = newContent;
     contentContainer.scrollTop = 0;
-
     if (pushState) history.pushState({ spa: true, url }, '', url);
-
     updateActiveSidebarLink(new URL(url, window.location.href).pathname);
     await executePageScripts(doc);
-
     window.dispatchEvent(new CustomEvent('spa:navigated', { detail: { url } }));
-
   } catch (err) {
-    console.warn('Navigasi SPA dialihkan ke reload bawaan:', err);
+    console.warn('SPA fallback to reload:', err);
     window.location.href = url;
   } finally {
     contentContainer.style.opacity = '1';
   }
 }
 
-// Eksekusi script dari halaman baru
 async function executePageScripts(doc) {
   const scripts = doc.querySelectorAll('script');
   for (const oldScript of scripts) {
     const src = oldScript.getAttribute('src');
-    if (src && (
-      src.includes('tailwindcss') || 
-      src.includes('font-awesome') || 
-      src.includes('sweetalert2') || 
-      src.includes('layout.js')
-    )) continue;
-
+    if (src && (src.includes('tailwindcss') || src.includes('font-awesome') || src.includes('sweetalert2') || src.includes('layout.js'))) continue;
     const newScript = document.createElement('script');
     if (oldScript.type) newScript.type = oldScript.type;
-    
-    if (src) {
-      newScript.src = src;
-      document.body.appendChild(newScript);
-    } else if (oldScript.textContent.trim()) {
+    if (src) { newScript.src = src; document.body.appendChild(newScript); }
+    else if (oldScript.textContent.trim()) {
       newScript.textContent = oldScript.textContent;
       document.body.appendChild(newScript);
       setTimeout(() => newScript.remove(), 100);
@@ -576,5 +578,4 @@ async function executePageScripts(doc) {
   }
 }
 
-// Ekspos spaNavigate ke window
 window.spaNavigate = spaNavigate;
