@@ -198,59 +198,79 @@ END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- 1. Policies untuk users_metadata
+DROP POLICY IF EXISTS "Users can read own profile" ON public.users_metadata;
 CREATE POLICY "Users can read own profile" ON public.users_metadata
   FOR SELECT USING (auth.uid() = id OR public.is_guru() OR auth.role() = 'anon');
 
+DROP POLICY IF EXISTS "Users can update own profile" ON public.users_metadata;
 CREATE POLICY "Users can update own profile" ON public.users_metadata
   FOR UPDATE USING (auth.uid() = id OR public.is_guru());
 
+DROP POLICY IF EXISTS "Allow insert profile" ON public.users_metadata;
 CREATE POLICY "Allow insert profile" ON public.users_metadata
   FOR INSERT WITH CHECK (true);
 
+DROP POLICY IF EXISTS "Guru can delete users_metadata" ON public.users_metadata;
 CREATE POLICY "Guru can delete users_metadata" ON public.users_metadata
   FOR DELETE USING (public.is_guru());
 
 -- 2. Policies untuk questions (Siswa read-only, Guru CRUD)
+DROP POLICY IF EXISTS "Public read questions" ON public.questions;
 CREATE POLICY "Public read questions" ON public.questions
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Guru can insert questions" ON public.questions;
 CREATE POLICY "Guru can insert questions" ON public.questions
   FOR INSERT WITH CHECK (public.is_guru() OR auth.role() = 'authenticated');
 
+DROP POLICY IF EXISTS "Guru can update questions" ON public.questions;
 CREATE POLICY "Guru can update questions" ON public.questions
   FOR UPDATE USING (public.is_guru() OR auth.role() = 'authenticated');
 
+DROP POLICY IF EXISTS "Guru can delete questions" ON public.questions;
 CREATE POLICY "Guru can delete questions" ON public.questions
   FOR DELETE USING (public.is_guru() OR auth.role() = 'authenticated');
 
 -- 3. Policies untuk materi_content (Siswa read-only, Guru CRUD)
+DROP POLICY IF EXISTS "Public read materi_content" ON public.materi_content;
 CREATE POLICY "Public read materi_content" ON public.materi_content
   FOR SELECT USING (true);
 
+DROP POLICY IF EXISTS "Guru can insert materi_content" ON public.materi_content;
 CREATE POLICY "Guru can insert materi_content" ON public.materi_content
   FOR INSERT WITH CHECK (public.is_guru() OR auth.role() = 'authenticated');
 
+DROP POLICY IF EXISTS "Guru can update materi_content" ON public.materi_content;
 CREATE POLICY "Guru can update materi_content" ON public.materi_content
   FOR UPDATE USING (public.is_guru() OR auth.role() = 'authenticated');
 
 -- 4. Policies untuk test_results
+DROP POLICY IF EXISTS "Enable all access for anon" ON public.test_results;
+DROP POLICY IF EXISTS "Read test_results" ON public.test_results;
 CREATE POLICY "Read test_results" ON public.test_results
   FOR SELECT USING (auth.uid() = student_id OR public.is_guru() OR auth.role() = 'anon');
 
+DROP POLICY IF EXISTS "Insert test_results" ON public.test_results;
 CREATE POLICY "Insert test_results" ON public.test_results
   FOR INSERT WITH CHECK (auth.uid() = student_id OR auth.role() = 'anon' OR auth.role() = 'authenticated');
 
 -- 5. Policies untuk student_progress
+DROP POLICY IF EXISTS "Enable all access for anon" ON public.student_progress;
+DROP POLICY IF EXISTS "Read student_progress" ON public.student_progress;
 CREATE POLICY "Read student_progress" ON public.student_progress
   FOR SELECT USING (auth.uid() = student_id OR public.is_guru() OR auth.role() = 'anon');
 
+DROP POLICY IF EXISTS "Upsert student_progress" ON public.student_progress;
 CREATE POLICY "Upsert student_progress" ON public.student_progress
   FOR ALL USING (auth.uid() = student_id OR public.is_guru() OR auth.role() = 'anon');
 
 -- 6. Policies untuk student_badges
+DROP POLICY IF EXISTS "Enable all access for anon" ON public.student_badges;
+DROP POLICY IF EXISTS "Read student_badges" ON public.student_badges;
 CREATE POLICY "Read student_badges" ON public.student_badges
   FOR SELECT USING (auth.uid() = student_id OR public.is_guru() OR auth.role() = 'anon');
 
+DROP POLICY IF EXISTS "Insert student_badges" ON public.student_badges;
 CREATE POLICY "Insert student_badges" ON public.student_badges
   FOR INSERT WITH CHECK (auth.uid() = student_id OR auth.role() = 'anon' OR auth.role() = 'authenticated');
 
