@@ -29,7 +29,7 @@
     </div>
   </header>
 
-  <!-- Login Main Container -->
+  <!-- Login Main Container (Satu Pintu Masuk Bersama) -->
   <main class="flex-1 flex items-center justify-center px-4 py-8">
     <div class="w-full max-w-md bg-white rounded-2xl shadow-xl border border-slate-200/80 p-8 md:p-10 relative overflow-hidden">
       
@@ -39,48 +39,14 @@
       <!-- Header Title -->
       <div class="text-center mb-8">
         <div class="w-16 h-16 bg-blue-50 text-blue-600 rounded-2xl flex items-center justify-center text-3xl mx-auto mb-4 shadow-sm">
-          <i class="fa-solid fa-right-to-bracket"></i>
+          <i class="fa-solid fa-arrow-right-to-bracket"></i>
         </div>
         <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight">
-          Selamat Datang!
+          Masuk ke Akun
         </h1>
-        <p class="text-slate-500 text-sm mt-1.5" id="login-subtext">
-          Masuk ke akunmu untuk melanjutkan pembelajaran
+        <p class="text-slate-500 text-sm mt-1.5">
+          Gunakan email dan kata sandi yang telah terdaftar
         </p>
-      </div>
-
-      <!-- Role Selector Tabs -->
-      <div class="grid grid-cols-2 gap-2 bg-slate-100 p-1.5 rounded-xl mb-6 text-sm font-semibold">
-        <button id="tab-siswa" type="button" class="py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all text-center flex items-center justify-center gap-2">
-          <i class="fa-solid fa-user-graduate"></i> Siswa
-        </button>
-        <button id="tab-guru" type="button" class="py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-2">
-          <i class="fa-solid fa-chalkboard-user"></i> Guru / Admin
-        </button>
-      </div>
-
-      <!-- Info Alert untuk Siswa -->
-      <div id="siswa-info-banner" class="mb-6 p-4 rounded-xl bg-blue-50/80 border border-blue-200/70 text-blue-800 text-xs leading-relaxed flex items-start gap-3">
-        <i class="fa-solid fa-circle-info text-blue-600 text-base mt-0.5 flex-shrink-0"></i>
-        <div>
-          <strong>Akun Siswa Diberikan oleh Guru:</strong>
-          <p class="text-blue-700 mt-0.5">Siswa tidak mendaftar secara publik. Gunakan email & password yang telah dibuatkan oleh guru kelasmu.</p>
-        </div>
-      </div>
-
-      <!-- Info Alert untuk Guru: Akun Bawaan Sudah Dibuatkan -->
-      <div id="guru-info-banner" class="hidden mb-6 p-4 rounded-xl bg-amber-50 border border-amber-200 text-amber-900 text-xs leading-relaxed flex items-start gap-3">
-        <i class="fa-solid fa-key text-amber-600 text-base mt-0.5 flex-shrink-0"></i>
-        <div class="flex-1">
-          <strong class="text-amber-900 block font-bold text-sm">Akun Guru Siap Pakai:</strong>
-          <div class="mt-1.5 space-y-1 bg-white/70 p-2.5 rounded-lg border border-amber-200 font-mono text-xs">
-            <div>Email: <strong class="text-blue-700 select-all">guru@bilbul.sch.id</strong></div>
-            <div>Password: <strong class="text-blue-700 select-all">guru123</strong></div>
-          </div>
-          <p class="text-[11px] text-amber-700 mt-1.5">
-            <i class="fa-solid fa-circle-check text-emerald-600 mr-1"></i> Form di bawah otomatis terisi. Cukup klik tombol <strong>"Masuk ke Admin Panel Guru"</strong>.
-          </p>
-        </div>
       </div>
 
       <!-- Alert Error Message -->
@@ -95,7 +61,7 @@
         <span id="success-message">Berhasil masuk! Mengalihkan...</span>
       </div>
 
-      <!-- Form Login -->
+      <!-- Form Login Tunggal (Guru & Siswa sama) -->
       <form id="login-form" class="space-y-4">
         <div>
           <label for="email" class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">
@@ -109,7 +75,7 @@
               type="email" 
               id="email" 
               required 
-              placeholder="nama@contoh.com" 
+              placeholder="nama@email.com" 
               class="w-full pl-10 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-600 focus:bg-white transition-all"
             >
           </div>
@@ -146,112 +112,63 @@
           id="btn-submit" 
           class="w-full mt-2 py-3.5 px-4 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg focus:outline-none focus:ring-4 focus:ring-blue-300 transition-all flex items-center justify-center gap-2"
         >
-          <span id="btn-text">Masuk ke BilBul</span>
+          <span id="btn-text">Masuk</span>
           <i class="fa-solid fa-arrow-right" id="btn-icon"></i>
         </button>
       </form>
 
-      <!-- Teacher Registration Link (Jika belum punya akun guru di Supabase) -->
-      <div id="guru-register-box" class="hidden mt-6 pt-6 border-t border-slate-100 text-center">
-        <p class="text-xs text-slate-500">
-          Belum punya akun Guru? 
-          <button type="button" id="btn-show-guru-modal" class="text-blue-600 font-bold hover:underline">
-            Daftar Akun Guru Baru
-          </button>
-        </p>
+      <!-- Informasi Akun Bawaan Guru & Siswa -->
+      <div class="mt-8 pt-6 border-t border-slate-100 space-y-3">
+        <div class="p-3 bg-slate-50 rounded-xl border border-slate-200 text-xs text-slate-600">
+          <div class="font-bold text-slate-800 flex items-center justify-between mb-1">
+            <span class="flex items-center gap-1.5"><i class="fa-solid fa-chalkboard-user text-blue-600"></i> Akun Guru / Admin:</span>
+            <button type="button" id="btn-autofill-guru" class="text-[11px] text-blue-600 font-semibold hover:underline">
+              Gunakan Akun Ini
+            </button>
+          </div>
+          <div class="font-mono text-[11px] text-slate-500">
+            Email: <strong class="text-slate-700">guru@bilbul.sch.id</strong> | Sandi: <strong class="text-slate-700">guru123</strong>
+          </div>
+        </div>
+
+        <div class="p-3 bg-blue-50/60 rounded-xl border border-blue-100 text-xs text-blue-800">
+          <div class="font-bold flex items-center gap-1.5 mb-0.5">
+            <i class="fa-solid fa-user-graduate text-blue-600"></i> Akun Siswa:
+          </div>
+          <p class="text-[11px] text-blue-700 leading-relaxed">
+            Didaftarkan langsung oleh Guru melalui Admin Panel. Silakan hubungi Guru kelas untuk memperoleh email & kata sandi.
+          </p>
+        </div>
       </div>
 
     </div>
   </main>
-
-  <!-- Modal Registrasi Guru Baru -->
-  <div id="guru-modal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
-      <div class="flex items-center justify-between mb-4 pb-3 border-b border-slate-100">
-        <h3 class="font-bold text-slate-900 text-lg flex items-center gap-2">
-          <i class="fa-solid fa-user-shield text-blue-600"></i> Registrasi Akun Guru
-        </h3>
-        <button type="button" id="btn-close-guru-modal" class="text-slate-400 hover:text-slate-600 text-lg">
-          <i class="fa-solid fa-xmark"></i>
-        </button>
-      </div>
-      
-      <p class="text-xs text-slate-500 mb-4">
-        Khusus Bapak/Ibu Guru Matematika untuk mendapatkan akses Admin Panel pengelola kelas.
-      </p>
-
-      <form id="guru-register-form" class="space-y-4">
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Nama Lengkap & Gelar</label>
-          <input type="text" id="guru-name" required placeholder="Contoh: Budi Santoso, S.Pd." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Email Guru</label>
-          <input type="email" id="guru-email" required placeholder="guru@sekolah.sch.id" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm">
-        </div>
-        <div>
-          <label class="block text-xs font-semibold text-slate-700 mb-1">Kata Sandi (Min. 6 Karakter)</label>
-          <input type="password" id="guru-password" minlength="6" required placeholder="••••••••" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-lg text-sm">
-        </div>
-        <button type="submit" id="btn-register-guru" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl transition-colors">
-          Buat Akun Guru
-        </button>
-      </form>
-    </div>
-  </div>
 
   <!-- Footer -->
   <footer class="py-6 text-center text-xs text-slate-400">
     &copy; 2024-2026 BilBul - Operasi Campuran Bilangan Bulat
   </footer>
 
-  <!-- Script Logika Login -->
+  <!-- Script Logika Login Tunggal -->
   <script type="module">
-    import { signIn, signUpGuru, getCurrentUser } from './js/supabase-client.js';
-
-    let currentRole = 'siswa';
-
-    const tabSiswa = document.getElementById('tab-siswa');
-    const tabGuru = document.getElementById('tab-guru');
-    const siswaInfoBanner = document.getElementById('siswa-info-banner');
-    const guruRegisterBox = document.getElementById('guru-register-box');
-    const btnText = document.getElementById('btn-text');
+    import { signIn, getCurrentUser } from './js/supabase-client.js';
 
     const form = document.getElementById('login-form');
     const emailInput = document.getElementById('email');
     const passwordInput = document.getElementById('password');
     const btnSubmit = document.getElementById('btn-submit');
+    const btnText = document.getElementById('btn-text');
     const errorAlert = document.getElementById('error-alert');
     const errorMessage = document.getElementById('error-message');
     const successAlert = document.getElementById('success-alert');
     const successMessage = document.getElementById('success-message');
+    const btnAutofillGuru = document.getElementById('btn-autofill-guru');
 
-    const guruInfoBanner = document.getElementById('guru-info-banner');
-
-    // Toggle Tab Siswa / Guru
-    tabSiswa.addEventListener('click', () => {
-      currentRole = 'siswa';
-      tabSiswa.className = 'py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all text-center flex items-center justify-center gap-2';
-      tabGuru.className = 'py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-2';
-      siswaInfoBanner.classList.remove('hidden');
-      guruInfoBanner.classList.add('hidden');
-      guruRegisterBox.classList.add('hidden');
-      btnText.textContent = 'Masuk ke Ruang Belajar';
-      emailInput.value = '';
-      passwordInput.value = '';
-    });
-
-    tabGuru.addEventListener('click', () => {
-      currentRole = 'guru';
-      tabGuru.className = 'py-2 rounded-lg bg-white text-blue-600 shadow-sm transition-all text-center flex items-center justify-center gap-2';
-      tabSiswa.className = 'py-2 rounded-lg text-slate-600 hover:text-slate-900 transition-all text-center flex items-center justify-center gap-2';
-      siswaInfoBanner.classList.add('hidden');
-      guruInfoBanner.classList.remove('hidden');
-      guruRegisterBox.classList.remove('hidden');
-      btnText.textContent = 'Masuk ke Admin Panel Guru';
-      // Otomatis isikan akun guru bawaan
+    // Tombol 1-klik isi akun guru
+    btnAutofillGuru?.addEventListener('click', () => {
       emailInput.value = 'guru@bilbul.sch.id';
       passwordInput.value = 'guru123';
+      emailInput.focus();
     });
 
     // Toggle Password Visibility
@@ -267,7 +184,7 @@
       }
     });
 
-    // Handle Login Submit
+    // Handle Submit Login Tunggal
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       errorAlert.classList.add('hidden');
@@ -287,69 +204,32 @@
         successAlert.classList.remove('hidden');
         successMessage.textContent = `Selamat datang, ${user.name}! Mengalihkan...`;
 
+        // Sistem secara otomatis mengarahkan sesuai role di database
         setTimeout(() => {
           if (user.role === 'guru') {
             window.location.href = 'admin/index.html';
           } else {
             window.location.href = 'dashboard.html';
           }
-        }, 800);
+        }, 700);
 
       } catch (err) {
         console.error("Login error:", err);
         errorAlert.classList.remove('hidden');
         
         if (err.message && err.message.toLowerCase().includes('invalid login credentials')) {
-          errorMessage.textContent = 'Email atau kata sandi salah. Silakan periksa kembali.';
+          errorMessage.textContent = 'Email atau kata sandi tidak sesuai. Silakan periksa kembali.';
         } else {
-          errorMessage.textContent = err.message || 'Terjadi kesalahan saat masuk. Coba lagi.';
+          errorMessage.textContent = err.message || 'Terjadi kendala saat login. Silakan coba lagi.';
         }
 
         btnSubmit.disabled = false;
         btnSubmit.classList.remove('opacity-75');
-        btnText.textContent = currentRole === 'guru' ? 'Masuk ke Admin Panel Guru' : 'Masuk ke Ruang Belajar';
+        btnText.textContent = 'Masuk';
       }
     });
 
-    // Modal Registrasi Guru Baru
-    const guruModal = document.getElementById('guru-modal');
-    const btnShowGuruModal = document.getElementById('btn-show-guru-modal');
-    const btnCloseGuruModal = document.getElementById('btn-close-guru-modal');
-    const guruRegisterForm = document.getElementById('guru-register-form');
-
-    btnShowGuruModal.addEventListener('click', () => {
-      guruModal.classList.remove('hidden');
-    });
-
-    btnCloseGuruModal.addEventListener('click', () => {
-      guruModal.classList.add('hidden');
-    });
-
-    guruRegisterForm.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('guru-name').value.trim();
-      const email = document.getElementById('guru-email').value.trim();
-      const password = document.getElementById('guru-password').value;
-      const btnReg = document.getElementById('btn-register-guru');
-
-      btnReg.disabled = true;
-      btnReg.textContent = 'Mendaftarkan Guru...';
-
-      try {
-        await signUpGuru(email, password, name);
-        alert(`Akun Guru berhasil dibuat untuk ${name}! Silakan langsung login.`);
-        guruModal.classList.add('hidden');
-        emailInput.value = email;
-        passwordInput.value = password;
-      } catch (err) {
-        alert("Gagal membuat akun guru: " + err.message);
-      } finally {
-        btnReg.disabled = false;
-        btnReg.textContent = 'Buat Akun Guru';
-      }
-    });
-
-    // Cek jika sudah pernah login sebelumnya
+    // Cek jika pengguna sudah memiliki sesi login aktif
     document.addEventListener('DOMContentLoaded', async () => {
       const user = await getCurrentUser();
       if (user) {
