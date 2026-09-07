@@ -15,9 +15,13 @@ CREATE TABLE IF NOT EXISTS public.users_metadata (
     email TEXT NOT NULL,
     name TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'siswa', -- 'guru' atau 'siswa'
+    password_plain TEXT, -- Password akun siswa agar guru dapat melihat, menyalin, dan membagikan
     dibuat_oleh_guru_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
     created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
+
+-- Pastikan kolom password_plain tersedia jika tabel sudah pernah dibuat sebelumnya
+ALTER TABLE public.users_metadata ADD COLUMN IF NOT EXISTS password_plain TEXT;
 
 -- 2. TABEL: questions (Bank Soal Dinamis / CMS)
 CREATE TABLE IF NOT EXISTS public.questions (
@@ -161,18 +165,67 @@ BEGIN
     email,
     name,
     role,
+    password_plain,
     dibuat_oleh_guru_id
   ) VALUES (
     new_id,
     LOWER(TRIM(student_email)),
     student_name,
     'siswa',
+    student_password,
     guru_id
   ) ON CONFLICT (id) DO UPDATE SET
     name = EXCLUDED.name,
-    role = 'siswa';
+    role = 'siswa',
+    password_plain = EXCLUDED.password_plain;
 
-  RETURN json_build_object('id', new_id, 'email', student_email, 'name', student_name);
+  RETURN json_build_object('id', new_id, 'email', student_email, 'name', student_name, 'password_plain', student_password);
+END;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ==========================================================
+-- FUNGSI EDIT AKUN SISWA (OLEH GURU)
+-- Mengupdate nama, email, dan password baru sekaligus
+-- ==========================================================
+CREATE OR REPLACE FUNCTION public.update_student_user(
+  student_id UUID,
+  new_name TEXT,
+  new_email TEXT,
+  new_password TEXT DEFAULT NULL
+)
+RETURNS JSON AS $$
+BEGIN
+  -- 1. Update data di users_metadata
+  IF new_password IS NOT NULL AND TRIM(new_password) <> '' THEN
+    UPDATE public.users_metadata
+    SET 
+      name = new_name,
+      email = LOWER(TRIM(new_email)),
+      password_plain = new_password
+    WHERE id = student_id;
+
+    -- Update juga di auth.users dengan hash baru
+    UPDATE auth.users
+    SET 
+      email = LOWER(TRIM(new_email)),
+      encrypted_password = crypt(new_password, gen_salt('bf')),
+      updated_at = NOW()
+    WHERE id = student_id;
+  ELSE
+    UPDATE public.users_metadata
+    SET 
+      name = new_name,
+      email = LOWER(TRIM(new_email))
+    WHERE id = student_id;
+
+    UPDATE auth.users
+    SET 
+      email = LOWER(TRIM(new_email)),
+      updated_at = NOW()
+    WHERE id = student_id;
+  END IF;
+
+  RETURN json_build_object('success', true, 'id', student_id, 'name', new_name, 'email', new_email);
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 

@@ -7,6 +7,7 @@ import {
   getCurrentUser, 
   signOut, 
   registerStudentByGuru, 
+  updateStudentByGuru,
   getStudentsList, 
   deleteStudent,
   getAllStudentsProgress,
@@ -22,6 +23,35 @@ import {
 let currentUser = null;
 let allQuestionsCache = [];
 let allStudentsProgressCache = [];
+let studentsDataTable = null;
+let progressDataTable = null;
+
+// Konfigurasi Bahasa DataTables Bahasa Indonesia yang Elegan
+const dtIndonesian = {
+  search: "",
+  searchPlaceholder: "Cari data...",
+  lengthMenu: "Tampilkan _MENU_ data",
+  info: "Menampilkan _START_ s/d _END_ dari _TOTAL_ data",
+  infoEmpty: "Menampilkan 0 data",
+  infoFiltered: "(disaring dari total _MAX_)",
+  zeroRecords: "Tidak ada data yang cocok",
+  paginate: {
+    first: "«",
+    previous: "‹",
+    next: "›",
+    last: "»"
+  }
+};
+
+function escapeHtml(str) {
+  if (!str) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+}
 
 // ==========================================================
 // INISIALISASI & AUTH GUARD
@@ -138,8 +168,18 @@ function setupNavigation() {
       document.getElementById('page-subtitle').textContent = tab.subtitle;
 
       // Lazy load tab specific data
-      if (tab.navId === 'nav-students') loadStudentsList();
-      if (tab.navId === 'nav-progress') loadProgressData();
+      if (tab.navId === 'nav-students') {
+        loadStudentsList();
+        setTimeout(() => {
+          if (studentsDataTable) studentsDataTable.columns.adjust();
+        }, 100);
+      }
+      if (tab.navId === 'nav-progress') {
+        loadProgressData();
+        setTimeout(() => {
+          if (progressDataTable) progressDataTable.columns.adjust();
+        }, 100);
+      }
       if (tab.navId === 'nav-questions') loadQuestionsCMS();
       if (tab.navId === 'nav-materi') loadMateriCMS();
     });
@@ -255,6 +295,16 @@ async function loadStudentsList() {
   const tbody = document.getElementById('students-table-body');
   if (!tbody) return;
 
+  // Hancurkan instance DataTable sebelumnya jika ada sebelum memanipulasi DOM
+  if (studentsDataTable) {
+    try {
+      studentsDataTable.destroy();
+    } catch (e) {
+      console.warn("Destroy DataTable students error:", e);
+    }
+    studentsDataTable = null;
+  }
+
   try {
     const students = await getStudentsList();
     if (students.length === 0) {
@@ -272,23 +322,46 @@ async function loadStudentsList() {
     let html = '';
     students.forEach((s, idx) => {
       const dateStr = new Date(s.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' });
+      const pass = s.password_plain || 'siswa123';
+
       html += `
         <tr class="hover:bg-slate-50/80 transition-colors">
-          <td class="px-6 py-4 font-semibold text-slate-400">${idx + 1}</td>
-          <td class="px-6 py-4">
-            <div class="font-bold text-slate-900">${s.name}</div>
+          <td class="px-4 py-3.5 font-semibold text-slate-400 text-center">${idx + 1}</td>
+          <td class="px-4 py-3.5">
+            <div class="font-bold text-slate-900">${escapeHtml(s.name)}</div>
           </td>
-          <td class="px-6 py-4">
-            <span class="font-mono text-xs bg-slate-100 px-2.5 py-1 rounded text-slate-700">${s.email}</span>
+          <td class="px-4 py-3.5">
+            <span class="font-mono text-xs bg-slate-100 px-2.5 py-1 rounded-md text-slate-700">${escapeHtml(s.email)}</span>
           </td>
-          <td class="px-6 py-4 text-xs text-slate-500">${dateStr}</td>
-          <td class="px-6 py-4">
-            <span class="px-2.5 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold">Siswa</span>
+          <td class="px-4 py-3.5">
+            <div class="inline-flex items-center gap-1.5 bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg">
+              <span class="font-mono text-xs text-slate-800 font-semibold student-pass-text" data-pass="${escapeHtml(pass)}" data-masked="false">${escapeHtml(pass)}</span>
+              <button type="button" class="btn-toggle-pass text-slate-400 hover:text-blue-600 p-0.5 transition-colors" title="Lihat / Sembunyikan Sandi">
+                <i class="fa-solid fa-eye-slash text-xs"></i>
+              </button>
+              <button type="button" class="btn-copy-pass text-slate-400 hover:text-emerald-600 p-0.5 transition-colors" data-pass="${escapeHtml(pass)}" title="Salin Sandi">
+                <i class="fa-solid fa-copy text-xs"></i>
+              </button>
+            </div>
           </td>
-          <td class="px-6 py-4 text-center">
-            <button class="btn-delete-student text-slate-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors" data-id="${s.id}" data-name="${s.name}" title="Hapus Siswa">
-              <i class="fa-solid fa-trash-can"></i>
-            </button>
+          <td class="px-4 py-3.5 text-xs text-slate-500">${dateStr}</td>
+          <td class="px-4 py-3.5 text-center">
+            <div class="flex items-center justify-center gap-1">
+              <button class="btn-edit-student text-slate-500 hover:text-amber-600 hover:bg-amber-50 p-2 rounded-lg transition-colors" 
+                data-id="${s.id}" 
+                data-name="${escapeHtml(s.name)}" 
+                data-email="${escapeHtml(s.email)}" 
+                data-password="${escapeHtml(pass)}" 
+                title="Edit Akun Siswa">
+                <i class="fa-solid fa-user-pen"></i>
+              </button>
+              <button class="btn-delete-student text-slate-400 hover:text-red-600 hover:bg-red-50 p-2 rounded-lg transition-colors" 
+                data-id="${s.id}" 
+                data-name="${escapeHtml(s.name)}" 
+                title="Hapus Siswa">
+                <i class="fa-solid fa-trash-can"></i>
+              </button>
+            </div>
           </td>
         </tr>
       `;
@@ -296,23 +369,18 @@ async function loadStudentsList() {
 
     tbody.innerHTML = html;
 
-    // Pasang listener hapus siswa
-    document.querySelectorAll('.btn-delete-student').forEach(btn => {
-      btn.addEventListener('click', async () => {
-        const id = btn.getAttribute('data-id');
-        const name = btn.getAttribute('data-name');
-        if (confirm(`Apakah Anda yakin ingin menghapus data siswa "${name}"?`)) {
-          try {
-            await deleteStudent(id);
-            alert(`Siswa ${name} berhasil dihapus.`);
-            await loadStudentsList();
-            await loadDashboardMetrics();
-          } catch (e) {
-            alert("Gagal menghapus siswa: " + e.message);
-          }
-        }
+    // Inisialisasi DataTable untuk fitur sorting & pagination tanpa lag
+    if (window.jQuery && typeof window.jQuery.fn.DataTable === 'function') {
+      studentsDataTable = window.jQuery('#table-students').DataTable({
+        pageLength: 10,
+        order: [[0, 'asc']],
+        columnDefs: [
+          { orderable: false, targets: [3, 5] } // Password & Aksi dinonaktifkan dari sorting
+        ],
+        language: dtIndonesian,
+        retrieve: true
       });
-    });
+    }
 
   } catch (err) {
     console.error("Gagal load students:", err);
@@ -339,10 +407,20 @@ function renderProgressTable(list) {
   const tbody = document.getElementById('progress-table-body');
   if (!tbody) return;
 
+  // Hancurkan DataTable sebelumnya jika ada
+  if (progressDataTable) {
+    try {
+      progressDataTable.destroy();
+    } catch (e) {
+      console.warn("Destroy DataTable progress error:", e);
+    }
+    progressDataTable = null;
+  }
+
   if (list.length === 0) {
     tbody.innerHTML = `
       <tr>
-        <td colspan="7" class="px-6 py-12 text-center text-slate-400 text-sm">
+        <td colspan="8" class="px-6 py-12 text-center text-slate-400 text-sm">
           Belum ada data pengerjaan dari siswa.
         </td>
       </tr>
@@ -362,15 +440,17 @@ function renderProgressTable(list) {
 
     html += `
       <tr class="hover:bg-slate-50/80 transition-colors">
-        <td class="px-6 py-4">
-          <div class="font-bold text-slate-900">${st.name}</div>
-          <div class="text-[11px] text-slate-400">${st.email}</div>
+        <td class="px-4 py-3.5">
+          <div class="font-bold text-slate-900">${escapeHtml(st.name)}</div>
         </td>
-        <td class="px-6 py-4 text-center">${formatScore(st.tesAwal)}</td>
-        <td class="px-6 py-4 text-center">${formatScore(st.latihanDasar)}</td>
-        <td class="px-6 py-4 text-center">${formatScore(st.latihanCampuran)}</td>
-        <td class="px-6 py-4 text-center">${formatScore(st.kuis)}</td>
-        <td class="px-6 py-4 text-center">
+        <td class="px-4 py-3.5">
+          <span class="font-mono text-xs text-slate-600 bg-slate-50 px-2 py-1 rounded border border-slate-100">${escapeHtml(st.email)}</span>
+        </td>
+        <td class="px-4 py-3.5 text-center">${formatScore(st.tesAwal)}</td>
+        <td class="px-4 py-3.5 text-center">${formatScore(st.latihanDasar)}</td>
+        <td class="px-4 py-3.5 text-center">${formatScore(st.latihanCampuran)}</td>
+        <td class="px-4 py-3.5 text-center">${formatScore(st.kuis)}</td>
+        <td class="px-4 py-3.5 text-center" data-order="${st.avgProgress || 0}">
           <div class="flex items-center justify-center gap-2">
             <div class="w-16 bg-slate-100 rounded-full h-2 overflow-hidden">
               <div class="bg-blue-600 h-2 rounded-full" style="width: ${st.avgProgress}%"></div>
@@ -378,7 +458,7 @@ function renderProgressTable(list) {
             <span class="text-xs font-bold text-slate-700">${st.avgProgress}%</span>
           </div>
         </td>
-        <td class="px-6 py-4 text-center">
+        <td class="px-4 py-3.5 text-center" data-order="${st.totalBadges || 0}">
           <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-amber-50 text-amber-700 font-bold text-xs border border-amber-200">
             <i class="fa-solid fa-medal text-amber-500"></i> ${st.totalBadges} / 7
           </span>
@@ -388,6 +468,16 @@ function renderProgressTable(list) {
   });
 
   tbody.innerHTML = html;
+
+  // Inisialisasi DataTable pada tabel progress
+  if (window.jQuery && typeof window.jQuery.fn.DataTable === 'function') {
+    progressDataTable = window.jQuery('#table-progress').DataTable({
+      pageLength: 10,
+      order: [[6, 'desc']], // Urutkan default berdasarkan Penguasaan (%) terbesar
+      language: dtIndonesian,
+      retrieve: true
+    });
+  }
 }
 
 // ==========================================================
@@ -645,6 +735,132 @@ function setupEventListeners() {
     } finally {
       btnSubmit.disabled = false;
       btnSubmit.innerHTML = `<span>Daftarkan Siswa</span> <i class="fa-solid fa-check"></i>`;
+    }
+  });
+
+  // Modal Edit Akun Siswa
+  const modalEditStudent = document.getElementById('modal-edit-student');
+  const btnCloseEditStudent = document.getElementById('btn-close-edit-student-modal');
+  const btnCancelEditStudent = document.getElementById('btn-cancel-edit-student');
+  const formEditStudent = document.getElementById('form-edit-student');
+
+  btnCloseEditStudent?.addEventListener('click', () => {
+    modalEditStudent.classList.add('hidden');
+  });
+
+  btnCancelEditStudent?.addEventListener('click', () => {
+    modalEditStudent.classList.add('hidden');
+  });
+
+  document.getElementById('btn-edit-gen-pass')?.addEventListener('click', () => {
+    const randomPass = 'bb' + Math.floor(1000 + Math.random() * 9000);
+    document.getElementById('edit-student-password').value = randomPass;
+  });
+
+  formEditStudent?.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const id = document.getElementById('edit-student-id').value;
+    const name = document.getElementById('edit-student-name').value.trim();
+    const email = document.getElementById('edit-student-email').value.trim();
+    const password = document.getElementById('edit-student-password').value.trim();
+    const btnSubmit = document.getElementById('btn-submit-edit-student');
+
+    if (!name || !email) {
+      alert("Nama dan email wajib diisi.");
+      return;
+    }
+
+    btnSubmit.disabled = true;
+    btnSubmit.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menyimpan...`;
+
+    try {
+      await updateStudentByGuru({ id, name, email, password });
+      showToastNotification(`Akun siswa "${name}" berhasil diperbarui!`);
+      modalEditStudent.classList.add('hidden');
+
+      await loadStudentsList();
+      await loadProgressData();
+      await loadDashboardMetrics();
+    } catch (err) {
+      alert("Gagal memperbarui akun siswa: " + (err.message || err));
+    } finally {
+      btnSubmit.disabled = false;
+      btnSubmit.innerHTML = `<span>Simpan Perubahan</span> <i class="fa-solid fa-check"></i>`;
+    }
+  });
+
+  // Delegated Event Listeners untuk Tabel Siswa (Mendukung DataTables Pagination & Sorting)
+  document.addEventListener('click', async (e) => {
+    // 1. Tombol Edit Siswa
+    const btnEdit = e.target.closest('.btn-edit-student');
+    if (btnEdit) {
+      const id = btnEdit.getAttribute('data-id');
+      const name = btnEdit.getAttribute('data-name') || '';
+      const email = btnEdit.getAttribute('data-email') || '';
+      const password = btnEdit.getAttribute('data-password') || '';
+
+      document.getElementById('edit-student-id').value = id;
+      document.getElementById('edit-student-name').value = name;
+      document.getElementById('edit-student-email').value = email;
+      document.getElementById('edit-student-password').value = password;
+
+      modalEditStudent.classList.remove('hidden');
+      return;
+    }
+
+    // 2. Tombol Hapus Siswa
+    const btnDelete = e.target.closest('.btn-delete-student');
+    if (btnDelete) {
+      const id = btnDelete.getAttribute('data-id');
+      const name = btnDelete.getAttribute('data-name');
+      if (confirm(`Apakah Anda yakin ingin menghapus data siswa "${name}"?`)) {
+        try {
+          await deleteStudent(id);
+          showToastNotification(`Siswa "${name}" berhasil dihapus.`);
+          await loadStudentsList();
+          await loadDashboardMetrics();
+        } catch (err) {
+          alert("Gagal menghapus siswa: " + (err.message || err));
+        }
+      }
+      return;
+    }
+
+    // 3. Tombol Salin Password
+    const btnCopy = e.target.closest('.btn-copy-pass');
+    if (btnCopy) {
+      const pass = btnCopy.getAttribute('data-pass');
+      if (pass) {
+        try {
+          await navigator.clipboard.writeText(pass);
+          showToastNotification(`Password "${pass}" berhasil disalin!`);
+        } catch (_) {
+          prompt("Salin password:", pass);
+        }
+      }
+      return;
+    }
+
+    // 4. Tombol Toggle Password (Lihat / Sembunyikan)
+    const btnToggle = e.target.closest('.btn-toggle-pass');
+    if (btnToggle) {
+      const parent = btnToggle.closest('div');
+      const textEl = parent?.querySelector('.student-pass-text');
+      const icon = btnToggle.querySelector('i');
+      if (textEl && icon) {
+        const isMasked = textEl.getAttribute('data-masked') === 'true';
+        const realPass = textEl.getAttribute('data-pass');
+        if (isMasked) {
+          textEl.textContent = realPass;
+          textEl.setAttribute('data-masked', 'false');
+          icon.className = 'fa-solid fa-eye-slash text-xs';
+        } else {
+          textEl.textContent = '••••••••';
+          textEl.setAttribute('data-masked', 'true');
+          icon.className = 'fa-solid fa-eye text-xs';
+        }
+      }
+      return;
     }
   });
 

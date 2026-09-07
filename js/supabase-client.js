@@ -393,6 +393,7 @@ export async function registerStudentByGuru({ name, email, password, guruId }) {
         email,
         name,
         role: 'siswa',
+        password_plain: password,
         dibuat_oleh_guru_id: guruId
       });
     } catch (e) {
@@ -401,6 +402,48 @@ export async function registerStudentByGuru({ name, email, password, guruId }) {
   }
 
   return data.user;
+}
+
+/**
+ * Guru mengupdate data akun siswa (Nama, Email, dan/atau Password)
+ */
+export async function updateStudentByGuru({ id, name, email, password }) {
+  if (!supabase) throw new Error("Database offline.");
+
+  // 1. Coba update lewat RPC PostgreSQL
+  try {
+    const { data: rpcData, error: rpcError } = await supabase.rpc('update_student_user', {
+      student_id: id,
+      new_name: name,
+      new_email: email,
+      new_password: password || null
+    });
+
+    if (!rpcError && rpcData) {
+      return rpcData;
+    }
+  } catch (rpcErr) {
+    console.warn("RPC update_student_user belum tersedia, mencoba update metadata langsung:", rpcErr);
+  }
+
+  // 2. Fallback update metadata langsung
+  const updatePayload = {
+    name,
+    email
+  };
+  if (password && password.trim() !== '') {
+    updatePayload.password_plain = password;
+  }
+
+  const { data, error } = await supabase
+    .from('users_metadata')
+    .update(updatePayload)
+    .eq('id', id)
+    .select()
+    .single();
+
+  if (error) throw error;
+  return data;
 }
 
 /**
