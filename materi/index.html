@@ -3,78 +3,103 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Materi Bilangan Bulat</title>
-  <link rel="stylesheet" href="../css/style.css">
+  <title>Daftar Materi - Operasi Campuran Bilangan Bulat</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
+  <!-- Layout will be dynamically injected by js/layout.js -->
   <div id="page-container" style="display: none;">
-    <h1>📚 Daftar Materi</h1>
-    <p>Pelajari materi secara berurutan untuk pemahaman yang lebih baik.</p>
-    
-    <div class="grid grid-2" style="margin-top: 30px;">
-      <a href="1-definisi.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: var(--primary-light); cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">1. Definisi Bilangan Bulat</h3>
-          <p class="text-muted">Mengenal bilangan positif, negatif, nol, dan nilai mutlak.</p>
-        </div>
-      </a>
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-8 border-b border-slate-200 pb-4">
+        <h1 class="text-3xl font-bold text-slate-800 flex items-center">
+          <i class="fa-solid fa-book-open text-blue-600 mr-3"></i> Daftar Materi
+        </h1>
+        <p class="text-slate-500 mt-2 text-lg">Pilih materi yang ingin kamu pelajari hari ini.</p>
+      </div>
       
-      <a href="2-garis-bilangan.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: var(--primary-light); cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">2. Garis Bilangan</h3>
-          <p class="text-muted">Memahami posisi bilangan dan membandingkan ukurannya.</p>
-        </div>
-      </a>
-      
-      <a href="3-penjumlahan.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: var(--success); cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">3. Penjumlahan Bilangan Bulat</h3>
-          <p class="text-muted">Konsep menjumlahkan dengan garis bilangan dan aturan tanda.</p>
-        </div>
-      </a>
-      
-      <a href="4-sifat-penjumlahan.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: var(--success); cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">4. Sifat-sifat Penjumlahan</h3>
-          <p class="text-muted">Sifat Komutatif, Asosiatif, Tertutup, Identitas, Invers.</p>
-        </div>
-      </a>
-      
-      <a href="5-pengurangan.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: var(--danger); cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">5. Pengurangan Bilangan Bulat</h3>
-          <p class="text-muted">Mengubah bentuk pengurangan menjadi penjumlahan.</p>
-        </div>
-      </a>
-      
-      <a href="6-perkalian.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: var(--secondary); cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">6. Perkalian Bilangan Bulat</h3>
-          <p class="text-muted">Aturan perkalian tanda sama dan tanda berbeda.</p>
-        </div>
-      </a>
-      
-      <a href="7-pembagian.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: var(--secondary); cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">7. Pembagian Bilangan Bulat</h3>
-          <p class="text-muted">Kebalikan dari perkalian dan pembagian dengan bilangan nol.</p>
-        </div>
-      </a>
-      
-      <a href="8-operasi-campuran.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: #8b5cf6; cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">8. Operasi Hitung Campuran</h3>
-          <p class="text-muted">Materi inti: Memahami urutan pengerjaan operasi hitung.</p>
-        </div>
-      </a>
-      
-      <a href="9-penerapan.html" style="text-decoration: none; color: inherit;">
-        <div class="card" style="border-top-color: #ec4899; cursor: pointer; transition: transform 0.2s;">
-          <h3 class="card-title">9. Penerapan Bilangan Bulat</h3>
-          <p class="text-muted">Penerapan dalam kehidupan sehari-hari (Suhu, Kedalaman, dll).</p>
-        </div>
-      </a>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+        
+        <a href="1-definisi.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">1</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Definisi Bilangan Bulat</h3>
+            <p class="text-sm text-slate-500">Mengenal bilangan positif, negatif, dan nol.</p>
+          </div>
+        </a>
+        
+        <a href="2-garis-bilangan.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">2</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Garis Bilangan</h3>
+            <p class="text-sm text-slate-500">Membandingkan nilai menggunakan garis bilangan.</p>
+          </div>
+        </a>
+        
+        <a href="3-penjumlahan.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">3</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Penjumlahan</h3>
+            <p class="text-sm text-slate-500">Konsep dasar menjumlahkan bilangan bulat.</p>
+          </div>
+        </a>
+        
+        <a href="4-sifat-penjumlahan.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">4</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Sifat Penjumlahan</h3>
+            <p class="text-sm text-slate-500">Komutatif, Asosiatif, dan Identitas.</p>
+          </div>
+        </a>
+        
+        <a href="5-pengurangan.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">5</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Pengurangan</h3>
+            <p class="text-sm text-slate-500">Operasi pengurangan sebagai penjumlahan dengan lawan.</p>
+          </div>
+        </a>
+        
+        <a href="6-perkalian.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">6</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Perkalian</h3>
+            <p class="text-sm text-slate-500">Aturan tanda dalam mengalikan bilangan.</p>
+          </div>
+        </a>
+        
+        <a href="7-pembagian.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">7</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Pembagian</h3>
+            <p class="text-sm text-slate-500">Kebalikan perkalian dan aturan tandanya.</p>
+          </div>
+        </a>
+        
+        <a href="8-operasi-campuran.html" class="bg-indigo-50 rounded-xl shadow-sm border border-indigo-200 p-6 flex items-start hover:shadow-md hover:border-indigo-400 transition-all group md:col-span-2">
+          <div class="w-10 h-10 rounded-full bg-indigo-200 text-indigo-700 flex items-center justify-center font-bold mr-4 group-hover:bg-indigo-600 group-hover:text-white transition-colors">8</div>
+          <div>
+            <h3 class="font-bold text-indigo-900 mb-1 group-hover:text-indigo-600 transition-colors">Operasi Hitung Campuran <span class="bg-indigo-200 text-indigo-800 text-xs px-2 py-1 rounded ml-2 font-normal">Penting</span></h3>
+            <p class="text-sm text-indigo-700">Hierarki operasi hitung yang wajib dipahami.</p>
+          </div>
+        </a>
+        
+        <a href="9-penerapan.html" class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start hover:shadow-md hover:border-blue-300 transition-all group">
+          <div class="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center font-bold mr-4 group-hover:bg-blue-600 group-hover:text-white transition-colors">9</div>
+          <div>
+            <h3 class="font-bold text-slate-800 mb-1 group-hover:text-blue-600 transition-colors">Penerapan</h3>
+            <p class="text-sm text-slate-500">Penggunaan bilangan bulat dalam kehidupan nyata.</p>
+          </div>
+        </a>
+        
+      </div>
     </div>
   </div>
 

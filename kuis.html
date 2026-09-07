@@ -3,23 +3,44 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kuis - Operasi Campuran Bilangan Bulat</title>
-  <link rel="stylesheet" href="css/style.css">
+  <title>Kuis Akhir - Operasi Campuran Bilangan Bulat</title>
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-  <div id="page-container" style="display: none;">
-    <h1>📝 Kuis Akhir</h1>
-    <p>Buktikan pemahamanmu dengan menjawab 15 soal evaluasi akhir ini. Nilai kuis ini akan menentukan seberapa baik kamu menguasai materi.</p>
-    
-    <div id="intro-container" class="card text-center" style="margin-top: 30px;">
-      <h3 style="margin-bottom: 20px;">Siap untuk memulai kuis?</h3>
-      <p style="margin-bottom: 30px;">Kuis ini terdiri dari soal-soal penjumlahan, pengurangan, perkalian, pembagian, serta operasi campuran.</p>
-      <button class="btn btn-primary" onclick="mulaiKuis()" style="font-size: 1.2rem; padding: 15px 30px;">Mulai Kuis Sekarang →</button>
-    </div>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
 
-    <div id="quiz-container" style="display: none;">
-      <!-- Quiz engine merender di sini -->
+  <!-- Layout will be dynamically injected by js/layout.js -->
+  <div id="page-container" style="display: none;">
+    <div class="max-w-4xl mx-auto">
+      <div class="mb-8 border-b border-slate-200 pb-4">
+        <h1 class="text-3xl font-bold text-slate-800 flex items-center">
+          <i class="fa-solid fa-stopwatch text-blue-600 mr-3"></i> Kuis Akhir
+        </h1>
+        <p class="text-slate-500 mt-2 text-lg">Buktikan pemahamanmu dengan menjawab soal evaluasi akhir ini.</p>
+      </div>
+      
+      <div id="intro-container" class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 md:p-12 text-center my-8">
+        <div class="w-20 h-20 bg-blue-50 text-blue-600 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+          <i class="fa-solid fa-graduation-cap"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-800 mb-4">Siap untuk memulai kuis?</h3>
+        <p class="text-slate-600 mb-8 max-w-lg mx-auto text-lg">
+          Kuis ini menggabungkan soal-soal penjumlahan, pengurangan, perkalian, pembagian, serta operasi hitung campuran secara acak.
+        </p>
+        <button class="px-8 py-4 text-lg bg-blue-600 text-white font-bold rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition-all focus:outline-none focus:ring-4 focus:ring-blue-300" onclick="mulaiKuis()">
+          Mulai Kuis Sekarang <i class="fa-solid fa-paper-plane ml-2"></i>
+        </button>
+      </div>
+
+      <div id="quiz-container" style="display: none;">
+        <!-- Quiz engine merender di sini -->
+      </div>
     </div>
   </div>
 

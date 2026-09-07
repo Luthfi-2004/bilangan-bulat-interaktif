@@ -4,76 +4,104 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materi 5 - Pengurangan Bilangan Bulat</title>
-  <link rel="stylesheet" href="../css/style.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
   <div id="page-container" style="display: none;">
-    <div style="margin-bottom: 20px;">
-      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
-    </div>
-
-    <h1>5. Pengurangan Bilangan Bulat</h1>
-    
-    <div class="card">
-      <h3 class="text-primary">Konsep Utama</h3>
-      <div class="alert alert-info">
-        Pengurangan dapat diubah menjadi <strong>penjumlahan dengan lawan bilangan</strong>.
+    <div class="max-w-3xl mx-auto">
+      
+      <div class="mb-6">
+        <a href="index.html" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Materi
+        </a>
       </div>
-      
-      <div style="font-size: 1.5rem; text-align: center; margin: 30px 0; font-weight: 700; color: var(--primary-dark);">
-        a − b = a + (−b)
-      </div>
-      
-      <p>Ini artinya, mengurangkan sebuah bilangan sama saja dengan menjumlahkan bilangan tersebut dengan lawannya.</p>
-    </div>
 
-    <div class="card">
-      <h3 class="text-primary">Contoh Soal & Perubahan Langkah</h3>
+      <h1 class="text-3xl font-bold text-slate-800 mb-8 border-b border-slate-200 pb-4">
+        <span class="text-blue-600 mr-2">5.</span> Pengurangan Bilangan Bulat
+      </h1>
       
-      <div class="grid grid-2">
-        <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius);">
-          <strong style="color: var(--primary);">Contoh 1: Positif - Positif</strong>
-          <div style="font-size: 1.2rem; margin-top: 10px;">
-            8 − 3 <br>
-            = 8 + (−3) <br>
-            = <strong>5</strong>
-          </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6">
+        <h3 class="text-xl font-bold text-blue-700 mb-6 flex items-center">
+          <i class="fa-solid fa-key text-amber-500 mr-2"></i> Konsep Utama
+        </h3>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded-r-lg mb-8 text-blue-800">
+          <i class="fa-solid fa-circle-info mr-2"></i> Pengurangan dapat diubah menjadi <strong class="bg-blue-100 px-1 rounded">penjumlahan dengan lawan bilangan</strong>.
         </div>
         
-        <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius);">
-          <strong style="color: var(--warning);">Contoh 2: Dikurangi Negatif</strong>
-          <div style="font-size: 1.2rem; margin-top: 10px;">
-            8 − (−3) <br>
-            = 8 + 3 <br>
-            = <strong>11</strong>
-          </div>
-          <div style="font-size: 0.9rem; margin-top: 10px; color: var(--danger);">*Lawan dari -3 adalah 3.</div>
+        <div class="text-3xl md:text-5xl text-center my-10 font-black text-blue-600 font-mono drop-shadow-sm">
+          a − b = a + (−b)
         </div>
         
-        <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius);">
-          <strong style="color: var(--danger);">Contoh 3: Negatif - Positif</strong>
-          <div style="font-size: 1.2rem; margin-top: 10px;">
-            −5 − 4 <br>
-            = −5 + (−4) <br>
-            = <strong>−9</strong>
-          </div>
-        </div>
+        <p class="text-slate-600 text-center text-lg max-w-xl mx-auto">Ini artinya, mengurangkan sebuah bilangan sama saja dengan menjumlahkan bilangan tersebut dengan lawannya.</p>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6">
+        <h3 class="text-xl font-bold text-blue-700 mb-6 flex items-center">
+          <i class="fa-solid fa-book-open-reader text-indigo-500 mr-2"></i> Contoh Soal & Perubahan Langkah
+        </h3>
         
-        <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius);">
-          <strong style="color: #8b5cf6;">Contoh 4: Negatif - Negatif</strong>
-          <div style="font-size: 1.2rem; margin-top: 10px;">
-            −5 − (−4) <br>
-            = −5 + 4 <br>
-            = <strong>−1</strong>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-emerald-300 transition-colors">
+            <div class="absolute top-0 right-0 p-3 opacity-10 text-emerald-500 text-4xl group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-plus"></i></div>
+            <strong class="text-emerald-600 block mb-3 text-lg border-b border-slate-200 pb-2">Positif - Positif</strong>
+            <div class="font-mono text-xl space-y-1 text-slate-700">
+              <div>8 − 3</div>
+              <div class="text-slate-400">= 8 + (−3)</div>
+              <div class="text-emerald-600 font-bold">= 5</div>
+            </div>
+          </div>
+          
+          <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-amber-300 transition-colors">
+            <div class="absolute top-0 right-0 p-3 opacity-10 text-amber-500 text-4xl group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-minus"></i></div>
+            <strong class="text-amber-600 block mb-3 text-lg border-b border-slate-200 pb-2">Dikurangi Negatif</strong>
+            <div class="font-mono text-xl space-y-1 text-slate-700">
+              <div>8 − (−3)</div>
+              <div class="text-slate-400">= 8 + 3</div>
+              <div class="text-amber-600 font-bold">= 11</div>
+            </div>
+            <div class="text-xs text-amber-600/70 font-sans mt-3 bg-amber-50 inline-block px-2 py-1 rounded">*Lawan dari -3 adalah 3.</div>
+          </div>
+          
+          <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-red-300 transition-colors">
+            <div class="absolute top-0 right-0 p-3 opacity-10 text-red-500 text-4xl group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-plus-minus"></i></div>
+            <strong class="text-red-500 block mb-3 text-lg border-b border-slate-200 pb-2">Negatif - Positif</strong>
+            <div class="font-mono text-xl space-y-1 text-slate-700">
+              <div>−5 − 4</div>
+              <div class="text-slate-400">= −5 + (−4)</div>
+              <div class="text-red-500 font-bold">= −9</div>
+            </div>
+          </div>
+          
+          <div class="bg-slate-50 p-6 rounded-xl border border-slate-100 shadow-sm relative overflow-hidden group hover:border-purple-300 transition-colors">
+            <div class="absolute top-0 right-0 p-3 opacity-10 text-purple-500 text-4xl group-hover:opacity-20 transition-opacity"><i class="fa-solid fa-minus"></i><i class="fa-solid fa-minus"></i></div>
+            <strong class="text-purple-600 block mb-3 text-lg border-b border-slate-200 pb-2">Negatif - Negatif</strong>
+            <div class="font-mono text-xl space-y-1 text-slate-700">
+              <div>−5 − (−4)</div>
+              <div class="text-slate-400">= −5 + 4</div>
+              <div class="text-purple-600 font-bold">= −1</div>
+            </div>
           </div>
         </div>
       </div>
-    </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
-      <a href="4-sifat-penjumlahan.html" class="btn btn-outline">← Sebelumnya</a>
-      <a href="6-perkalian.html" class="btn btn-primary">Lanjut ke Materi 6 →</a>
+      <div class="flex justify-between mt-10">
+        <a href="4-sifat-penjumlahan.html" class="inline-flex items-center px-6 py-3 border border-slate-300 text-slate-600 font-medium rounded-lg hover:bg-slate-50 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+        </a>
+        <a href="6-perkalian.html" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
+          Lanjut ke Materi 6 <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+      
     </div>
   </div>
 

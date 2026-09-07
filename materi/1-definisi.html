@@ -4,54 +4,77 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materi 1 - Definisi Bilangan Bulat</title>
-  <link rel="stylesheet" href="../css/style.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
   <div id="page-container" style="display: none;">
-    <div style="margin-bottom: 20px;">
-      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
-    </div>
-
-    <h1>1. Definisi Bilangan Bulat</h1>
-    
-    <div class="card">
-      <h3 class="text-primary">Pengertian</h3>
-      <p>Bilangan bulat adalah bilangan yang terdiri dari bilangan bulat negatif, nol, dan bilangan bulat positif.</p>
+    <div class="max-w-3xl mx-auto">
       
-      <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius); text-align: center; font-size: 1.2rem; margin: 20px 0; font-family: monospace;">
-        ..., −5, −4, −3, −2, −1, <strong>0</strong>, 1, 2, 3, 4, 5, ...
+      <div class="mb-6">
+        <a href="index.html" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Materi
+        </a>
       </div>
 
-      <ul style="padding-left: 20px; line-height: 1.8;">
-        <li><span class="text-primary" style="font-weight: 600;">Bilangan positif</span> — berada di sebelah kanan 0.</li>
-        <li><span style="color: var(--danger); font-weight: 600;">Bilangan negatif</span> — berada di sebelah kiri 0.</li>
-        <li><strong>Nol</strong> — bukan bilangan positif dan bukan bilangan negatif.</li>
-      </ul>
-    </div>
-
-    <div class="card">
-      <h3 class="text-primary">Garis Bilangan Interaktif</h3>
-      <p>Cobalah klik angka di bawah ini untuk melihat nilainya:</p>
+      <h1 class="text-3xl font-bold text-slate-800 mb-8 border-b border-slate-200 pb-4">
+        <span class="text-blue-600 mr-2">1.</span> Definisi Bilangan Bulat
+      </h1>
       
-      <div id="number-line-container"></div>
-      
-      <div id="nilai-mutlak-info" style="margin-top: 20px; text-align: center; font-size: 1.2rem; font-weight: 600; min-height: 40px; padding: 10px; border: 2px dashed var(--gray-200); border-radius: var(--radius);">
-        Klik angka pada garis bilangan.
-      </div>
-    </div>
-    
-    <div class="card">
-      <h3 class="text-primary">Nilai Mutlak</h3>
-      <p>Nilai mutlak (dilambangkan dengan garis vertikal |...|) adalah jarak suatu bilangan dari 0 pada garis bilangan. Jarak selalu bernilai positif atau nol.</p>
-      <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px;">
-        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.2rem; font-weight: 600;">|−5| = 5</div>
-        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.2rem; font-weight: 600;">|5| = 5</div>
-      </div>
-    </div>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6">
+        <h3 class="text-xl font-bold text-blue-700 mb-4 flex items-center">
+          <i class="fa-solid fa-lightbulb text-amber-400 mr-2"></i> Pengertian
+        </h3>
+        <p class="text-slate-600 leading-relaxed text-lg mb-6">Bilangan bulat adalah bilangan yang terdiri dari bilangan bulat negatif, nol, dan bilangan bulat positif.</p>
+        
+        <div class="bg-slate-50 border border-slate-200 p-4 rounded-lg text-center font-mono text-lg md:text-xl text-slate-700 mb-6 tracking-widest shadow-inner">
+          ..., −5, −4, −3, −2, −1, <strong class="text-blue-600">0</strong>, 1, 2, 3, 4, 5, ...
+        </div>
 
-    <div style="display: flex; justify-content: flex-end; margin-top: 30px;">
-      <a href="2-garis-bilangan.html" class="btn btn-primary">Lanjut ke Materi 2 →</a>
+        <ul class="space-y-3 text-slate-600 text-lg ml-2">
+          <li class="flex items-start"><i class="fa-solid fa-plus-circle text-emerald-500 mt-1 mr-3"></i> <span><strong class="text-emerald-700">Bilangan positif</strong> — berada di sebelah kanan 0.</span></li>
+          <li class="flex items-start"><i class="fa-solid fa-minus-circle text-red-500 mt-1 mr-3"></i> <span><strong class="text-red-700">Bilangan negatif</strong> — berada di sebelah kiri 0.</span></li>
+          <li class="flex items-start"><i class="fa-solid fa-circle-dot text-slate-400 mt-1 mr-3"></i> <span><strong class="text-slate-800">Nol</strong> — bukan bilangan positif dan bukan bilangan negatif.</span></li>
+        </ul>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6">
+        <h3 class="text-xl font-bold text-blue-700 mb-4 flex items-center">
+          <i class="fa-solid fa-arrows-left-right text-blue-500 mr-2"></i> Garis Bilangan Interaktif
+        </h3>
+        <p class="text-slate-600 mb-6">Cobalah klik angka di bawah ini untuk melihat nilainya:</p>
+        
+        <div id="number-line-container" class="my-8"></div>
+        
+        <div id="nilai-mutlak-info" class="mt-6 text-center text-lg font-semibold min-h-[60px] p-4 border-2 border-dashed border-blue-200 bg-blue-50 rounded-xl text-blue-800 transition-all">
+          Klik angka pada garis bilangan.
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-8">
+        <h3 class="text-xl font-bold text-blue-700 mb-4 flex items-center">
+          <i class="fa-solid fa-arrows-left-right-to-line text-indigo-500 mr-2"></i> Nilai Mutlak
+        </h3>
+        <p class="text-slate-600 leading-relaxed text-lg mb-6">Nilai mutlak (dilambangkan dengan garis vertikal |...|) adalah jarak suatu bilangan dari 0 pada garis bilangan. Jarak selalu bernilai positif atau nol.</p>
+        <div class="flex flex-wrap gap-4 justify-center">
+          <div class="bg-slate-50 border border-slate-200 px-6 py-3 rounded-lg text-xl font-mono font-bold text-slate-700 shadow-sm">|−5| = 5</div>
+          <div class="bg-slate-50 border border-slate-200 px-6 py-3 rounded-lg text-xl font-mono font-bold text-slate-700 shadow-sm">|5| = 5</div>
+        </div>
+      </div>
+
+      <div class="flex justify-end mt-10">
+        <a href="2-garis-bilangan.html" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
+          Lanjut ke Materi 2 <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+      
     </div>
   </div>
 
@@ -67,7 +90,6 @@
         if (contentContainer && pageContainer) {
           contentContainer.innerHTML = pageContainer.innerHTML;
           
-          // Inisialisasi Number Line
           const infoBox = document.getElementById('nilai-mutlak-info');
           new NumberLine('number-line-container', {
             min: -7,
@@ -76,7 +98,8 @@
             onChange: (val) => {
               if (infoBox) {
                 const jenis = val === 0 ? "Nol" : (val > 0 ? "Positif" : "Negatif");
-                infoBox.innerHTML = \`Angka: <span style="color: var(--primary);">\${val}</span> (\${jenis}) <br> Nilai Mutlak: <span style="color: var(--secondary);">|\${val}| = \${Math.abs(val)}</span>\`;
+                const color = val === 0 ? 'text-slate-600' : (val > 0 ? 'text-emerald-600' : 'text-red-600');
+                infoBox.innerHTML = `Angka: <span class="${color} font-bold">${val}</span> (${jenis}) <br> <span class="text-sm text-slate-500 mt-1 inline-block">Nilai Mutlak: <strong class="text-blue-700">|${val}| = ${Math.abs(val)}</strong></span>`;
               }
             }
           });

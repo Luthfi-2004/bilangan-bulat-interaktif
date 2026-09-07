@@ -3,14 +3,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!document.getElementById('app-layout')) {
     const originalContent = document.body.innerHTML;
     document.body.innerHTML = `
-      <div id="app-layout">
-        <aside class="sidebar" id="app-sidebar"></aside>
-        <div class="main-wrapper">
-          <header class="topbar" id="app-topbar"></header>
-          <main class="page-content" id="app-content">
+      <div id="app-layout" class="flex h-screen overflow-hidden bg-slate-50 font-sans text-slate-800">
+        <aside id="app-sidebar" class="w-64 flex-shrink-0 border-r border-slate-200 bg-white hidden md:flex flex-col transition-all duration-300 z-20 absolute md:relative h-full"></aside>
+        <div class="flex-1 flex flex-col w-full relative">
+          <header id="app-topbar" class="h-16 flex-shrink-0 border-b border-slate-200 bg-white/80 backdrop-blur-sm sticky top-0 z-10"></header>
+          <main id="app-content" class="flex-1 overflow-y-auto p-4 md:p-8 relative">
             ${originalContent}
           </main>
-          <footer class="app-footer" id="app-footer"></footer>
+          <footer id="app-footer" class="flex-shrink-0 bg-white border-t border-slate-200 p-4"></footer>
         </div>
       </div>
     `;
@@ -47,7 +47,7 @@ function initLayoutInteractivity() {
   
   if (menuToggleBtn && sidebar) {
     menuToggleBtn.addEventListener('click', () => {
-      sidebar.classList.toggle('active');
+      sidebar.classList.toggle('hidden');
     });
   }
 
@@ -58,7 +58,8 @@ function initLayoutInteractivity() {
   menuLinks.forEach(link => {
     // Basic matching for active state
     if (currentPath.includes(link.getAttribute('data-path'))) {
-      link.classList.add('active');
+      link.classList.add('bg-blue-50', 'text-blue-600', 'font-semibold', 'border-r-4', 'border-blue-600');
+      link.classList.remove('text-slate-600', 'hover:bg-slate-50', 'hover:text-blue-600');
     }
     
     // Fix links for subfolders

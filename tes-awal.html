@@ -4,18 +4,38 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Tes Awal - Operasi Campuran Bilangan Bulat</title>
-  <link rel="stylesheet" href="css/style.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
 
-  <!-- Layout akan dimuat dinamis -->
+  <!-- Layout will be dynamically injected by js/layout.js -->
   <div id="page-container" style="display: none;">
-    <h1>🧠 Tes Awal</h1>
-    <p>Kerjakan tes awal ini untuk mengetahui kemampuan awalmu sebelum mempelajari materi.</p>
-    
-    <div id="quiz-container">
-      <!-- Quiz engine akan merender soal di sini -->
+    <div class="max-w-3xl mx-auto">
+      <div class="mb-8 border-b border-slate-200 pb-4">
+        <h1 class="text-3xl font-bold text-slate-800 flex items-center">
+          <i class="fa-solid fa-clipboard-list text-blue-600 mr-3"></i> Tes Awal (Diagnostik)
+        </h1>
+        <p class="text-slate-500 mt-2 text-lg">Kerjakan 5 soal ini untuk melihat pemahaman dasar kamu sebelum masuk ke materi.</p>
+      </div>
+      
+      <div id="intro-container" class="bg-white rounded-xl shadow-sm border border-slate-100 p-8 text-center mb-8">
+        <h3 class="text-2xl font-bold text-slate-800 mb-4">Siap untuk memulai?</h3>
+        <p class="text-slate-600 mb-8 max-w-lg mx-auto">Jangan khawatir jika kamu belum tahu jawabannya. Tes ini hanya untuk mengukur sejauh mana kamu sudah mengenal bilangan bulat.</p>
+        <button class="px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors shadow-sm focus:outline-none focus:ring-4 focus:ring-blue-300" onclick="mulaiTes()">
+          Mulai Tes Awal <i class="fa-solid fa-play ml-2"></i>
+        </button>
+      </div>
+
+      <div id="quiz-container" style="display: none;">
+        <!-- Quiz engine merender di sini -->
+      </div>
     </div>
   </div>
 
@@ -25,16 +45,19 @@
     import { SOAL_TES_AWAL } from './js/soal-data.js';
     import { QuizEngine } from './js/quiz-engine.js';
     
+    window.mulaiTes = function() {
+      document.getElementById('intro-container').style.display = 'none';
+      document.getElementById('quiz-container').style.display = 'block';
+      
+      new QuizEngine('quiz-container', SOAL_TES_AWAL, 'tes_awal');
+    };
+
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const contentContainer = document.getElementById('app-content');
         const pageContainer = document.getElementById('page-container');
-        
         if (contentContainer && pageContainer) {
           contentContainer.innerHTML = pageContainer.innerHTML;
-          
-          // Mulai Quiz Engine
-          new QuizEngine('quiz-container', SOAL_TES_AWAL, 'tes_awal');
         }
       }, 100);
     });

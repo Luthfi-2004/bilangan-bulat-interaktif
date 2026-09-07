@@ -21,59 +21,67 @@ export class QuizEngine {
     }
     
     const soal = this.soalArray[this.currentIndex];
+    const progressPercent = ((this.currentIndex) / this.soalArray.length) * 100;
     
-    let html = \`
-      <div class="card">
-        <div style="display: flex; justify-content: space-between; margin-bottom: 20px;">
-          <span style="font-weight: 600; color: var(--primary);">Soal \${this.currentIndex + 1} dari \${this.soalArray.length}</span>
-          <span class="text-muted">\${this.jenis.replace('_', ' ').toUpperCase()}</span>
+    let html = `
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 relative overflow-hidden">
+        <div class="flex justify-between items-center mb-6">
+          <span class="font-bold text-blue-600 bg-blue-50 px-3 py-1 rounded-full text-sm">Soal ${this.currentIndex + 1} dari ${this.soalArray.length}</span>
+          <span class="text-slate-400 text-xs font-semibold uppercase tracking-wider">${this.jenis.replace('_', ' ')}</span>
         </div>
         
-        <div class="progress-container">
-          <div class="progress-bar" style="width: \${((this.currentIndex) / this.soalArray.length) * 100}%"></div>
+        <div class="w-full bg-slate-100 rounded-full h-2 mb-8 overflow-hidden">
+          <div class="bg-blue-600 h-2 rounded-full transition-all duration-300" style="width: ${progressPercent}%"></div>
         </div>
         
-        <h3 style="font-size: 1.5rem; margin-top: 20px;">\${soal.pertanyaan}</h3>
+        <h3 class="text-2xl font-bold text-slate-800 mb-8 leading-snug">${soal.pertanyaan}</h3>
         
-        <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 30px;" id="pilihan-container">
-    \`;
+        <div class="space-y-3" id="pilihan-container">
+    `;
     
     soal.pilihan.forEach((pilihanText, index) => {
       const isSelected = this.jawabanSiswa[this.currentIndex] === pilihanText;
-      html += \`
-        <button class="btn \${isSelected ? 'btn-primary' : 'btn-outline'}" 
-                style="justify-content: flex-start; text-align: left; padding: 15px;"
-                data-jawaban="\${pilihanText}">
-          \${String.fromCharCode(65 + index)}. \${pilihanText}
+      const baseBtnClass = "w-full text-left px-5 py-4 rounded-xl border-2 transition-all duration-200 focus:outline-none";
+      const stateClass = isSelected 
+        ? "border-blue-600 bg-blue-50 text-blue-700 font-semibold shadow-sm" 
+        : "border-slate-200 hover:border-blue-300 hover:bg-slate-50 text-slate-700";
+        
+      html += `
+        <button class="${baseBtnClass} ${stateClass}" data-jawaban="${pilihanText}">
+          <span class="inline-block w-8 font-bold opacity-60">${String.fromCharCode(65 + index)}.</span> ${pilihanText}
         </button>
-      \`;
+      `;
     });
     
-    html += \`
+    html += `
         </div>
         
-        <div style="display: flex; justify-content: space-between; margin-top: 30px;">
-          <button class="btn btn-outline" id="btn-prev" \${this.currentIndex === 0 ? 'disabled' : ''}>← Sebelumnya</button>
-          <button class="btn btn-primary" id="btn-next">\${this.currentIndex === this.soalArray.length - 1 ? 'Selesai & Cek Skor' : 'Selanjutnya →'}</button>
+        <div class="flex justify-between mt-10 border-t border-slate-100 pt-6">
+          <button class="px-6 py-2.5 rounded-lg border border-slate-200 text-slate-600 font-medium hover:bg-slate-50 transition-colors disabled:opacity-50 disabled:cursor-not-allowed" id="btn-prev" ${this.currentIndex === 0 ? 'disabled' : ''}>
+            <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+          </button>
+          
+          <button class="px-6 py-2.5 rounded-lg bg-blue-600 text-white font-medium hover:bg-blue-700 shadow-sm transition-colors" id="btn-next">
+            ${this.currentIndex === this.soalArray.length - 1 ? 'Selesai & Cek Skor <i class="fa-solid fa-check ml-2"></i>' : 'Selanjutnya <i class="fa-solid fa-arrow-right ml-2"></i>'}
+          </button>
         </div>
       </div>
-    \`;
+    `;
     
     this.container.innerHTML = html;
     this.attachEvents();
   }
   
   attachEvents() {
-    // Tombol Pilihan
-    const pilihanBtns = this.container.querySelectorAll('#pilihan-container .btn');
+    const pilihanBtns = this.container.querySelectorAll('#pilihan-container button');
     pilihanBtns.forEach(btn => {
       btn.addEventListener('click', (e) => {
-        this.jawabanSiswa[this.currentIndex] = e.target.getAttribute('data-jawaban');
-        this.render(); // Re-render untuk mengupdate state tombol
+        const selectedValue = e.currentTarget.getAttribute('data-jawaban');
+        this.jawabanSiswa[this.currentIndex] = selectedValue;
+        this.render(); 
       });
     });
     
-    // Navigasi
     const btnPrev = this.container.querySelector('#btn-prev');
     if (btnPrev) {
       btnPrev.addEventListener('click', () => {
@@ -107,7 +115,6 @@ export class QuizEngine {
     this.hitungSkor();
     this.renderHasil();
     
-    // Simpan ke database
     const student = window.getCurrentStudent();
     if (student) {
       await saveTestResult(student.id, this.jenis, this.skor);
@@ -131,51 +138,70 @@ export class QuizEngine {
   renderHasil() {
     let feedback = "";
     let alertClass = "";
+    let iconClass = "";
     
     if (this.skor >= 80) {
-      feedback = "Wah, kemampuan awalmu sudah bagus!";
-      alertClass = "alert-success";
+      feedback = "Wah, kemampuanmu sangat memuaskan!";
+      alertClass = "bg-emerald-50 border-emerald-200 text-emerald-800";
+      iconClass = "text-emerald-500 fa-solid fa-face-grin-stars";
     } else if (this.skor >= 60) {
-      feedback = "Lumayan! Kamu sudah punya dasar.";
-      alertClass = "alert-info";
+      feedback = "Lumayan! Kamu sudah punya dasar yang cukup baik.";
+      alertClass = "bg-blue-50 border-blue-200 text-blue-800";
+      iconClass = "text-blue-500 fa-solid fa-thumbs-up";
     } else {
-      feedback = "Tidak apa-apa kalau masih banyak yang salah. Yuk mulai belajar dari konsep dasarnya!";
-      alertClass = "alert-warning"; // Using a warning style, or fall back to error
+      feedback = "Tidak apa-apa kalau masih banyak salah. Yuk mulai belajar dari konsep dasar!";
+      alertClass = "bg-amber-50 border-amber-200 text-amber-800";
+      iconClass = "text-amber-500 fa-solid fa-lightbulb";
     }
     
-    let html = \`
-      <div class="card text-center">
-        <h2>Skor \${this.jenis.replace('_', ' ').toUpperCase()}</h2>
-        <div style="font-size: 4rem; font-weight: 800; color: var(--primary); margin: 20px 0;">\${this.skor}</div>
-        <div class="alert \${alertClass}" style="display: inline-block;">\${feedback}</div>
+    let html = `
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-8 text-center mb-8">
+        <h2 class="text-2xl font-bold text-slate-800 mb-2">Skor ${this.jenis.replace('_', ' ').toUpperCase()}</h2>
+        <div class="text-6xl md:text-8xl font-black text-blue-600 my-6 drop-shadow-sm">${this.skor}</div>
         
-        <div style="margin-top: 30px;">
-          <a href="materi/index.html" class="btn btn-primary">Lanjut ke Materi →</a>
+        <div class="inline-flex items-center gap-3 px-6 py-4 border rounded-xl ${alertClass} max-w-xl mx-auto">
+          <i class="${iconClass} text-2xl"></i>
+          <span class="font-medium">${feedback}</span>
+        </div>
+        
+        <div class="mt-10">
+          <a href="materi/index.html" class="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
+            Lanjut ke Materi <i class="fa-solid fa-arrow-right ml-2"></i>
+          </a>
         </div>
       </div>
       
-      <h3 style="margin-top: 30px;">Pembahasan Jawaban</h3>
-      <div class="grid">
-    \`;
+      <div class="flex items-center mb-6 mt-12">
+        <h3 class="text-xl font-bold text-slate-800"><i class="fa-solid fa-list-check text-blue-600 mr-2"></i> Pembahasan Jawaban</h3>
+      </div>
+      
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    `;
     
     this.soalArray.forEach((soal, index) => {
       const jawabanUser = this.jawabanSiswa[index];
       const isCorrect = jawabanUser === soal.jawaban_benar;
+      const borderColor = isCorrect ? 'border-l-emerald-500' : 'border-l-red-500';
+      const iconResult = isCorrect ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>' : '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
       
-      html += \`
-        <div class="card" style="border-left: 5px solid \${isCorrect ? 'var(--success)' : 'var(--danger)'}">
-          <h4>Soal \${index + 1}: \${soal.pertanyaan}</h4>
-          <p>Jawabanmu: <strong>\${jawabanUser || '-'}</strong> \${isCorrect ? '✅' : '❌'}</p>
-          \${!isCorrect ? \`<p>Jawaban Benar: <strong>\${soal.jawaban_benar}</strong></p>\` : ''}
-          <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius); margin-top: 10px;">
-            <strong>Pembahasan:</strong><br>
-            \${soal.pembahasan}
+      html += `
+        <div class="bg-white rounded-lg shadow-sm border border-slate-200 border-l-4 ${borderColor} p-6 h-full flex flex-col">
+          <h4 class="font-bold text-slate-800 mb-4 text-lg">Soal ${index + 1}: <span class="font-normal font-mono bg-slate-100 px-2 py-1 rounded">${soal.pertanyaan}</span></h4>
+          
+          <div class="mb-4">
+            <p class="text-slate-600 mb-1">Jawabanmu: <strong class="text-slate-800">${jawabanUser || '-'}</strong> ${iconResult}</p>
+            ${!isCorrect ? `<p class="text-slate-600">Jawaban Benar: <strong class="text-emerald-600">${soal.jawaban_benar}</strong></p>` : ''}
+          </div>
+          
+          <div class="mt-auto bg-slate-50 p-4 rounded-lg border border-slate-100 text-sm">
+            <strong class="text-slate-700 block mb-1"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i> Pembahasan:</strong>
+            <span class="text-slate-600">${soal.pembahasan}</span>
           </div>
         </div>
-      \`;
+      `;
     });
     
-    html += \`</div>\`;
+    html += `</div>`;
     this.container.innerHTML = html;
   }
 }

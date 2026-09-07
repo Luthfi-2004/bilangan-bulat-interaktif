@@ -4,59 +4,98 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materi 7 - Pembagian Bilangan Bulat</title>
-  <link rel="stylesheet" href="../css/style.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
   <div id="page-container" style="display: none;">
-    <div style="margin-bottom: 20px;">
-      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
-    </div>
-
-    <h1>7. Pembagian Bilangan Bulat</h1>
-    
-    <div class="card">
-      <h3 class="text-primary">Kebalikan dari Perkalian</h3>
-      <p>Pembagian pada dasarnya adalah operasi kebalikan (invers) dari perkalian.</p>
-      <div style="background: var(--bg-color); padding: 15px; border-radius: var(--radius); font-size: 1.2rem; font-weight: 600; text-align: center; margin-bottom: 20px;">
-        12 ÷ 3 = 4 &nbsp;&nbsp; karena &nbsp;&nbsp; 4 × 3 = 12
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 class="text-primary">Aturan Tanda Pembagian</h3>
-      <p>Aturan tanda pada pembagian <strong>sama persis</strong> dengan aturan tanda pada perkalian!</p>
+    <div class="max-w-4xl mx-auto">
       
-      <div class="grid grid-2" style="margin-top: 20px;">
-        <div style="background: #f0fdf4; padding: 15px; border-radius: var(--radius); border-left: 4px solid var(--success);">
-          <h4 style="color: var(--success); margin-bottom: 10px;">Tanda Sama = Positif</h4>
-          <ul style="list-style: none; padding: 0;">
-            <li style="margin-bottom: 5px;">12 ÷ 3 = <strong>4</strong></li>
-            <li>−12 ÷ (−3) = <strong>4</strong></li>
-          </ul>
-        </div>
-        
-        <div style="background: #fef2f2; padding: 15px; border-radius: var(--radius); border-left: 4px solid var(--danger);">
-          <h4 style="color: var(--danger); margin-bottom: 10px;">Tanda Beda = Negatif</h4>
-          <ul style="list-style: none; padding: 0;">
-            <li style="margin-bottom: 5px;">12 ÷ (−3) = <strong>−4</strong></li>
-            <li>−12 ÷ 3 = <strong>−4</strong></li>
-          </ul>
-        </div>
+      <div class="mb-6">
+        <a href="index.html" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Materi
+        </a>
       </div>
-    </div>
-    
-    <div class="alert alert-error" style="display: flex; align-items: flex-start; gap: 15px;">
-      <div style="font-size: 2rem;">⚠️</div>
-      <div>
-        <h4 style="margin-bottom: 5px;">Peringatan Penting!</h4>
-        <p style="margin: 0;">Suatu bilangan <strong>tidak dapat dibagi dengan 0</strong>. Hasilnya tidak terdefinisi (bukan bilangan bulat).</p>
-      </div>
-    </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
-      <a href="6-perkalian.html" class="btn btn-outline">← Sebelumnya</a>
-      <a href="8-operasi-campuran.html" class="btn btn-primary">Lanjut ke Materi 8 →</a>
+      <h1 class="text-3xl font-bold text-slate-800 mb-8 border-b border-slate-200 pb-4">
+        <span class="text-blue-600 mr-2">7.</span> Pembagian Bilangan Bulat
+      </h1>
+      
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6">
+        <h3 class="text-xl font-bold text-blue-700 mb-4 flex items-center">
+          <i class="fa-solid fa-divide text-purple-500 mr-2"></i> Kebalikan Perkalian
+        </h3>
+        
+        <p class="text-slate-600 text-lg mb-6 leading-relaxed">Pembagian adalah operasi kebalikan (invers) dari perkalian. Aturan tandanya <strong>sama persis</strong> dengan aturan tanda pada perkalian!</p>
+        
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="bg-emerald-50 border border-emerald-200 p-6 rounded-xl flex items-center shadow-sm">
+            <div class="text-4xl text-emerald-500 mr-6 bg-white p-3 rounded-full shadow-sm"><i class="fa-solid fa-plus"></i></div>
+            <div>
+              <strong class="text-emerald-800 block mb-1">Tanda Sama = Positif</strong>
+              <div class="font-mono text-emerald-700 bg-white/50 px-2 py-1 rounded inline-block text-sm">
+                12 ÷ 3 = 4 <br>
+                −12 ÷ (−3) = 4
+              </div>
+            </div>
+          </div>
+          
+          <div class="bg-red-50 border border-red-200 p-6 rounded-xl flex items-center shadow-sm">
+            <div class="text-4xl text-red-500 mr-6 bg-white p-3 rounded-full shadow-sm"><i class="fa-solid fa-minus"></i></div>
+            <div>
+              <strong class="text-red-800 block mb-1">Tanda Beda = Negatif</strong>
+              <div class="font-mono text-red-700 bg-white/50 px-2 py-1 rounded inline-block text-sm">
+                12 ÷ (−3) = −4 <br>
+                −12 ÷ 3 = −4
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6 border-l-4 border-l-amber-400">
+        <h3 class="text-xl font-bold text-slate-800 mb-3 flex items-center">
+          <i class="fa-solid fa-triangle-exclamation text-amber-500 mr-2"></i> Pengecualian Penting
+        </h3>
+        <p class="text-slate-600 leading-relaxed text-lg mb-6">Pembagian memiliki batasan penting yang berhubungan dengan angka 0.</p>
+        
+        <div class="space-y-4">
+          <div class="bg-amber-50 p-4 rounded-lg flex items-start gap-4">
+            <i class="fa-solid fa-check-circle text-emerald-500 text-xl mt-1"></i>
+            <div>
+              <strong class="text-slate-800 block">Nol dibagi angka: 0</strong>
+              <p class="text-slate-600 text-sm mt-1">Nol dibagi dengan bilangan bulat apa saja (selain 0) hasilnya selalu 0.</p>
+              <div class="font-mono text-blue-700 mt-2 bg-white px-3 py-1 rounded border border-amber-100 shadow-sm inline-block">0 ÷ 5 = 0</div>
+            </div>
+          </div>
+          
+          <div class="bg-red-50 p-4 rounded-lg flex items-start gap-4">
+            <i class="fa-solid fa-ban text-red-500 text-xl mt-1"></i>
+            <div>
+              <strong class="text-slate-800 block">Angka dibagi Nol: TIDAK TERDEFINISI</strong>
+              <p class="text-slate-600 text-sm mt-1">Kita tidak bisa membagi bilangan apa pun dengan nol.</p>
+              <div class="font-mono text-red-600 mt-2 bg-white px-3 py-1 rounded border border-red-100 shadow-sm inline-block">5 ÷ 0 = (Tidak terdefinisi)</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between mt-10">
+        <a href="6-perkalian.html" class="inline-flex items-center px-6 py-3 border border-slate-300 text-slate-600 font-medium rounded-lg hover:bg-slate-50 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+        </a>
+        <a href="8-operasi-campuran.html" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
+          Lanjut ke Materi 8 <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+      
     </div>
   </div>
 

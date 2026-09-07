@@ -4,125 +4,113 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materi 8 - Operasi Hitung Campuran</title>
-  <link rel="stylesheet" href="../css/style.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <style>
-    .step-box { background: var(--bg-color); padding: 15px; border-radius: var(--radius); margin-bottom: 10px; display: none; }
-    .step-box.visible { display: block; animation: fadeIn 0.5s ease; }
-    @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-  </style>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
   <div id="page-container" style="display: none;">
-    <div style="margin-bottom: 20px;">
-      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
-    </div>
-
-    <h1>8. Operasi Hitung Campuran</h1>
-    <p>Ini adalah materi inti kita! Operasi hitung campuran menggunakan lebih dari satu jenis operasi hitung.</p>
-    
-    <div class="card" style="border-top-color: #8b5cf6;">
-      <h3 style="color: #8b5cf6;">Urutan Pengerjaan Wajib (Hierarki Operasi)</h3>
-      <ol style="padding-left: 20px; line-height: 2; font-size: 1.1rem; font-weight: 500;">
-        <li>Tanda kurung <code>( )</code> atau <code>[ ]</code> dikerjakan <strong>pertama</strong>.</li>
-        <li>Perkalian <code>×</code> dan Pembagian <code>÷</code> dikerjakan <strong>kedua</strong>.</li>
-        <li>Penjumlahan <code>+</code> dan Pengurangan <code>−</code> dikerjakan <strong>terakhir</strong>.</li>
-      </ol>
-      <div class="alert alert-info" style="margin-top: 15px;">
-        💡 <strong>Catatan:</strong> Jika tingkat operasinya sama (misalnya ada perkalian dan pembagian sekaligus), maka kerjakan dari <strong>kiri ke kanan</strong>.
-      </div>
-    </div>
-
-    <div class="card">
-      <h3 class="text-primary">Latihan Langkah demi Langkah</h3>
-      <p>Pilih contoh soal di bawah ini, lalu klik tombol "Langkah Selanjutnya" untuk melihat cara penyelesaiannya.</p>
+    <div class="max-w-4xl mx-auto">
       
-      <!-- Soal Selector -->
-      <div style="display: flex; gap: 10px; margin-bottom: 20px; flex-wrap: wrap;">
-        <button class="btn btn-outline" onclick="loadSoal(1)">Contoh 1</button>
-        <button class="btn btn-outline" onclick="loadSoal(2)">Contoh 2</button>
-        <button class="btn btn-outline" onclick="loadSoal(3)">Contoh 3</button>
-        <button class="btn btn-outline" onclick="loadSoal(4)">Contoh 4 (Kompleks)</button>
+      <div class="mb-6">
+        <a href="index.html" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Materi
+        </a>
       </div>
 
-      <!-- Container Soal -->
-      <div id="soal-display" style="font-size: 1.5rem; font-weight: 700; text-align: center; margin: 20px 0; padding: 20px; border: 2px dashed var(--primary-light); border-radius: var(--radius);">
-        Pilih contoh soal di atas
-      </div>
-
-      <!-- Container Langkah -->
-      <div id="steps-container"></div>
+      <h1 class="text-3xl font-bold text-slate-800 mb-8 border-b border-slate-200 pb-4">
+        <span class="text-blue-600 mr-2">8.</span> Operasi Hitung Campuran
+      </h1>
       
-      <div style="text-align: center; margin-top: 20px;">
-        <button class="btn btn-primary" id="btn-next-step" style="display: none;" onclick="showNextStep()">Tampilkan Langkah</button>
+      <div class="bg-indigo-600 text-white rounded-xl shadow-lg p-8 md:p-12 mb-8 relative overflow-hidden">
+        <div class="absolute right-0 top-0 opacity-10 text-9xl transform translate-x-1/4 -translate-y-1/4">
+          <i class="fa-solid fa-gears"></i>
+        </div>
+        <h3 class="text-2xl font-bold mb-4 flex items-center relative z-10">
+          <i class="fa-solid fa-list-ol text-amber-400 mr-3 text-3xl"></i> Hierarki Operasi Hitung
+        </h3>
+        <p class="text-indigo-100 text-lg mb-8 max-w-2xl relative z-10">
+          Jika dalam satu soal terdapat beberapa jenis operasi hitung, kamu wajib mengerjakannya sesuai urutan prioritas (hierarki) berikut:
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 relative z-10">
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-5 rounded-xl">
+            <div class="text-3xl font-bold text-amber-300 mb-2">1. Kurung</div>
+            <p class="text-sm text-indigo-50">Operasi di dalam tanda kurung <strong>()</strong> selalu dikerjakan paling awal.</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-5 rounded-xl">
+            <div class="text-3xl font-bold text-amber-300 mb-2">2. × / ÷</div>
+            <p class="text-sm text-indigo-50">Perkalian dan pembagian dikerjakan berikutnya, urut dari kiri ke kanan.</p>
+          </div>
+          
+          <div class="bg-white/10 backdrop-blur-sm border border-white/20 p-5 rounded-xl">
+            <div class="text-3xl font-bold text-amber-300 mb-2">3. + / −</div>
+            <p class="text-sm text-indigo-50">Penjumlahan dan pengurangan dikerjakan terakhir, urut dari kiri ke kanan.</p>
+          </div>
+        </div>
       </div>
-    </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
-      <a href="7-pembagian.html" class="btn btn-outline">← Sebelumnya</a>
-      <a href="9-penerapan.html" class="btn btn-primary">Lanjut ke Materi 9 →</a>
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6">
+        <h3 class="text-xl font-bold text-blue-700 mb-6 flex items-center">
+          <i class="fa-solid fa-magnifying-glass text-blue-500 mr-2"></i> Contoh Pengerjaan
+        </h3>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl relative">
+            <div class="absolute -left-3 -top-3 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold shadow">1</div>
+            <h4 class="font-bold text-slate-800 mb-3 border-b border-slate-200 pb-2">Contoh Tanpa Kurung</h4>
+            <div class="font-mono text-lg text-slate-700">
+              <div class="mb-2">10 + <span class="bg-amber-100 text-amber-800 px-1 rounded font-bold">2 × (-5)</span> − 4</div>
+              <div class="text-xs text-blue-600 mb-2 font-sans"><i class="fa-solid fa-arrow-turn-up fa-rotate-90 mr-1"></i> (kerjakan perkalian dulu)</div>
+              <div class="mb-2">= <span class="bg-emerald-100 text-emerald-800 px-1 rounded font-bold">10 + (-10)</span> − 4</div>
+              <div class="text-xs text-blue-600 mb-2 font-sans"><i class="fa-solid fa-arrow-turn-up fa-rotate-90 mr-1"></i> (dari kiri ke kanan)</div>
+              <div class="mb-2">= 0 − 4</div>
+              <div class="text-blue-700 font-bold text-xl mt-3">= -4</div>
+            </div>
+          </div>
+          
+          <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl relative">
+            <div class="absolute -left-3 -top-3 w-8 h-8 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold shadow">2</div>
+            <h4 class="font-bold text-slate-800 mb-3 border-b border-slate-200 pb-2">Contoh Dengan Kurung</h4>
+            <div class="font-mono text-lg text-slate-700">
+              <div class="mb-2">10 + 2 × <span class="bg-amber-100 text-amber-800 px-1 rounded font-bold">(-5 − 4)</span></div>
+              <div class="text-xs text-blue-600 mb-2 font-sans"><i class="fa-solid fa-arrow-turn-up fa-rotate-90 mr-1"></i> (kerjakan kurung dulu)</div>
+              <div class="mb-2">= 10 + <span class="bg-emerald-100 text-emerald-800 px-1 rounded font-bold">2 × (-9)</span></div>
+              <div class="text-xs text-blue-600 mb-2 font-sans"><i class="fa-solid fa-arrow-turn-up fa-rotate-90 mr-1"></i> (kerjakan perkalian)</div>
+              <div class="mb-2">= 10 + (-18)</div>
+              <div class="text-blue-700 font-bold text-xl mt-3">= -8</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="flex justify-between mt-10">
+        <a href="7-pembagian.html" class="inline-flex items-center px-6 py-3 border border-slate-300 text-slate-600 font-medium rounded-lg hover:bg-slate-50 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+        </a>
+        <a href="9-penerapan.html" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
+          Lanjut ke Materi 9 <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+      
     </div>
   </div>
 
   <script src="../js/layout.js"></script>
   <script type="module" src="../js/main.js"></script>
   <script>
-    const dataSoal = {
-      1: { soal: "8 + 3 × 2", steps: ["Kerjakan perkalian dulu: 3 × 2 = 6", "= 8 + 6", "= 14"] },
-      2: { soal: "20 − 12 ÷ 3", steps: ["Kerjakan pembagian dulu: 12 ÷ 3 = 4", "= 20 − 4", "= 16"] },
-      3: { soal: "5 + (−3) × 4", steps: ["Kerjakan perkalian dulu: (−3) × 4 = −12", "= 5 + (−12)", "= −7"] },
-      4: { soal: "15 − [6 + (−3)] × 2", steps: ["Kerjakan tanda kurung dulu: [6 + (−3)] = 3", "= 15 − 3 × 2", "Kerjakan perkalian: 3 × 2 = 6", "= 15 − 6", "= 9"] }
-    };
-
-    let currentSteps = [];
-    let currentStepIndex = 0;
-
-    window.loadSoal = function(id) {
-      const data = dataSoal[id];
-      document.getElementById('soal-display').innerHTML = data.soal;
-      
-      const container = document.getElementById('steps-container');
-      container.innerHTML = '';
-      currentSteps = data.steps;
-      currentStepIndex = 0;
-      
-      currentSteps.forEach((text, i) => {
-        const div = document.createElement('div');
-        div.className = 'step-box';
-        div.id = 'step-' + i;
-        div.innerHTML = `<strong>Langkah ${i+1}:</strong> ${text}`;
-        container.appendChild(div);
-      });
-      
-      const btn = document.getElementById('btn-next-step');
-      btn.style.display = 'inline-block';
-      btn.innerHTML = 'Langkah 1';
-      btn.disabled = false;
-    };
-
-    window.showNextStep = function() {
-      if (currentStepIndex < currentSteps.length) {
-        document.getElementById('step-' + currentStepIndex).classList.add('visible');
-        currentStepIndex++;
-        
-        const btn = document.getElementById('btn-next-step');
-        if (currentStepIndex >= currentSteps.length) {
-          btn.innerHTML = 'Selesai';
-          btn.disabled = true;
-        } else {
-          btn.innerHTML = `Langkah ${currentStepIndex + 1}`;
-        }
-      }
-    };
-
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
         const contentContainer = document.getElementById('app-content');
         const pageContainer = document.getElementById('page-container');
-        if (contentContainer && pageContainer) {
-          contentContainer.innerHTML = pageContainer.innerHTML;
-          loadSoal(1); // Load default soal
-        }
+        if (contentContainer && pageContainer) contentContainer.innerHTML = pageContainer.innerHTML;
       }, 100);
     });
   </script>

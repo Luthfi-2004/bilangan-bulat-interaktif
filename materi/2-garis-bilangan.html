@@ -4,41 +4,64 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Materi 2 - Garis Bilangan</title>
-  <link rel="stylesheet" href="../css/style.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
   <div id="page-container" style="display: none;">
-    <div style="margin-bottom: 20px;">
-      <a href="index.html" class="btn btn-outline" style="padding: 5px 15px; font-size: 0.9rem;">← Kembali ke Daftar Materi</a>
-    </div>
-
-    <h1>2. Garis Bilangan</h1>
-    
-    <div class="card">
-      <h3 class="text-primary">Fungsi Garis Bilangan</h3>
-      <p>Garis bilangan sangat berguna untuk membantu kita membandingkan nilai bilangan bulat.</p>
+    <div class="max-w-3xl mx-auto">
       
-      <div class="alert alert-info" style="margin: 20px 0;">
-        <ul style="padding-left: 20px; line-height: 1.8;">
-          <li>Semakin ke <strong>kanan</strong> posisinya, nilainya semakin <strong>besar</strong>.</li>
-          <li>Semakin ke <strong>kiri</strong> posisinya, nilainya semakin <strong>kecil</strong>.</li>
-        </ul>
+      <div class="mb-6">
+        <a href="index.html" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Materi
+        </a>
       </div>
 
-      <div style="display: flex; gap: 20px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
-        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.1rem;">
-          <strong>3 &gt; −5</strong> <br> <span class="text-muted">(3 lebih besar dari -5)</span>
+      <h1 class="text-3xl font-bold text-slate-800 mb-8 border-b border-slate-200 pb-4">
+        <span class="text-blue-600 mr-2">2.</span> Garis Bilangan
+      </h1>
+      
+      <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 md:p-8 mb-6">
+        <h3 class="text-xl font-bold text-blue-700 mb-4 flex items-center">
+          <i class="fa-solid fa-ruler-horizontal text-blue-500 mr-2"></i> Fungsi Garis Bilangan
+        </h3>
+        <p class="text-slate-600 leading-relaxed text-lg mb-6">Garis bilangan sangat berguna untuk membantu kita membandingkan nilai bilangan bulat.</p>
+        
+        <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-lg mb-8">
+          <ul class="space-y-3 text-blue-800 font-medium">
+            <li class="flex items-center"><i class="fa-solid fa-arrow-right mr-3 opacity-70"></i> Semakin ke <strong class="mx-1">kanan</strong> posisinya, nilainya semakin <strong class="mx-1 text-blue-900">besar</strong>.</li>
+            <li class="flex items-center"><i class="fa-solid fa-arrow-left mr-3 opacity-70"></i> Semakin ke <strong class="mx-1">kiri</strong> posisinya, nilainya semakin <strong class="mx-1 text-blue-900">kecil</strong>.</li>
+          </ul>
         </div>
-        <div style="background: var(--bg-color); padding: 15px 30px; border-radius: var(--radius); font-size: 1.1rem;">
-          <strong>−4 &lt; −1</strong> <br> <span class="text-muted">(-4 lebih kecil dari -1)</span>
+
+        <div class="flex flex-wrap gap-6 justify-center">
+          <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl text-center shadow-sm w-full md:w-5/12">
+            <div class="text-2xl font-mono font-bold text-emerald-600 mb-2">3 &gt; −5</div>
+            <div class="text-sm text-slate-500">(3 lebih besar dari -5)</div>
+          </div>
+          <div class="bg-slate-50 border border-slate-200 p-6 rounded-xl text-center shadow-sm w-full md:w-5/12">
+            <div class="text-2xl font-mono font-bold text-red-600 mb-2">−4 &lt; −1</div>
+            <div class="text-sm text-slate-500">(-4 lebih kecil dari -1)</div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <div style="display: flex; justify-content: space-between; margin-top: 30px;">
-      <a href="1-definisi.html" class="btn btn-outline">← Sebelumnya</a>
-      <a href="3-penjumlahan.html" class="btn btn-primary">Lanjut ke Materi 3 →</a>
+      <div class="flex justify-between mt-10">
+        <a href="1-definisi.html" class="inline-flex items-center px-6 py-3 border border-slate-300 text-slate-600 font-medium rounded-lg hover:bg-slate-50 transition-colors">
+          <i class="fa-solid fa-arrow-left mr-2"></i> Sebelumnya
+        </a>
+        <a href="3-penjumlahan.html" class="inline-flex items-center px-6 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
+          Lanjut ke Materi 3 <i class="fa-solid fa-arrow-right ml-2"></i>
+        </a>
+      </div>
+      
     </div>
   </div>
 

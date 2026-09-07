@@ -4,43 +4,72 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Hasil - Operasi Campuran Bilangan Bulat</title>
-  <link rel="stylesheet" href="css/style.css">
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="bg-slate-50 text-slate-800 antialiased font-sans">
+
+  <!-- Layout will be dynamically injected by js/layout.js -->
   <div id="page-container" style="display: none;">
-    <h1>📊 Hasil Belajar</h1>
-    <p>Pantau perkembangan belajarmu di sini.</p>
-    
-    <div id="not-logged-in" style="display: none; margin-top: 30px;" class="card text-center">
-      <h3>Masuk Dulu Yuk!</h3>
-      <p>Kamu belum memasukkan nama. Klik ikon profil di atas untuk mulai menyimpan nilai.</p>
-    </div>
-    
-    <div id="results-dashboard" style="display: none; margin-top: 30px;">
-      
-      <div class="grid grid-2">
-        <div class="card">
-          <h3 class="text-primary">Skor Kuis & Latihan</h3>
-          <ul id="score-list" style="list-style: none; padding: 0;">
-            <!-- Dirender via JS -->
-            <li style="color: var(--text-light); text-align: center; padding: 20px;">Belum ada data nilai.</li>
-          </ul>
-        </div>
-        
-        <div class="card">
-          <h3 class="text-primary">Rekomendasi Belajar</h3>
-          <div id="recommendation-box" style="background: var(--bg-color); padding: 20px; border-radius: var(--radius); line-height: 1.6;">
-            <!-- Dirender via JS -->
-            Ayo mulai kerjakan Tes Awal atau pelajari materi pertama!
-          </div>
-          
-          <div style="margin-top: 20px; text-align: center;">
-            <a href="pencapaian.html" class="btn btn-outline" style="width: 100%;">Lihat Lencana (Badge) 🏆</a>
-          </div>
-        </div>
+    <div class="max-w-5xl mx-auto">
+      <div class="mb-8 border-b border-slate-200 pb-4">
+        <h1 class="text-3xl font-bold text-slate-800 flex items-center">
+          <i class="fa-solid fa-chart-line text-blue-600 mr-3"></i> Hasil Belajar
+        </h1>
+        <p class="text-slate-500 mt-2 text-lg">Pantau perkembangan belajarmu di sini.</p>
       </div>
       
+      <div id="not-logged-in" style="display: none;" class="bg-white rounded-xl shadow-sm border border-slate-100 p-10 text-center mt-8">
+        <div class="w-20 h-20 bg-slate-100 text-slate-400 rounded-full flex items-center justify-center text-4xl mx-auto mb-6">
+          <i class="fa-solid fa-user-lock"></i>
+        </div>
+        <h3 class="text-2xl font-bold text-slate-800 mb-3">Masuk Dulu Yuk!</h3>
+        <p class="text-slate-600 mb-6">Kamu belum memasukkan nama. Klik tombol Masuk di pojok kanan atas untuk mulai menyimpan nilai.</p>
+      </div>
+      
+      <div id="results-dashboard" style="display: none;" class="mt-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          
+          <div class="lg:col-span-2 bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full">
+            <div class="bg-slate-50 border-b border-slate-100 px-6 py-4">
+              <h3 class="text-lg font-bold text-slate-800 flex items-center">
+                <i class="fa-solid fa-list-ul text-blue-500 mr-2"></i> Riwayat Kuis & Latihan
+              </h3>
+            </div>
+            <ul id="score-list" class="divide-y divide-slate-100">
+              <!-- Dirender via JS -->
+              <li class="p-8 text-center text-slate-400">Belum ada data nilai.</li>
+            </ul>
+          </div>
+          
+          <div class="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden flex flex-col h-full">
+            <div class="bg-blue-50 border-b border-blue-100 px-6 py-4">
+              <h3 class="text-lg font-bold text-blue-800 flex items-center">
+                <i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i> Rekomendasi
+              </h3>
+            </div>
+            <div class="p-6 flex-1 flex flex-col">
+              <div id="recommendation-box" class="text-slate-600 leading-relaxed mb-6">
+                <!-- Dirender via JS -->
+                Ayo mulai kerjakan Tes Awal atau pelajari materi pertama!
+              </div>
+              
+              <div class="mt-auto pt-6 border-t border-slate-100">
+                <a href="pencapaian.html" class="flex items-center justify-center w-full px-4 py-3 bg-white border-2 border-amber-400 text-amber-600 font-bold rounded-lg hover:bg-amber-50 transition-colors">
+                  <i class="fa-solid fa-trophy mr-2"></i> Lihat Lencana
+                </a>
+              </div>
+            </div>
+          </div>
+          
+        </div>
+      </div>
     </div>
   </div>
 
@@ -74,31 +103,37 @@
           if (isTesAwal) hasTesAwal = true;
           
           const title = r.jenis.replace('_', ' ').toUpperCase();
-          const colorClass = r.skor >= 80 ? 'var(--success)' : (r.skor >= 60 ? 'var(--warning)' : 'var(--danger)');
+          const colorClass = r.skor >= 80 ? 'text-emerald-500' : (r.skor >= 60 ? 'text-blue-500' : 'text-amber-500');
+          const bgIconClass = r.skor >= 80 ? 'bg-emerald-50 text-emerald-500' : (r.skor >= 60 ? 'bg-blue-50 text-blue-500' : 'bg-amber-50 text-amber-500');
+          const iconType = isKuis ? 'fa-stopwatch' : (isTesAwal ? 'fa-clipboard-list' : 'fa-pen-to-square');
           
-          html += \`
-            <li style="display: flex; justify-content: space-between; align-items: center; padding: 15px 0; border-bottom: 1px solid var(--gray-200);">
-              <div>
-                <strong>\${title}</strong><br>
-                <span style="font-size: 0.8rem; color: var(--text-light);">\${new Date(r.created_at).toLocaleDateString('id-ID')}</span>
+          html += `
+            <li class="flex items-center justify-between p-4 md:p-6 hover:bg-slate-50 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 rounded-full ${bgIconClass} flex items-center justify-center text-xl">
+                  <i class="fa-solid ${iconType}"></i>
+                </div>
+                <div>
+                  <strong class="text-slate-800 text-lg">${title}</strong><br>
+                  <span class="text-sm text-slate-500"><i class="fa-regular fa-calendar-days mr-1"></i> ${new Date(r.created_at).toLocaleDateString('id-ID')}</span>
+                </div>
               </div>
-              <div style="font-size: 1.5rem; font-weight: bold; color: \${colorClass};">\${r.skor}</div>
+              <div class="text-3xl font-black ${colorClass}">${r.skor}</div>
             </li>
-          \`;
+          `;
         });
         
         scoreList.innerHTML = html;
         
-        // Setup rekomendasi sederhana
         const recBox = document.getElementById('recommendation-box');
         if (!hasTesAwal) {
-          recBox.innerHTML = "Sebaiknya kamu mengerjakan <strong>Tes Awal</strong> terlebih dahulu untuk melihat kemampuan dasarmu.";
+          recBox.innerHTML = "Sebaiknya kamu mengerjakan <strong class='text-blue-600'>Tes Awal</strong> terlebih dahulu untuk melihat kemampuan dasarmu.";
         } else if (highestKuis >= 90) {
-          recBox.innerHTML = "🎉 <strong>Luar Biasa!</strong> Pemahamanmu tentang bilangan bulat sudah sangat baik. Pertahankan prestasimu!";
+          recBox.innerHTML = "<div class='text-4xl text-emerald-500 mb-3'><i class='fa-solid fa-crown'></i></div> <strong class='text-slate-800'>Luar Biasa!</strong> Pemahamanmu tentang bilangan bulat sudah sangat baik. Pertahankan prestasimu!";
         } else if (highestKuis >= 70) {
-          recBox.innerHTML = "👍 <strong>Bagus!</strong> Kamu sudah memahami sebagian besar materi. Coba kerjakan ulang bagian latihan campuran untuk mendapat nilai maksimal.";
+          recBox.innerHTML = "<div class='text-4xl text-blue-500 mb-3'><i class='fa-solid fa-thumbs-up'></i></div> <strong class='text-slate-800'>Bagus!</strong> Kamu sudah memahami sebagian besar materi. Coba kerjakan ulang bagian latihan campuran untuk mendapat nilai maksimal.";
         } else if (results.length > 0) {
-          recBox.innerHTML = "💪 <strong>Jangan Menyerah!</strong> Matematika itu butuh latihan. Mari baca ulang materi <em>Operasi Hitung Campuran</em> secara perlahan.";
+          recBox.innerHTML = "<div class='text-4xl text-amber-500 mb-3'><i class='fa-solid fa-dumbbell'></i></div> <strong class='text-slate-800'>Jangan Menyerah!</strong> Matematika itu butuh latihan. Mari baca ulang materi <em>Operasi Hitung Campuran</em> secara perlahan.";
         }
       }
     }
