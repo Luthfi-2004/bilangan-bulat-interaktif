@@ -96,7 +96,21 @@ export class QuizEngine {
     if (btnNext) {
       btnNext.addEventListener('click', () => {
         if (this.jawabanSiswa[this.currentIndex] === null) {
-          alert('Silakan pilih jawaban terlebih dahulu!');
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'warning',
+              title: 'Pilih Jawaban',
+              text: 'Silakan pilih salah satu jawaban terlebih dahulu sebelum melanjutkan!',
+              confirmButtonText: 'Baik, Mengerti',
+              confirmButtonColor: '#2563eb',
+              customClass: {
+                popup: 'rounded-2xl shadow-xl font-sans',
+                confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm'
+              }
+            });
+          } else {
+            alert('Silakan pilih jawaban terlebih dahulu!');
+          }
           return;
         }
         

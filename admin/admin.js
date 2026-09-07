@@ -53,6 +53,26 @@ function escapeHtml(str) {
     .replace(/>/g, '&gt;');
 }
 
+// Override window.alert agar dialog default browser tidak pernah muncul
+if (typeof window !== 'undefined') {
+  const origAlert = window.alert;
+  window.alert = function (message) {
+    if (typeof Swal !== 'undefined') {
+      return Swal.fire({
+        title: 'Pemberitahuan',
+        text: String(message),
+        icon: 'info',
+        confirmButtonColor: '#2563eb',
+        customClass: {
+          popup: 'rounded-2xl shadow-xl font-sans',
+          confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm'
+        }
+      });
+    }
+    return origAlert(message);
+  };
+}
+
 // ==========================================================
 // INISIALISASI & AUTH GUARD
 // ==========================================================
@@ -60,14 +80,34 @@ document.addEventListener('DOMContentLoaded', async () => {
   // 1. Cek sesi login
   currentUser = await getCurrentUser();
   if (!currentUser) {
-    alert("Silakan login terlebih dahulu sebagai Guru.");
+    if (typeof Swal !== 'undefined') {
+      await Swal.fire({
+        icon: 'warning',
+        title: 'Sesi Belum Masuk',
+        text: 'Silakan login terlebih dahulu sebagai Guru.',
+        confirmButtonText: 'Ke Halaman Login',
+        confirmButtonColor: '#2563eb'
+      });
+    } else {
+      alert("Silakan login terlebih dahulu sebagai Guru.");
+    }
     window.location.href = '../login.html';
     return;
   }
 
   // Jika bukan guru, tolak akses dan arahkan ke dashboard belajar siswa
   if (currentUser.role !== 'guru') {
-    alert("Akses ditolak. Halaman ini khusus untuk Pendidik / Guru.");
+    if (typeof Swal !== 'undefined') {
+      await Swal.fire({
+        icon: 'error',
+        title: 'Akses Ditolak',
+        text: 'Halaman ini khusus untuk Pendidik / Guru.',
+        confirmButtonText: 'Ke Ruang Belajar',
+        confirmButtonColor: '#2563eb'
+      });
+    } else {
+      alert("Akses ditolak. Halaman ini khusus untuk Pendidik / Guru.");
+    }
     window.location.href = '../dashboard.html';
     return;
   }
@@ -579,14 +619,51 @@ function renderQuestionsList(questions) {
   document.querySelectorAll('.btn-delete-q').forEach(btn => {
     btn.addEventListener('click', async () => {
       const qId = btn.getAttribute('data-id');
-      if (confirm("Hapus soal ini dari database?")) {
+      let confirmed = false;
+
+      if (typeof Swal !== 'undefined') {
+        const res = await Swal.fire({
+          title: 'Hapus Soal?',
+          text: 'Soal ini akan dihapus secara permanen dari database.',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ef4444',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: 'Ya, Hapus!',
+          cancelButtonText: 'Batal'
+        });
+        confirmed = res.isConfirmed;
+      } else {
+        confirmed = confirm("Hapus soal ini dari database?");
+      }
+
+      if (confirmed) {
         try {
           await deleteQuestion(qId);
-          alert("Soal berhasil dihapus!");
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Berhasil!',
+              text: 'Soal berhasil dihapus dari bank soal.',
+              timer: 1500,
+              showConfirmButton: false
+            });
+          } else {
+            alert("Soal berhasil dihapus!");
+          }
           await loadQuestionsCMS();
           await loadDashboardMetrics();
         } catch (e) {
-          alert("Gagal menghapus soal: " + e.message);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal Menghapus',
+              text: e.message || 'Terjadi kendala saat menghapus soal.',
+              confirmButtonColor: '#2563eb'
+            });
+          } else {
+            alert("Gagal menghapus soal: " + e.message);
+          }
         }
       }
     });
@@ -649,9 +726,28 @@ async function loadMateriCMS() {
 
         try {
           await updateMateriContent(slug, { judul, ringkasan });
-          alert(`Materi "${judul}" berhasil diperbarui!`);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Materi Diperbarui!',
+              text: `Materi "${judul}" berhasil disimpan.`,
+              timer: 1800,
+              showConfirmButton: false
+            });
+          } else {
+            alert(`Materi "${judul}" berhasil diperbarui!`);
+          }
         } catch (e) {
-          alert("Gagal memperbarui materi: " + e.message);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal Menyimpan',
+              text: 'Gagal memperbarui materi: ' + e.message,
+              confirmButtonColor: '#2563eb'
+            });
+          } else {
+            alert("Gagal memperbarui materi: " + e.message);
+          }
         } finally {
           btn.disabled = false;
           btn.innerHTML = `<i class="fa-solid fa-floppy-disk"></i> Simpan Materi`;
@@ -670,7 +766,24 @@ async function loadMateriCMS() {
 function setupEventListeners() {
   // Logout Guru
   document.getElementById('btn-admin-logout')?.addEventListener('click', async () => {
-    if (confirm("Apakah Anda ingin keluar dari Admin Panel Guru?")) {
+    let confirmed = false;
+    if (typeof Swal !== 'undefined') {
+      const res = await Swal.fire({
+        title: 'Keluar dari Panel?',
+        text: 'Apakah Anda ingin keluar dari Admin Panel Guru?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Keluar',
+        cancelButtonText: 'Batal'
+      });
+      confirmed = res.isConfirmed;
+    } else {
+      confirmed = confirm("Apakah Anda ingin keluar dari Admin Panel Guru?");
+    }
+
+    if (confirmed) {
       await signOut();
       window.location.href = '../login.html';
     }
@@ -721,7 +834,24 @@ function setupEventListeners() {
         guruId: currentUser.id
       });
 
-      alert(`Akun Siswa Berhasil Dibuat!\n\nNama: ${name}\nEmail: ${email}\nPassword: ${password}\n\nSilakan berikan informasi ini kepada siswa untuk login.`);
+      if (typeof Swal !== 'undefined') {
+        await Swal.fire({
+          icon: 'success',
+          title: 'Akun Siswa Berhasil Dibuat!',
+          html: `
+            <div class="text-left bg-slate-50 p-4 rounded-xl border border-slate-200 text-sm space-y-2 mt-2">
+              <div><span class="text-slate-400">Nama:</span> <strong class="text-slate-800">${escapeHtml(name)}</strong></div>
+              <div><span class="text-slate-400">Email:</span> <strong class="text-slate-800 font-mono">${escapeHtml(email)}</strong></div>
+              <div><span class="text-slate-400">Password:</span> <strong class="text-blue-600 font-mono text-base">${escapeHtml(password)}</strong></div>
+            </div>
+            <p class="text-xs text-slate-500 mt-3">Silakan berikan informasi login ini kepada siswa.</p>
+          `,
+          confirmButtonText: 'Selesai',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert(`Akun Siswa Berhasil Dibuat!\n\nNama: ${name}\nEmail: ${email}\nPassword: ${password}\n\nSilakan berikan informasi ini kepada siswa untuk login.`);
+      }
       
       modalStudent.classList.add('hidden');
       formCreateStudent.reset();
@@ -731,7 +861,16 @@ function setupEventListeners() {
       await loadDashboardMetrics();
 
     } catch (err) {
-      alert("Gagal membuat akun siswa: " + (err.message || err));
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Mendaftar',
+          text: err.message || 'Terjadi kendala saat mendaftarkan akun siswa.',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert("Gagal membuat akun siswa: " + (err.message || err));
+      }
     } finally {
       btnSubmit.disabled = false;
       btnSubmit.innerHTML = `<span>Daftarkan Siswa</span> <i class="fa-solid fa-check"></i>`;
@@ -766,7 +905,16 @@ function setupEventListeners() {
     const btnSubmit = document.getElementById('btn-submit-edit-student');
 
     if (!name || !email) {
-      alert("Nama dan email wajib diisi.");
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'warning',
+          title: 'Data Belum Lengkap',
+          text: 'Nama dan email siswa wajib diisi.',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert("Nama dan email wajib diisi.");
+      }
       return;
     }
 
@@ -775,14 +923,33 @@ function setupEventListeners() {
 
     try {
       await updateStudentByGuru({ id, name, email, password });
-      showToastNotification(`Akun siswa "${name}" berhasil diperbarui!`);
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'success',
+          title: 'Akun Diperbarui!',
+          text: `Akun siswa "${name}" berhasil diperbarui.`,
+          timer: 2000,
+          showConfirmButton: false
+        });
+      } else {
+        showToastNotification(`Akun siswa "${name}" berhasil diperbarui!`);
+      }
       modalEditStudent.classList.add('hidden');
 
       await loadStudentsList();
       await loadProgressData();
       await loadDashboardMetrics();
     } catch (err) {
-      alert("Gagal memperbarui akun siswa: " + (err.message || err));
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Memperbarui',
+          text: err.message || 'Terjadi kesalahan saat memperbarui akun.',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert("Gagal memperbarui akun siswa: " + (err.message || err));
+      }
     } finally {
       btnSubmit.disabled = false;
       btnSubmit.innerHTML = `<span>Simpan Perubahan</span> <i class="fa-solid fa-check"></i>`;
@@ -813,14 +980,51 @@ function setupEventListeners() {
     if (btnDelete) {
       const id = btnDelete.getAttribute('data-id');
       const name = btnDelete.getAttribute('data-name');
-      if (confirm(`Apakah Anda yakin ingin menghapus data siswa "${name}"?`)) {
+      let confirmed = false;
+
+      if (typeof Swal !== 'undefined') {
+        const res = await Swal.fire({
+          title: 'Hapus Siswa?',
+          text: `Apakah Anda yakin ingin menghapus data siswa "${name}"? Data riwayat nilai siswa ini akan ikut terhapus.`,
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#ef4444',
+          cancelButtonColor: '#64748b',
+          confirmButtonText: 'Ya, Hapus Siswa',
+          cancelButtonText: 'Batal'
+        });
+        confirmed = res.isConfirmed;
+      } else {
+        confirmed = confirm(`Apakah Anda yakin ingin menghapus data siswa "${name}"?`);
+      }
+
+      if (confirmed) {
         try {
           await deleteStudent(id);
-          showToastNotification(`Siswa "${name}" berhasil dihapus.`);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Terhapus',
+              text: `Data siswa "${name}" berhasil dihapus.`,
+              timer: 1500,
+              showConfirmButton: false
+            });
+          } else {
+            showToastNotification(`Siswa "${name}" berhasil dihapus.`);
+          }
           await loadStudentsList();
           await loadDashboardMetrics();
         } catch (err) {
-          alert("Gagal menghapus siswa: " + (err.message || err));
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'error',
+              title: 'Gagal Menghapus',
+              text: err.message || 'Terjadi kesalahan saat menghapus siswa.',
+              confirmButtonColor: '#2563eb'
+            });
+          } else {
+            alert("Gagal menghapus siswa: " + (err.message || err));
+          }
         }
       }
       return;
@@ -833,9 +1037,27 @@ function setupEventListeners() {
       if (pass) {
         try {
           await navigator.clipboard.writeText(pass);
-          showToastNotification(`Password "${pass}" berhasil disalin!`);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              icon: 'success',
+              title: 'Tersalin!',
+              text: `Password "${pass}" berhasil disalin ke clipboard.`,
+              timer: 1500,
+              showConfirmButton: false
+            });
+          } else {
+            showToastNotification(`Password "${pass}" berhasil disalin!`);
+          }
         } catch (_) {
-          prompt("Salin password:", pass);
+          if (typeof Swal !== 'undefined') {
+            Swal.fire({
+              title: 'Password Siswa',
+              text: pass,
+              confirmButtonColor: '#2563eb'
+            });
+          } else {
+            prompt("Salin password:", pass);
+          }
         }
       }
       return;
@@ -921,10 +1143,30 @@ function setupEventListeners() {
     try {
       if (id) {
         await updateQuestion(id, payload);
-        alert("Soal berhasil diperbarui!");
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Soal Diperbarui!',
+            text: 'Data soal berhasil diperbarui di cloud database.',
+            timer: 1800,
+            showConfirmButton: false
+          });
+        } else {
+          alert("Soal berhasil diperbarui!");
+        }
       } else {
         await addQuestion(payload);
-        alert("Soal baru berhasil ditambahkan!");
+        if (typeof Swal !== 'undefined') {
+          Swal.fire({
+            icon: 'success',
+            title: 'Soal Ditambahkan!',
+            text: 'Soal baru berhasil ditambahkan ke bank soal.',
+            timer: 1800,
+            showConfirmButton: false
+          });
+        } else {
+          alert("Soal baru berhasil ditambahkan!");
+        }
       }
 
       modalQuestion.classList.add('hidden');
@@ -932,7 +1174,16 @@ function setupEventListeners() {
       await loadDashboardMetrics();
 
     } catch (err) {
-      alert("Gagal menyimpan soal: " + err.message);
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'error',
+          title: 'Gagal Menyimpan',
+          text: err.message || 'Terjadi kesalahan saat menyimpan soal.',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert("Gagal menyimpan soal: " + err.message);
+      }
     } finally {
       btnSave.disabled = false;
       btnSave.textContent = 'Simpan Soal';
@@ -956,7 +1207,16 @@ function setupEventListeners() {
   // Ekspor CSV Nilai
   document.getElementById('btn-export-csv')?.addEventListener('click', () => {
     if (allStudentsProgressCache.length === 0) {
-      alert("Tidak ada data untuk diekspor.");
+      if (typeof Swal !== 'undefined') {
+        Swal.fire({
+          icon: 'info',
+          title: 'Data Masih Kosong',
+          text: 'Belum ada data pengerjaan siswa untuk diekspor ke CSV.',
+          confirmButtonColor: '#2563eb'
+        });
+      } else {
+        alert("Tidak ada data untuk diekspor.");
+      }
       return;
     }
 

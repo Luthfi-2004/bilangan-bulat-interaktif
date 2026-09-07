@@ -1,3 +1,30 @@
+// Auto-inject SweetAlert2 jika belum ada di halaman
+(function ensureSweetAlert() {
+  if (typeof window.Swal === 'undefined' && !document.querySelector('script[src*="sweetalert2"]')) {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/sweetalert2@11';
+    document.head.appendChild(script);
+  }
+
+  // Override window.alert agar tidak pernah muncul dialog kaku browser
+  const origAlert = window.alert;
+  window.alert = function (message) {
+    if (typeof Swal !== 'undefined') {
+      return Swal.fire({
+        title: 'Pemberitahuan',
+        text: String(message),
+        icon: 'info',
+        confirmButtonColor: '#2563eb',
+        customClass: {
+          popup: 'rounded-2xl shadow-xl font-sans',
+          confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm'
+        }
+      });
+    }
+    return origAlert(message);
+  };
+})();
+
 document.addEventListener('DOMContentLoaded', async () => {
   // Lewati jika halaman menandai data-no-layout="true", atau halaman admin, login, dan landing page index.html
   if (document.body.dataset.noLayout === 'true' || 

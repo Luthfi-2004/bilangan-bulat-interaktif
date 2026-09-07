@@ -53,7 +53,29 @@ function updateProfileUI(user) {
   `;
 
   document.getElementById('logout-btn')?.addEventListener('click', async () => {
-    if (confirm("Apakah kamu ingin keluar dari sesi belajar?")) {
+    let confirmed = false;
+    if (typeof Swal !== 'undefined') {
+      const res = await Swal.fire({
+        title: 'Keluar Belajar?',
+        text: 'Apakah kamu yakin ingin keluar dari sesi belajar?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#ef4444',
+        cancelButtonColor: '#64748b',
+        confirmButtonText: 'Ya, Keluar',
+        cancelButtonText: 'Tetap Belajar',
+        customClass: {
+          popup: 'rounded-2xl shadow-xl font-sans',
+          confirmButton: 'px-5 py-2.5 rounded-xl font-bold text-sm',
+          cancelButton: 'px-5 py-2.5 rounded-xl font-semibold text-sm'
+        }
+      });
+      confirmed = res.isConfirmed;
+    } else {
+      confirmed = confirm("Apakah kamu ingin keluar dari sesi belajar?");
+    }
+
+    if (confirmed) {
       await signOut();
       window.location.href = loginPath;
     }
