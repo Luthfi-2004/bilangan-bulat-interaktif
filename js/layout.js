@@ -65,21 +65,24 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (!document.getElementById('app-layout')) {
     const originalContent = document.body.innerHTML;
     document.body.innerHTML = `
-      <div id="app-layout" class="flex h-screen overflow-hidden bg-slate-50 font-sans text-slate-800">
-        <!-- Sidebar Permanen -->
-        <aside id="app-sidebar" class="w-64 flex-shrink-0 border-r border-slate-200 bg-white hidden md:flex flex-col transition-all duration-300 z-20 absolute md:relative h-full"></aside>
+      <div id="app-layout" class="flex h-screen overflow-hidden bg-slate-50 font-sans text-slate-800" style="position:relative;">
+        <!-- Overlay untuk mobile/tablet -->
+        <div id="sidebar-overlay"></div>
+        
+        <!-- Sidebar -->
+        <aside id="app-sidebar" class="border-r border-slate-200 bg-white"></aside>
         
         <!-- Main Area -->
-        <div class="flex-1 flex flex-col w-full relative overflow-hidden">
-          <!-- Topbar Permanen -->
+        <div id="app-main" class="flex-1 flex flex-col min-w-0 relative overflow-hidden">
+          <!-- Topbar -->
           <header id="app-topbar" class="h-16 flex-shrink-0 border-b border-slate-200 bg-white/90 backdrop-blur-md sticky top-0 z-10"></header>
           
-          <!-- Konten Dinamis yang Bertransisi Halus -->
-          <main id="app-content" class="flex-1 overflow-y-auto p-4 md:p-8 relative transition-opacity duration-150">
+          <!-- Konten Dinamis -->
+          <main id="app-content" class="flex-1 overflow-y-auto relative transition-opacity duration-150">
             ${originalContent}
           </main>
           
-          <!-- Footer Permanen -->
+          <!-- Footer -->
           <footer id="app-footer" class="flex-shrink-0 bg-white border-t border-slate-200 p-4"></footer>
         </div>
       </div>
@@ -115,17 +118,120 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 });
 
-// 4. Interaktivitas UI Layout
+// 4. Interaktivitas UI Layout (Responsive Sidebar)
 function initLayoutInteractivity() {
-  // Toggle Sidebar Mobile
-  const menuToggleBtn = document.getElementById('menu-toggle-btn');
   const sidebar = document.getElementById('app-sidebar');
-  if (menuToggleBtn && sidebar) {
-    // Hindari duplikasi listener
-    menuToggleBtn.onclick = () => {
-      sidebar.classList.toggle('hidden');
-    };
+  const overlay = document.getElementById('sidebar-overlay');
+  const menuToggleBtn = document.getElementById('menu-toggle-btn');
+  const desktopToggleBtn = document.getElementById('sidebar-toggle-desktop');
+
+  if (!sidebar) return;
+
+  // --- Helper: apakah ini layar desktop? ---
+  const isDesktop = () => window.innerWidth >= 1024;
+
+  // --- Buka/Tutup sidebar (mobile & tablet) ---
+  function openSidebar() {
+    sidebar.classList.add('sidebar-open');
+    if (overlay) overlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // cegah scroll body saat drawer terbuka
   }
+
+  function closeSidebar() {
+    sidebar.classList.remove('sidebar-open');
+    if (overlay) overlay.classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function toggleSidebarMobile() {
+    if (sidebar.classList.contains('sidebar-open')) {
+      closeSidebar();
+    } else {
+      openSidebar();
+    }
+  }
+
+  // --- Collapse/Expand sidebar (desktop only) ---
+  const COLLAPSE_KEY = 'bilbul_sidebar_collapsed';
+
+  function applyDesktopCollapse(collapsed) {
+    if (collapsed) {
+      sidebar.classList.add('sidebar-collapsed');
+    } else {
+      sidebar.classList.remove('sidebar-collapsed');
+    }
+    try { localStorage.setItem(COLLAPSE_KEY, collapsed ? '1' : '0'); } catch(_) {}
+  }
+
+  function toggleDesktopSidebar() {
+    const isCollapsed = sidebar.classList.contains('sidebar-collapsed');
+    applyDesktopCollapse(!isCollapsed);
+  }
+
+  // Restore state dari localStorage
+  if (isDesktop()) {
+    try {
+      const saved = localStorage.getItem(COLLAPSE_KEY);
+      if (saved === '1') applyDesktopCollapse(true);
+    } catch(_) {}
+  }
+
+  // --- Event Listeners ---
+
+  // Hamburger (mobile & tablet)
+  if (menuToggleBtn) {
+    menuToggleBtn.onclick = toggleSidebarMobile;
+  }
+
+  // Collapse toggle (desktop)
+  if (desktopToggleBtn) {
+    desktopToggleBtn.onclick = toggleDesktopSidebar;
+  }
+
+  // Klik overlay untuk tutup drawer
+  if (overlay) {
+    overlay.onclick = closeSidebar;
+  }
+
+  // Tutup sidebar saat resize ke desktop
+  window.addEventListener('resize', () => {
+    if (isDesktop()) {
+      closeSidebar(); // bersihkan state mobile
+      document.body.style.overflow = '';
+    }
+  });
+
+  // === Swipe gesture untuk mobile (geser kiri untuk tutup, kanan untuk buka) ===
+  let touchStartX = 0;
+  let touchStartY = 0;
+
+  document.addEventListener('touchstart', (e) => {
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+
+  document.addEventListener('touchend', (e) => {
+    if (isDesktop()) return;
+    const dx = e.changedTouches[0].clientX - touchStartX;
+    const dy = e.changedTouches[0].clientY - touchStartY;
+    // Pastikan swipe lebih horizontal daripada vertikal
+    if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+
+    if (dx > 0 && touchStartX < 30) {
+      // Swipe dari tepi kiri ke kanan: buka sidebar
+      openSidebar();
+    } else if (dx < 0 && sidebar.classList.contains('sidebar-open')) {
+      // Swipe kanan ke kiri saat sidebar terbuka: tutup
+      closeSidebar();
+    }
+  }, { passive: true });
+
+  // Tutup sidebar saat link di-klik (mobile/tablet)
+  sidebar.addEventListener('click', (e) => {
+    if (!isDesktop() && e.target.closest('a')) {
+      closeSidebar();
+    }
+  });
 
   updateActiveSidebarLink(window.location.pathname);
 }
@@ -149,12 +255,11 @@ function updateActiveSidebarLink(targetPath) {
       }
     }
 
+    // Gunakan CSS class 'active' dari style.css (bukan Tailwind utilities)
     if (isActive) {
-      link.classList.add('bg-blue-50', 'text-blue-600', 'font-semibold', 'border-r-4', 'border-blue-600');
-      link.classList.remove('text-slate-600', 'hover:bg-slate-50', 'hover:text-blue-600');
+      link.classList.add('active');
     } else {
-      link.classList.remove('bg-blue-50', 'text-blue-600', 'font-semibold', 'border-r-4', 'border-blue-600');
-      link.classList.add('text-slate-600', 'hover:bg-slate-50', 'hover:text-blue-600');
+      link.classList.remove('active');
     }
 
     // Koreksi href relatif terhadap kedalaman folder aktif saat ini

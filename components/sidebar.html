@@ -1,68 +1,74 @@
-<div class="h-16 flex items-center justify-center border-b border-slate-200">
-  <h2 class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">
-    <i class="fa-solid fa-calculator mr-2 text-blue-600"></i>BilBul
-  </h2>
+<!-- Brand / Logo -->
+<div class="sidebar-brand">
+  <i class="fa-solid fa-calculator text-blue-600 text-xl flex-shrink-0"></i>
+  <span class="sidebar-brand-text ml-2 text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600">BilBul</span>
+  <!-- Tombol collapse hanya muncul di desktop -->
+  <button id="sidebar-toggle-desktop" title="Perkecil/Perbesar Sidebar">
+    <i class="fa-solid fa-chevron-left"></i>
+  </button>
 </div>
-<nav class="flex-1 overflow-y-auto py-4">
-  <ul id="sidebar-menu" class="space-y-1">
+
+<!-- Navigation Menu -->
+<nav class="flex-1 overflow-y-auto py-4 no-scrollbar">
+  <ul id="sidebar-menu" class="space-y-0.5">
     <li>
-      <a href="/dashboard.html" data-path="/dashboard.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-house w-6 text-center mr-3 text-lg"></i>
-        <span>Beranda Belajar</span>
+      <a href="/dashboard.html" data-path="/dashboard.html" class="nav-link">
+        <i class="fa-solid fa-house"></i>
+        <span class="sidebar-label">Beranda Belajar</span>
       </a>
     </li>
     <li>
-      <a href="/petunjuk.html" data-path="/petunjuk.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-circle-info w-6 text-center mr-3 text-lg"></i>
-        <span>Petunjuk</span>
+      <a href="/petunjuk.html" data-path="/petunjuk.html" class="nav-link">
+        <i class="fa-solid fa-circle-info"></i>
+        <span class="sidebar-label">Petunjuk</span>
       </a>
     </li>
     <li>
-      <a href="/tes-awal.html" data-path="/tes-awal.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-clipboard-list w-6 text-center mr-3 text-lg"></i>
-        <span>Tes Awal</span>
+      <a href="/tes-awal.html" data-path="/tes-awal.html" class="nav-link">
+        <i class="fa-solid fa-clipboard-list"></i>
+        <span class="sidebar-label">Tes Awal</span>
       </a>
     </li>
     <li>
-      <a href="/materi/index.html" data-path="/materi/" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-book-open w-6 text-center mr-3 text-lg"></i>
-        <span>Materi</span>
+      <a href="/materi/index.html" data-path="/materi/" class="nav-link">
+        <i class="fa-solid fa-book-open"></i>
+        <span class="sidebar-label">Materi</span>
       </a>
     </li>
     <li>
-      <a href="/latihan.html" data-path="/latihan.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-pen-to-square w-6 text-center mr-3 text-lg"></i>
-        <span>Latihan</span>
+      <a href="/latihan.html" data-path="/latihan.html" class="nav-link">
+        <i class="fa-solid fa-pen-to-square"></i>
+        <span class="sidebar-label">Latihan</span>
       </a>
     </li>
     <li>
-      <a href="/soal-cerita.html" data-path="/soal-cerita.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-comment-dots w-6 text-center mr-3 text-lg"></i>
-        <span>Soal Cerita</span>
+      <a href="/soal-cerita.html" data-path="/soal-cerita.html" class="nav-link">
+        <i class="fa-solid fa-comment-dots"></i>
+        <span class="sidebar-label">Soal Cerita</span>
       </a>
     </li>
     <li>
-      <a href="/game.html" data-path="/game.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-gamepad w-6 text-center mr-3 text-lg"></i>
-        <span>Game</span>
+      <a href="/game.html" data-path="/game.html" class="nav-link">
+        <i class="fa-solid fa-gamepad"></i>
+        <span class="sidebar-label">Game</span>
       </a>
     </li>
     <li>
-      <a href="/kuis.html" data-path="/kuis.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-stopwatch w-6 text-center mr-3 text-lg"></i>
-        <span>Kuis Akhir</span>
+      <a href="/kuis.html" data-path="/kuis.html" class="nav-link">
+        <i class="fa-solid fa-stopwatch"></i>
+        <span class="sidebar-label">Kuis Akhir</span>
       </a>
     </li>
     <li>
-      <a href="/hasil.html" data-path="/hasil.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-chart-line w-6 text-center mr-3 text-lg"></i>
-        <span>Hasil Belajar</span>
+      <a href="/hasil.html" data-path="/hasil.html" class="nav-link">
+        <i class="fa-solid fa-chart-line"></i>
+        <span class="sidebar-label">Hasil Belajar</span>
       </a>
     </li>
     <li>
-      <a href="/pencapaian.html" data-path="/pencapaian.html" class="flex items-center px-6 py-3 text-slate-600 hover:bg-slate-50 hover:text-blue-600 transition-colors">
-        <i class="fa-solid fa-trophy w-6 text-center mr-3 text-lg"></i>
-        <span>Pencapaian</span>
+      <a href="/pencapaian.html" data-path="/pencapaian.html" class="nav-link">
+        <i class="fa-solid fa-trophy"></i>
+        <span class="sidebar-label">Pencapaian</span>
       </a>
     </li>
   </ul>
