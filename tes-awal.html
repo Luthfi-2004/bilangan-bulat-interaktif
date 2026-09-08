@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -54,10 +54,13 @@
 
       const questions = await getQuestions('tes_awal');
       
-      document.getElementById('intro-container').style.display = 'none';
-      document.getElementById('quiz-container').style.display = 'block';
+      const introContainer = document.querySelector('#app-content #intro-container') || document.getElementById('intro-container');
+      const quizContainer = document.querySelector('#app-content #quiz-container') || document.getElementById('quiz-container');
       
-      new QuizEngine('quiz-container', questions, 'tes_awal');
+      if (introContainer) introContainer.style.display = 'none';
+      if (quizContainer) quizContainer.style.display = 'block';
+      
+      new QuizEngine('#app-content #quiz-container', questions, 'tes_awal');
     };
 
     document.addEventListener('DOMContentLoaded', () => {

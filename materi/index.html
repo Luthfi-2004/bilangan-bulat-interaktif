@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -59,7 +59,7 @@
     ];
 
     async function loadMateriCatalog() {
-      const container = document.getElementById('materi-grid');
+      const container = document.querySelector('#app-content #materi-grid') || document.getElementById('materi-grid');
       if (!container) return;
 
       try {

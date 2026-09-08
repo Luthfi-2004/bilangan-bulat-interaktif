@@ -2,7 +2,7 @@ import { saveTestResult } from './supabase-client.js';
 
 export class QuizEngine {
   constructor(containerId, soalArray, jenis, onComplete) {
-    this.container = document.getElementById(containerId);
+    this.container = document.querySelector(containerId.includes('#') ? containerId : `#${containerId}`) || document.getElementById(containerId);
     this.soalArray = soalArray;
     this.jenis = jenis; // 'tes_awal', 'kuis', 'latihan'
     this.onComplete = onComplete;

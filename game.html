@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -96,33 +96,37 @@
     let intervalId = null;
     let correctAnswer = null;
     
+    function getEl(id) {
+      return document.querySelector('#app-content #' + id) || document.getElementById(id);
+    }
+
     window.mulaiGame = function(mode) {
       currentMode = mode;
       score = 0;
       
-      document.getElementById('game-menu').style.display = 'none';
-      document.getElementById('game-container').style.display = 'block';
-      document.getElementById('game-over').style.display = 'none';
-      document.getElementById('game-controls').style.display = 'flex';
-      document.getElementById('game-score').textContent = 'Skor: 0';
+      if (getEl('game-menu')) getEl('game-menu').style.display = 'none';
+      if (getEl('game-container')) getEl('game-container').style.display = 'block';
+      if (getEl('game-over')) getEl('game-over').style.display = 'none';
+      if (getEl('game-controls')) getEl('game-controls').style.display = 'flex';
+      if (getEl('game-score')) getEl('game-score').textContent = 'Skor: 0';
       
       if (mode === 'tantangan') {
-        document.getElementById('timer-badge').style.display = 'flex';
+        if (getEl('timer-badge')) getEl('timer-badge').style.display = 'flex';
         nextTantangan();
       } else if (mode === 'benar_salah') {
-        document.getElementById('timer-badge').style.display = 'none';
+        if (getEl('timer-badge')) getEl('timer-badge').style.display = 'none';
         nextBenarSalah();
       }
     };
     
     function startTimer() {
       timer = 15;
-      document.getElementById('game-timer').textContent = timer + 's';
+      if (getEl('game-timer')) getEl('game-timer').textContent = timer + 's';
       clearInterval(intervalId);
       
       intervalId = setInterval(() => {
         timer--;
-        document.getElementById('game-timer').textContent = timer + 's';
+        if (getEl('game-timer')) getEl('game-timer').textContent = timer + 's';
         if (timer <= 0) {
           gameOver("Waktu habis!");
         }
@@ -147,7 +151,7 @@
         correctAnswer = a - (b * c);
       }
       
-      document.getElementById('game-question').textContent = soalStr + " = ?";
+      if (getEl('game-question')) getEl('game-question').textContent = soalStr + " = ?";
       
       let options = [correctAnswer];
       while(options.length < 4) {
@@ -157,8 +161,9 @@
       
       options.sort(() => Math.random() - 0.5);
       
-      const controls = document.getElementById('game-controls');
-      controls.innerHTML = '';
+      const controls = getEl('game-controls');
+      if (controls) {
+        controls.innerHTML = '';
       options.forEach(opt => {
         const btn = document.createElement('button');
         btn.className = 'px-8 py-4 text-2xl font-bold bg-white text-blue-600 border-2 border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300 w-full sm:w-auto min-w-[120px]';
@@ -166,6 +171,7 @@
         btn.onclick = () => cekJawaban(opt);
         controls.appendChild(btn);
       });
+      }
       
       startTimer();
     }
@@ -181,20 +187,22 @@
       const aStr = a < 0 ? `(${a})` : a;
       const bStr = b < 0 ? `(${b})` : b;
       
-      document.getElementById('game-question').innerHTML = `${aStr} Ã— ${bStr} = ${displayAns}`;
+      if (getEl('game-question')) getEl('game-question').innerHTML = `${aStr} × ${bStr} = ${displayAns}`;
       correctAnswer = isCorrect;
       
-      const controls = document.getElementById('game-controls');
-      controls.innerHTML = `
+      const controls = getEl('game-controls');
+      if (controls) {
+        controls.innerHTML = `
         <button class="px-10 py-5 text-2xl font-bold bg-emerald-500 text-white rounded-xl shadow hover:bg-emerald-600 transition-colors focus:outline-none focus:ring-4 focus:ring-emerald-300 w-full sm:w-auto" onclick="cekJawaban(true)"><i class="fa-solid fa-check mr-2"></i> BENAR</button>
         <button class="px-10 py-5 text-2xl font-bold bg-red-500 text-white rounded-xl shadow hover:bg-red-600 transition-colors focus:outline-none focus:ring-4 focus:ring-red-300 w-full sm:w-auto" onclick="cekJawaban(false)"><i class="fa-solid fa-xmark mr-2"></i> SALAH</button>
       `;
+      }
     }
     
     function cekJawaban(jawabanUser) {
       if (jawabanUser === correctAnswer) {
         score += 10;
-        document.getElementById('game-score').textContent = 'Skor: ' + score;
+        if (getEl('game-score')) getEl('game-score').textContent = 'Skor: ' + score;
         
         if (currentMode === 'tantangan') nextTantangan();
         else nextBenarSalah();
@@ -205,9 +213,9 @@
     
     async function gameOver(msg) {
       clearInterval(intervalId);
-      document.getElementById('game-controls').style.display = 'none';
-      document.getElementById('game-over').style.display = 'block';
-      document.getElementById('game-over-msg').innerHTML = `<div class="font-bold text-slate-800 mb-2">${msg}</div>Skor Akhirmu: <strong class="text-2xl text-blue-600 ml-2">${score}</strong>`;
+      if (getEl('game-controls')) getEl('game-controls').style.display = 'none';
+      if (getEl('game-over')) getEl('game-over').style.display = 'block';
+      if (getEl('game-over-msg')) getEl('game-over-msg').innerHTML = `<div class="font-bold text-slate-800 mb-2">${msg}</div>Skor Akhirmu: <strong class="text-2xl text-blue-600 ml-2">${score}</strong>`;
       
       try {
         const { saveTestResult } = await import('./js/supabase-client.js');
@@ -222,9 +230,12 @@
     
     window.kembaliKeMenu = function() {
       // Fix for Tailwind grid display
-      document.getElementById('game-menu').style.display = '';
-      document.getElementById('game-menu').classList.remove('hidden');
-      document.getElementById('game-container').style.display = 'none';
+      const gameMenu = getEl('game-menu');
+      if (gameMenu) {
+        gameMenu.style.display = '';
+        gameMenu.classList.remove('hidden');
+      }
+      if (getEl('game-container')) getEl('game-container').style.display = 'none';
     };
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -235,6 +246,14 @@
           contentContainer.innerHTML = pageContainer.innerHTML;
         }
       }, 100);
+    });
+
+    window.addEventListener('spa:navigated', () => {
+      if (window.location.pathname.includes('/game.html')) {
+        if (typeof window.kembaliKeMenu === 'function') {
+          window.kembaliKeMenu();
+        }
+      }
     });
   </script>
 </body>

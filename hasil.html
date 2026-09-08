@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -80,15 +80,18 @@
     
     async function loadResults() {
       const student = window.getCurrentStudent();
+      const notLoggedIn = document.querySelector('#app-content #not-logged-in') || document.getElementById('not-logged-in');
+      const resultsDashboard = document.querySelector('#app-content #results-dashboard') || document.getElementById('results-dashboard');
+      const scoreList = document.querySelector('#app-content #score-list') || document.getElementById('score-list');
+
       if (!student) {
-        document.getElementById('not-logged-in').style.display = 'block';
+        if (notLoggedIn) notLoggedIn.style.display = 'block';
         return;
       }
       
-      document.getElementById('results-dashboard').style.display = 'block';
+      if (resultsDashboard) resultsDashboard.style.display = 'block';
       
       const results = await getTestResults(student.id);
-      const scoreList = document.getElementById('score-list');
       
       if (results && results.length > 0) {
         let html = '';
@@ -123,17 +126,19 @@
           `;
         });
         
-        scoreList.innerHTML = html;
+        if (scoreList) scoreList.innerHTML = html;
         
-        const recBox = document.getElementById('recommendation-box');
-        if (!hasTesAwal) {
+        const recBox = document.querySelector('#app-content #recommendation-box') || document.getElementById('recommendation-box');
+        if (recBox) {
+          if (!hasTesAwal) {
           recBox.innerHTML = "Sebaiknya kamu mengerjakan <strong class='text-blue-600'>Tes Awal</strong> terlebih dahulu untuk melihat kemampuan dasarmu.";
         } else if (highestKuis >= 90) {
           recBox.innerHTML = "<div class='text-4xl text-emerald-500 mb-3'><i class='fa-solid fa-crown'></i></div> <strong class='text-slate-800'>Luar Biasa!</strong> Pemahamanmu tentang bilangan bulat sudah sangat baik. Pertahankan prestasimu!";
         } else if (highestKuis >= 70) {
           recBox.innerHTML = "<div class='text-4xl text-blue-500 mb-3'><i class='fa-solid fa-thumbs-up'></i></div> <strong class='text-slate-800'>Bagus!</strong> Kamu sudah memahami sebagian besar materi. Coba kerjakan ulang bagian latihan campuran untuk mendapat nilai maksimal.";
-        } else if (results.length > 0) {
-          recBox.innerHTML = "<div class='text-4xl text-amber-500 mb-3'><i class='fa-solid fa-dumbbell'></i></div> <strong class='text-slate-800'>Jangan Menyerah!</strong> Matematika itu butuh latihan. Mari baca ulang materi <em>Operasi Hitung Campuran</em> secara perlahan.";
+          } else if (results.length > 0) {
+            recBox.innerHTML = "<div class='text-4xl text-amber-500 mb-3'><i class='fa-solid fa-dumbbell'></i></div> <strong class='text-slate-800'>Jangan Menyerah!</strong> Matematika itu butuh latihan. Mari baca ulang materi <em>Operasi Hitung Campuran</em> secara perlahan.";
+          }
         }
       }
     }
@@ -147,6 +152,12 @@
           loadResults();
         }
       }, 100);
+    });
+
+    window.addEventListener('spa:navigated', () => {
+      if (window.location.pathname.includes('/hasil.html')) {
+        loadResults();
+      }
     });
   </script>
 </body>
