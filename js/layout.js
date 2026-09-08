@@ -219,31 +219,35 @@ function injectLayoutStyles() {
       border-radius: 10px;
       color: #64748b; text-decoration: none;
       font-size: 0.875rem; font-weight: 500;
-      transition: all 0.18s;
+      transition: all 0.2s ease;
       margin-bottom: 2px;
       white-space: nowrap;
       overflow: hidden;
       position: relative;
     }
     .sb-link:hover {
-      background: #f1f5f9; color: #1e40af;
+      color: #0f172a;
     }
     .sb-link.active {
-      background: linear-gradient(135deg, #eff6ff, #eef2ff);
-      color: #2563eb; font-weight: 600;
-      box-shadow: inset 3px 0 0 #2563eb;
+      color: #2563eb; 
+      font-weight: 700;
     }
     .sb-icon {
       width: 32px; height: 32px;
       display: flex; align-items: center; justify-content: center;
       border-radius: 8px;
-      font-size: 0.875rem;
+      font-size: 1rem;
       flex-shrink: 0;
       background: transparent;
-      transition: background 0.18s, color 0.18s;
+      color: #94a3b8;
+      transition: all 0.2s ease;
     }
-    .sb-link:hover .sb-icon { background: #dbeafe; color: #2563eb; }
-    .sb-link.active .sb-icon { background: #dbeafe; color: #2563eb; }
+    .sb-link:hover .sb-icon { color: #64748b; }
+    .sb-link.active .sb-icon { 
+      background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+      color: white; 
+      box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+    }
     .sb-text { overflow: hidden; transition: opacity 0.2s, width 0.3s; }
 
     /* ============ COLLAPSED STATE (Desktop) ============ */
