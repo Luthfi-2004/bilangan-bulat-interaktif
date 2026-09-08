@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -52,60 +52,77 @@
       }
     };
 
+    async function renderSoalCerita() {
+      const scContainer = document.querySelector('#app-content #soal-cerita-container') || document.getElementById('soal-cerita-container');
+      if (scContainer) {
+        scContainer.innerHTML = `
+          <div class="py-12 text-center text-slate-400">
+            <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-blue-600"></i>
+            <p>Memuat soal cerita...</p>
+          </div>
+        `;
+        const soalList = await getQuestions('soal_cerita');
+        if (!soalList || soalList.length === 0) {
+          scContainer.innerHTML = `
+            <div class="py-12 text-center text-slate-500">
+              <p>Belum ada soal cerita yang ditambahkan.</p>
+            </div>
+          `;
+          return;
+        }
+        let html = '';
+        soalList.forEach((soal, index) => {
+          html += `
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
+              <div class="p-6 md:p-8 flex flex-col md:flex-row gap-6">
+                <div class="flex-shrink-0">
+                  <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-bold text-2xl shadow-inner">
+                    ${index + 1}
+                  </div>
+                </div>
+                
+                <div class="flex-1">
+                  <h3 class="text-xl font-bold text-slate-800 mb-3">${soal.judul || 'Soal Cerita'}</h3>
+                  <p class="text-slate-600 text-lg leading-relaxed mb-6">${soal.pertanyaan}</p>
+                  
+                  <button id="btn-pembahasan-${soal.id}" class="inline-flex items-center px-4 py-2 text-blue-700 bg-blue-50 hover:bg-blue-100 font-medium rounded-lg transition-colors focus:outline-none" onclick="togglePembahasan('${soal.id}')">
+                    Lihat Pembahasan <i class="fa-solid fa-chevron-down ml-2"></i>
+                  </button>
+                  
+                  <div id="pembahasan-${soal.id}" class="hidden mt-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
+                    <div class="flex items-center gap-3 mb-4">
+                      <i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i>
+                      <p class="font-bold text-slate-800 text-lg">Jawaban Akhir: <span class="text-blue-600">${soal.jawaban}</span></p>
+                    </div>
+                    <div class="border-t border-slate-200 pt-4">
+                      <strong class="text-slate-700 block mb-2"><i class="fa-solid fa-list-ol mr-2 text-slate-400"></i>Langkah Penyelesaian:</strong>
+                      <p class="text-slate-600 leading-relaxed font-mono bg-white p-3 rounded border border-slate-100">${soal.pembahasan || 'Pembahasan belum ditambahkan.'}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+        });
+        scContainer.innerHTML = html;
+      }
+    }
+
     document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(async () => {
+      setTimeout(() => {
         const contentContainer = document.getElementById('app-content');
         const pageContainer = document.getElementById('page-container');
         if (contentContainer && pageContainer) {
           contentContainer.innerHTML = pageContainer.innerHTML;
-          
-          const scContainer = document.getElementById('soal-cerita-container');
-          if (scContainer) {
-            scContainer.innerHTML = `
-              <div class="py-12 text-center text-slate-400">
-                <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-blue-600"></i>
-                <p>Memuat soal cerita...</p>
-              </div>
-            `;
-            const soalList = await getQuestions('soal_cerita');
-            let html = '';
-            soalList.forEach((soal, index) => {
-              html += `
-                <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden hover:shadow-md transition-shadow">
-                  <div class="p-6 md:p-8 flex flex-col md:flex-row gap-6">
-                    <div class="flex-shrink-0">
-                      <div class="w-14 h-14 bg-blue-100 text-blue-700 rounded-full flex items-center justify-center font-bold text-2xl shadow-inner">
-                        ${index + 1}
-                      </div>
-                    </div>
-                    
-                    <div class="flex-1">
-                      <h3 class="text-xl font-bold text-slate-800 mb-3">${soal.judul}</h3>
-                      <p class="text-slate-600 text-lg leading-relaxed mb-6">${soal.pertanyaan}</p>
-                      
-                      <button id="btn-pembahasan-${soal.id}" class="inline-flex items-center px-4 py-2 text-blue-700 bg-blue-50 hover:bg-blue-100 font-medium rounded-lg transition-colors focus:outline-none" onclick="togglePembahasan('${soal.id}')">
-                        Lihat Pembahasan <i class="fa-solid fa-chevron-down ml-2"></i>
-                      </button>
-                      
-                      <div id="pembahasan-${soal.id}" class="hidden mt-6 bg-slate-50 p-6 rounded-xl border border-slate-200">
-                        <div class="flex items-center gap-3 mb-4">
-                          <i class="fa-solid fa-circle-check text-emerald-500 text-xl"></i>
-                          <p class="font-bold text-slate-800 text-lg">Jawaban Akhir: <span class="text-blue-600">${soal.jawaban}</span></p>
-                        </div>
-                        <div class="border-t border-slate-200 pt-4">
-                          <strong class="text-slate-700 block mb-2"><i class="fa-solid fa-list-ol mr-2 text-slate-400"></i>Langkah Penyelesaian:</strong>
-                          <p class="text-slate-600 leading-relaxed font-mono bg-white p-3 rounded border border-slate-100">${soal.pembahasan}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              `;
-            });
-            scContainer.innerHTML = html;
-          }
+          renderSoalCerita();
         }
       }, 100);
+    });
+
+    window.addEventListener('spa:navigated', () => {
+      if (window.location.pathname.includes('/soal-cerita.html')) {
+        renderSoalCerita();
+      }
     });
   </script>
 </body>

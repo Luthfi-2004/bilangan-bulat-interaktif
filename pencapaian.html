@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -60,7 +60,7 @@
         unlockedIds = await getStudentBadges(student.id);
       }
       
-      const container = document.getElementById('badge-container');
+      const container = document.querySelector('#app-content #badge-container') || document.getElementById('badge-container');
       if (!container) return;
       
       let html = '';
@@ -111,6 +111,12 @@
           renderBadges();
         }
       }, 100);
+    });
+
+    window.addEventListener('spa:navigated', () => {
+      if (window.location.pathname.includes('/pencapaian.html')) {
+        renderBadges();
+      }
     });
   </script>
 </body>
