@@ -16,7 +16,7 @@ const SIDEBAR_HTML = `
 </div>
 
 <nav class="sb-nav" id="sidebar-menu-wrap">
-  <div class="sb-section-label">Menu Utama</div>
+
   <ul id="sidebar-menu">
     <li>
       <a href="./dashboard.html" data-path="/dashboard.html" class="sb-link">
@@ -38,7 +38,7 @@ const SIDEBAR_HTML = `
     </li>
   </ul>
 
-  <div class="sb-section-label">Belajar</div>
+
   <ul id="sidebar-menu-belajar">
     <li>
       <a href="./materi/index.html" data-path="/materi/" class="sb-link">
@@ -72,7 +72,7 @@ const SIDEBAR_HTML = `
     </li>
   </ul>
 
-  <div class="sb-section-label">Progres</div>
+
   <ul id="sidebar-menu-progres">
     <li>
       <a href="./hasil.html" data-path="/hasil.html" class="sb-link">
