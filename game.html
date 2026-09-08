@@ -88,7 +88,7 @@
 
   <script src="js/layout.js"></script>
   <script type="module" src="js/main.js"></script>
-  <script>
+  <script type="module">
     // Logic Game Sederhana
     let currentMode = '';
     let score = 0;
@@ -168,7 +168,7 @@
         const btn = document.createElement('button');
         btn.className = 'px-8 py-4 text-2xl font-bold bg-white text-blue-600 border-2 border-blue-600 rounded-xl hover:bg-blue-600 hover:text-white transition-colors focus:outline-none focus:ring-4 focus:ring-blue-300 w-full sm:w-auto min-w-[120px]';
         btn.textContent = opt;
-        btn.onclick = () => cekJawaban(opt);
+        btn.onclick = () => window.cekJawaban(opt);
         controls.appendChild(btn);
       });
       }
@@ -199,7 +199,7 @@
       }
     }
     
-    function cekJawaban(jawabanUser) {
+    window.cekJawaban = function(jawabanUser) {
       if (jawabanUser === correctAnswer) {
         score += 10;
         if (getEl('game-score')) getEl('game-score').textContent = 'Skor: ' + score;

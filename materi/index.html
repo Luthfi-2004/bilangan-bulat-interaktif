@@ -132,12 +132,9 @@
     }
 
     // Inisialisasi awal dan saat navigasi SPA
-    document.addEventListener('DOMContentLoaded', loadMateriCatalog);
-    window.addEventListener('spa:navigated', () => {
-      if (window.location.pathname.includes('/materi/index.html') || window.location.pathname.endsWith('/materi/')) {
-        loadMateriCatalog();
-      }
-    });
+    // Karena script ini bertipe module, ia akan dieksekusi secara asynchronous oleh browser.
+    // Menjalankan langsung lebih aman daripada mendengarkan event yang mungkin sudah lewat.
+    loadMateriCatalog();
   </script>
 </body>
 </html>

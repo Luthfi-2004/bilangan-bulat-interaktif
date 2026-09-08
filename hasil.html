@@ -149,16 +149,12 @@
         const pageContainer = document.getElementById('page-container');
         if (contentContainer && pageContainer) {
           contentContainer.innerHTML = pageContainer.innerHTML;
-          loadResults();
         }
       }, 100);
     });
 
-    window.addEventListener('spa:navigated', () => {
-      if (window.location.pathname.includes('/hasil.html')) {
-        loadResults();
-      }
-    });
+    // Jalankan langsung untuk memastikan data dimuat setelah script dievaluasi
+    loadResults();
   </script>
 </body>
 </html>
