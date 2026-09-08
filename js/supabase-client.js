@@ -951,7 +951,6 @@ export async function saveTestResult(studentId, jenis, skor) {
     .from('test_results')
     .insert([{ 
       student_id: studentId, 
-      student_name: studentName,
       jenis, 
       skor 
     }]);
@@ -1006,7 +1005,6 @@ export async function saveStudentProgress(studentId, materi, persentase) {
       .from('student_progress')
       .insert([{ 
         student_id: studentId, 
-        student_name: studentName,
         materi, 
         persentase_penguasaan: persentase 
       }]);
@@ -1032,7 +1030,6 @@ export async function unlockBadge(studentId, badgeId) {
       .from('student_badges')
       .insert([{ 
         student_id: studentId, 
-        student_name: studentName,
         badge_id: badgeId 
       }]);
     return !error;
