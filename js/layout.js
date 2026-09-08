@@ -169,33 +169,6 @@ function injectLayoutStyles() {
       color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;
     }
 
-    /* ============ DRAG RESIZE HANDLE ============ */
-    #sb-resizer {
-      width: 5px;
-      flex-shrink: 0;
-      cursor: col-resize;
-      position: relative;
-      z-index: 20;
-      background: transparent;
-      transition: background 0.2s;
-    }
-    #sb-resizer::after {
-      content: '';
-      position: absolute;
-      top: 0; bottom: 0;
-      left: 1px; width: 3px;
-      background: transparent;
-      border-radius: 3px;
-      transition: background 0.2s;
-    }
-    #sb-resizer:hover::after,
-    #sb-resizer.dragging::after {
-      background: #2563eb;
-    }
-    @media (max-width: 1023px) {
-      #sb-resizer { display: none; }
-    }
-
     /* ============ NAV ============ */
     .sb-nav {
       flex: 1; overflow-y: auto; padding: 12px 10px 16px;
@@ -399,7 +372,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       <div id="app-layout">
         <div id="sidebar-overlay"></div>
         <aside id="app-sidebar">${SIDEBAR_HTML}</aside>
-        <div id="sb-resizer" title="Tarik untuk mengubah lebar sidebar"></div>
         <div id="app-main">
           <header id="app-topbar" style="height:64px;flex-shrink:0;border-bottom:1px solid #e2e8f0;background:rgba(255,255,255,0.95);backdrop-filter:blur(8px);position:sticky;top:0;z-index:10;">
             ${TOPBAR_HTML}
@@ -416,7 +388,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   addTooltipLabels();
   fixSubfolderLinks();
   initLayoutInteractivity();
-  initResizer();
   setupSpaRouter();
 
   window.dispatchEvent(new CustomEvent('spa:navigated', { detail: { url: window.location.href, initial: true } }));
@@ -492,86 +463,6 @@ function initLayoutInteractivity() {
   updateActiveSidebarLink(window.location.pathname);
 }
 
-// 4b. Drag-to-resize sidebar (desktop only)
-function initResizer() {
-  const resizer = document.getElementById('sb-resizer');
-  const sidebar = document.getElementById('app-sidebar');
-  if (!resizer || !sidebar) return;
-
-  const MIN_W   = 64;   // icon-only
-  const MAX_W   = 320;  // max expanded
-  const SNAP_W  = 80;   // snap to collapsed below this
-  const DEF_W   = 240;  // default expanded width
-  const WIDTH_KEY = 'bilbul_sidebar_width';
-
-  // Restore saved width
-  if (window.innerWidth >= 1024) {
-    try {
-      const saved = parseInt(localStorage.getItem(WIDTH_KEY));
-      if (saved && saved >= MIN_W && saved <= MAX_W) {
-        sidebar.style.width = saved + 'px';
-        sidebar.classList.toggle('sb-collapsed', saved <= SNAP_W);
-      }
-    } catch(_) {}
-  }
-
-  let dragging = false, startX = 0, startW = 0;
-
-  resizer.addEventListener('mousedown', e => {
-    if (window.innerWidth < 1024) return;
-    dragging = true;
-    startX = e.clientX;
-    startW = sidebar.offsetWidth;
-    resizer.classList.add('dragging');
-    document.body.style.cursor = 'col-resize';
-    document.body.style.userSelect = 'none';
-    e.preventDefault();
-  });
-
-  document.addEventListener('mousemove', e => {
-    if (!dragging) return;
-    const dx = e.clientX - startX;
-    let newW = Math.max(MIN_W, Math.min(MAX_W, startW + dx));
-
-    if (newW <= SNAP_W) {
-      // Snap ke icon-only
-      sidebar.style.width = MIN_W + 'px';
-      sidebar.classList.add('sb-collapsed');
-    } else {
-      sidebar.style.width = newW + 'px';
-      sidebar.classList.remove('sb-collapsed');
-    }
-  });
-
-  document.addEventListener('mouseup', e => {
-    if (!dragging) return;
-    dragging = false;
-    resizer.classList.remove('dragging');
-    document.body.style.cursor = '';
-    document.body.style.userSelect = '';
-    // Snap outward: kalau drag sedikit dari collapsed, langsung ke default
-    const w = sidebar.offsetWidth;
-    if (w > SNAP_W && w < 120) {
-      sidebar.style.width = DEF_W + 'px';
-      sidebar.classList.remove('sb-collapsed');
-    }
-    try { localStorage.setItem(WIDTH_KEY, sidebar.offsetWidth); } catch(_) {}
-  });
-
-  // Double-click resizer → toggle collapsed/expanded
-  resizer.addEventListener('dblclick', () => {
-    if (window.innerWidth < 1024) return;
-    const isCollapsed = sidebar.classList.contains('sb-collapsed');
-    if (isCollapsed) {
-      sidebar.style.width = DEF_W + 'px';
-      sidebar.classList.remove('sb-collapsed');
-    } else {
-      sidebar.style.width = MIN_W + 'px';
-      sidebar.classList.add('sb-collapsed');
-    }
-    try { localStorage.setItem(WIDTH_KEY, sidebar.offsetWidth); } catch(_) {}
-  });
-}
 
 // 5. Active link
 function updateActiveSidebarLink(targetPath) {
