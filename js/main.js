@@ -7,7 +7,10 @@ window.addEventListener('pageshow', async (event) => {
     return;
   }
   if (event.persisted || (window.performance && window.performance.getEntriesByType && window.performance.getEntriesByType("navigation")[0]?.type === "back_forward")) {
-    const user = await getCurrentUser();
+    let user = localStorage.getItem('math_current_user');
+    if (!user) {
+      user = await getCurrentUser();
+    }
     if (!user) {
       const isSubfolder = path.includes('/materi/');
       const loginPath = isSubfolder ? '../login.html?logout=true' : 'login.html?logout=true';
@@ -23,23 +26,49 @@ document.addEventListener('DOMContentLoaded', async () => {
     return;
   }
 
-  // Auth Guard: Cek apakah siswa sudah login
-  const currentUser = await getCurrentUser();
-  if (!currentUser) {
-    // Siswa belum login, arahkan ke login.html
-    const isSubfolder = path.includes('/materi/');
-    const loginPath = isSubfolder ? '../login.html?logout=true' : 'login.html?logout=true';
-    window.location.replace(loginPath);
-    return;
+  // Tampilkan loading state sederhana di layar
+  const originalDisplay = document.body.style.display;
+  document.body.style.display = 'none';
+  
+  const loadingOverlay = document.createElement('div');
+  loadingOverlay.id = 'auth-loading-overlay';
+  loadingOverlay.innerHTML = `
+    <div style="position:fixed;top:0;left:0;width:100%;height:100%;background:#f8fafc;z-index:9999;display:flex;flex-direction:column;align-items:center;justify-content:center;font-family:sans-serif;">
+      <div style="width:40px;height:40px;border:4px solid #cbd5e1;border-top-color:#2563eb;border-radius:50%;animation:spin 1s linear infinite;"></div>
+      <p style="margin-top:16px;color:#475569;font-weight:600;">Memverifikasi sesi...</p>
+      <style>@keyframes spin { to { transform: rotate(360deg); } }</style>
+    </div>
+  `;
+  document.documentElement.appendChild(loadingOverlay);
+
+  try {
+    // Auth Guard: Cek apakah siswa sudah login secara asinkron
+    const currentUser = await getCurrentUser();
+    
+    if (!currentUser) {
+      // Siswa belum login, arahkan ke login.html
+      const isSubfolder = path.includes('/materi/');
+      const loginPath = isSubfolder ? '../login.html?logout=true' : 'login.html?logout=true';
+      window.location.replace(loginPath);
+      return;
+    }
+
+    // Hapus overlay dan kembalikan body
+    loadingOverlay.remove();
+    document.body.style.display = originalDisplay;
+
+    // Set timeout kecil agar topbar layout selesai di-inject
+    setTimeout(() => updateProfileUI(currentUser), 200);
+
+    // Responsif terhadap perpindahan halaman SPA
+    window.addEventListener('spa:navigated', () => {
+      updateProfileUI(currentUser);
+    });
+  } catch (err) {
+    loadingOverlay.remove();
+    document.body.style.display = originalDisplay;
+    console.error("Auth error:", err);
   }
-
-  // Set timeout kecil agar topbar layout selesai di-inject
-  setTimeout(() => updateProfileUI(currentUser), 200);
-
-  // Responsif terhadap perpindahan halaman SPA
-  window.addEventListener('spa:navigated', () => {
-    updateProfileUI(currentUser);
-  });
 });
 
 function updateProfileUI(user) {

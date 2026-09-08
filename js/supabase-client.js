@@ -1055,3 +1055,18 @@ export async function getStudentBadges(studentId) {
   if (error) return [];
   return data.map(b => b.badge_id);
 }
+
+export async function getStudentProgress(studentId) {
+  if (!supabase) return [];
+  
+  const { data, error } = await supabase
+    .from('student_progress')
+    .select('*')
+    .eq('student_id', studentId);
+    
+  if (error) {
+    console.error("Gagal ambil student progress:", error);
+    return [];
+  }
+  return data;
+}

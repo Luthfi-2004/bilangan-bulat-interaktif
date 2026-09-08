@@ -68,7 +68,7 @@
   <script src="../js/layout.js"></script>
   <script type="module" src="../js/main.js"></script>
   <script type="module">
-    import { getMateri } from '../js/supabase-client.js';
+    import { getMateri, saveStudentProgress } from '../js/supabase-client.js';
 
     async function renderMateriDetail() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -120,6 +120,14 @@
               </div>
             `;
           }
+        }
+        
+        // Simpan progress baca materi (100%)
+        const student = window.getCurrentStudent();
+        if (student) {
+          saveStudentProgress(student.id, slug, 100).catch(err => {
+            console.warn("Gagal menyimpan progres:", err);
+          });
         }
 
       } catch (err) {
