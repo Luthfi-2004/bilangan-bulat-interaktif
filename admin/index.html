@@ -107,7 +107,7 @@
     /* Brand */
     .brand-header {
       display: flex; align-items: center; gap: 12px;
-      height: 72px; padding: 0 18px;
+      height: 72px; padding: 0 14px;
       border-bottom: 1px solid rgba(255,255,255,0.07);
       flex-shrink: 0; overflow: hidden;
     }
@@ -133,24 +133,9 @@
       transition: opacity 0.2s, width 0.3s;
     }
 
-    /* Desktop collapse button — inline in brand row */
-    #admin-sidebar-collapse-btn {
-      width: 28px; height: 28px;
-      border-radius: 8px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.12);
-      display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: #64748b; font-size: 10px;
-      transition: all 0.2s; flex-shrink: 0;
-      margin-left: auto;
-    }
-    #admin-sidebar-collapse-btn:hover { background:#2563eb; color:white; border-color:#2563eb; }
-    #admin-sidebar-collapse-btn i { transition: transform 0.3s; }
-    #admin-sidebar.collapsed #admin-sidebar-collapse-btn i { transform: rotate(180deg); }
-
     /* Hamburger button */
     #admin-hamburger {
-      display: none;
+      display: flex;
       width: 36px; height: 36px; border-radius: 9px;
       background: #f1f5f9; border: 1px solid #e2e8f0;
       color: #475569; cursor: pointer;
@@ -175,9 +160,6 @@
 
     /* ====== DESKTOP (>=1024px) ====== */
     @media (min-width: 1024px) {
-      #admin-hamburger { display: none !important; }
-      #admin-sidebar-collapse-btn { display: flex; }
-
       #admin-sidebar.collapsed { width: 68px; }
 
       #admin-sidebar.collapsed .sidebar-text,
@@ -185,17 +167,11 @@
       #admin-sidebar.collapsed .btn-grid {
         opacity: 0; width: 0; overflow: hidden; pointer-events: none;
       }
-      #admin-sidebar.collapsed #admin-sidebar-collapse-btn { margin-left: 0; }
-      #admin-sidebar.collapsed .brand-header { justify-content: space-between; padding: 0 18px; }
+      
       #admin-sidebar.collapsed .realtime-bar {
-        justify-content: center; padding-left: 0; padding-right: 0;
+        padding-left: 14px;
       }
       #admin-sidebar.collapsed .realtime-bar .sidebar-text { display: none; }
-      #admin-sidebar.collapsed .admin-nav-item {
-        justify-content: center !important;
-        padding-left: 0 !important; padding-right: 0 !important;
-        gap: 0 !important;
-      }
       #admin-sidebar.collapsed .admin-nav-item span:first-of-type {
         opacity: 0; width: 0; pointer-events: none;
       }
@@ -924,11 +900,25 @@
       }
 
       // Event bindings
-      if (hamburger) hamburger.onclick = () =>
-        sidebar.classList.contains('open') ? closeDrawer() : openDrawer();
-
-      if (collapseBtn) collapseBtn.onclick = () =>
-        applyCollapse(!sidebar.classList.contains('collapsed'));
+      if (hamburger) {
+        hamburger.onclick = () => {
+          if (isDesktop()) {
+            const DEF_W = 248;
+            const MIN_W = 68;
+            const isCollapsed = sidebar.classList.contains('collapsed');
+            if (isCollapsed) {
+              sidebar.style.width = DEF_W + 'px';
+              sidebar.classList.remove('collapsed');
+            } else {
+              sidebar.style.width = MIN_W + 'px';
+              sidebar.classList.add('collapsed');
+            }
+            try { localStorage.setItem(COLLAPSE_KEY, !isCollapsed ? '1' : '0'); } catch(_) {}
+          } else {
+            sidebar.classList.contains('open') ? closeDrawer() : openDrawer();
+          }
+        };
+      }
 
       if (overlay) overlay.onclick = closeDrawer;
 

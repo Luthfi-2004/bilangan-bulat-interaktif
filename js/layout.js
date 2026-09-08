@@ -136,8 +136,8 @@ function injectLayoutStyles() {
     .sb-brand {
       display: flex;
       align-items: center;
-      gap: 10px;
-      padding: 0 16px;
+      gap: 12px;
+      padding: 0 14px;
       height: 64px;
       border-bottom: 1px solid #f1f5f9;
       flex-shrink: 0;
@@ -214,8 +214,8 @@ function injectLayoutStyles() {
 
     /* ============ NAV LINKS ============ */
     .sb-link {
-      display: flex; align-items: center; gap: 10px;
-      padding: 9px 10px;
+      display: flex; align-items: center; gap: 12px;
+      padding: 9px 14px;
       border-radius: 10px;
       color: #64748b; text-decoration: none;
       font-size: 0.875rem; font-weight: 500;
@@ -253,8 +253,7 @@ function injectLayoutStyles() {
       #app-sidebar.sb-collapsed .sb-brand-info { opacity:0; pointer-events:none; }
       #app-sidebar.sb-collapsed .sb-section-label { opacity:0; height:0; padding:0; pointer-events:none; }
       #app-sidebar.sb-collapsed .sb-text { opacity:0; width:0; pointer-events:none; }
-      #app-sidebar.sb-collapsed .sb-link { justify-content: center; padding-left:0; padding-right:0; gap:0; }
-      #app-sidebar.sb-collapsed .sb-brand { justify-content: center; }
+
 
       /* Tooltip on hover when collapsed */
       #app-sidebar.sb-collapsed .sb-link::after {
