@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="css/tailwind-compiled.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
@@ -140,10 +140,10 @@
       let soalStr = "";
       
       if (op === '+') {
-        soalStr = `${a} + ${b} × ${c}`;
+        soalStr = `${a} + ${b} Ã— ${c}`;
         correctAnswer = a + (b * c);
       } else {
-        soalStr = `${a} − (${b} × ${c})`;
+        soalStr = `${a} âˆ’ (${b} Ã— ${c})`;
         correctAnswer = a - (b * c);
       }
       
@@ -181,7 +181,7 @@
       const aStr = a < 0 ? `(${a})` : a;
       const bStr = b < 0 ? `(${b})` : b;
       
-      document.getElementById('game-question').innerHTML = `${aStr} × ${bStr} = ${displayAns}`;
+      document.getElementById('game-question').innerHTML = `${aStr} Ã— ${bStr} = ${displayAns}`;
       correctAnswer = isCorrect;
       
       const controls = document.getElementById('game-controls');
@@ -239,3 +239,4 @@
   </script>
 </body>
 </html>
+

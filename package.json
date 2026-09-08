@@ -1,0 +1,26 @@
+{
+  "name": "pembelajaran_matematika",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build:css": "npx @tailwindcss/cli -i ./css/input.css -o ./css/tailwind-compiled.css"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Luthfi-2004/bilangan-bulat-interaktif.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Luthfi-2004/bilangan-bulat-interaktif/issues"
+  },
+  "homepage": "https://github.com/Luthfi-2004/bilangan-bulat-interaktif#readme",
+  "devDependencies": {
+    "@tailwindcss/cli": "^4.3.3",
+    "tailwindcss": "^4.3.3"
+  }
+}
