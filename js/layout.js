@@ -100,7 +100,10 @@ const TOPBAR_HTML = `
     <span class="tb-title-mobile">BilBul</span>
     <span class="tb-greeting">Selamat datang di Media Pembelajaran Interaktif!</span>
   </div>
-  <div id="student-profile" class="tb-profile"></div>
+  <div class="tb-right">
+    <div id="realtime-clock-student" class="tb-clock" style="display: none;"></div>
+    <div id="student-profile" class="tb-profile"></div>
+  </div>
 </div>
 `;
 
@@ -268,6 +271,14 @@ function injectLayoutStyles() {
     .tb-left { display: flex; align-items: center; gap: 10px; }
     .tb-greeting { font-size: 0.875rem; color: #64748b; font-weight: 500; }
     .tb-title-mobile { font-size: 0.9rem; font-weight: 800; color: #1e293b; display: none; }
+    .tb-right { display: flex; align-items: center; gap: 16px; }
+    .tb-clock { 
+      align-items: center; gap: 8px;
+      padding: 6px 12px; background: #f8fafc; 
+      border-radius: 8px; font-size: 0.75rem; 
+      color: #475569; font-weight: 600;
+      border: 1px solid #e2e8f0;
+    }
     .tb-profile { display: flex; align-items: center; gap: 8px; }
 
     /* ============ OVERLAY ============ */
@@ -293,11 +304,11 @@ function injectLayoutStyles() {
       #app-sidebar.sb-open { transform:translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.15); }
     }
 
-    /* ============ MOBILE (<768px) ============ */
     @media (max-width: 767px) {
       .sb-collapse-btn { display: none !important; }
       .tb-hamburger { display: flex !important; }
       .tb-greeting { display: none; }
+      .tb-clock { display: none !important; }
       .tb-title-mobile { display: block; }
       #app-sidebar {
         position: fixed !important; top:0; left:0; height:100% !important;
@@ -459,6 +470,21 @@ function initLayoutInteractivity() {
   }, { passive: true });
 
   sidebar.addEventListener('click', e => { if (!isDesktop() && e.target.closest('a')) closeDrawer(); });
+
+  // --- Realtime Clock ---
+  function updateStudentClock() {
+    const clockEl = document.getElementById('realtime-clock-student');
+    if (!clockEl) return;
+    const now = new Date();
+    const dateOpts = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' };
+    const timeOpts = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+    const dateStr = now.toLocaleDateString('id-ID', dateOpts);
+    const timeStr = now.toLocaleTimeString('id-ID', timeOpts).replace(/\./g, ':');
+    clockEl.innerHTML = `<i class="fa-solid fa-clock text-blue-500"></i><span>${dateStr} - ${timeStr}</span>`;
+    clockEl.style.display = 'flex';
+  }
+  updateStudentClock();
+  setInterval(updateStudentClock, 1000);
 
   updateActiveSidebarLink(window.location.pathname);
 }

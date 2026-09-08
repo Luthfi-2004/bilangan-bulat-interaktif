@@ -118,10 +118,7 @@
       flex: 1; min-width: 0;
     }
 
-    /* Realtime bar */
-    .realtime-bar {
-      overflow: hidden; transition: padding 0.3s;
-    }
+
 
     /* Nav buttons */
     .admin-nav-item {
@@ -168,10 +165,7 @@
         opacity: 0; width: 0; overflow: hidden; pointer-events: none;
       }
       
-      #admin-sidebar.collapsed .realtime-bar {
-        padding-left: 14px;
-      }
-      #admin-sidebar.collapsed .realtime-bar .sidebar-text { display: none; }
+
       #admin-sidebar.collapsed .admin-nav-item span:first-of-type {
         opacity: 0; width: 0; pointer-events: none;
       }
@@ -241,17 +235,7 @@
         </div>
       </div>
 
-      <!-- Realtime Status Indicator -->
-      <div class="realtime-bar px-4 py-3 bg-slate-800/60 border-b border-slate-800 flex items-center justify-between text-xs overflow-hidden">
-        <span class="text-slate-400 flex items-center gap-2 rt-dot">
-          <span class="relative flex h-2.5 w-2.5 flex-shrink-0">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
-          </span>
-          <span class="sidebar-text whitespace-nowrap">Live Realtime</span>
-        </span>
-        <span class="text-[11px] font-semibold text-emerald-400 sidebar-text">Aktif</span>
-      </div>
+
 
       <!-- Nav Items -->
       <nav class="flex-1 px-3 py-4 overflow-y-auto" style="scrollbar-width:none;">

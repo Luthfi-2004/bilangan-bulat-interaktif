@@ -110,9 +110,20 @@ document.addEventListener('DOMContentLoaded', async () => {
   if (adminNameEl) adminNameEl.textContent = currentUser.name || 'Bapak/Ibu Guru';
   if (adminEmailEl) adminEmailEl.textContent = currentUser.email;
 
-  // Set tanggal hari ini
+  // Set tanggal hari ini dan jam realtime
   const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-  document.getElementById('current-date-display').textContent = new Date().toLocaleDateString('id-ID', dateOptions);
+  const timeOptions = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+  const dateDisplayEl = document.getElementById('current-date-display');
+  if (dateDisplayEl) {
+    function updateAdminClock() {
+      const now = new Date();
+      const dateStr = now.toLocaleDateString('id-ID', dateOptions);
+      const timeStr = now.toLocaleTimeString('id-ID', timeOptions).replace(/\./g, ':');
+      dateDisplayEl.textContent = `${dateStr} - ${timeStr}`;
+    }
+    updateAdminClock();
+    setInterval(updateAdminClock, 1000);
+  }
 
   // 2. Setup Navigasi Tab
   setupNavigation();
