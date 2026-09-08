@@ -141,19 +141,19 @@ function injectLayoutStyles() {
       align-items: center;
       gap: 12px;
       padding: 0 14px;
-      height: 64px;
+      height: 72px;
       border-bottom: 1px solid #f1f5f9;
       flex-shrink: 0;
       overflow: hidden;
     }
     .sb-logo {
-      width: 36px; height: 36px;
-      background: linear-gradient(135deg, #2563eb, #4f46e5);
-      border-radius: 10px;
+      width: 40px; height: 40px;
+      background: #2563eb;
+      border-radius: 12px;
       display: flex; align-items: center; justify-content: center;
-      color: white; font-size: 15px;
+      color: white; font-size: 1.125rem; font-weight: 900;
       flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(37,99,235,0.3);
+      box-shadow: 0 4px 6px -1px rgba(59, 130, 246, 0.2), 0 2px 4px -2px rgba(59, 130, 246, 0.2);
     }
     .sb-brand-info {
       display: flex; flex-direction: column;
@@ -163,13 +163,13 @@ function injectLayoutStyles() {
     }
     .sb-brand-name {
       font-size: 1rem; font-weight: 800;
-      background: linear-gradient(to right, #2563eb, #4f46e5);
-      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+      color: #0f172a;
+      letter-spacing: -0.025em;
       line-height: 1.2;
     }
     .sb-brand-sub {
-      font-size: 0.6rem; font-weight: 600;
-      color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em;
+      font-size: 0.625rem; font-weight: 700;
+      color: #3b82f6; text-transform: uppercase; letter-spacing: 0.05em;
     }
 
     /* ============ NAV ============ */
