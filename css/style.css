@@ -214,47 +214,9 @@ body {
   width: auto;
 }
 
-/* === SIDEBAR TOGGLE BUTTON (Desktop only) === */
-#sidebar-toggle-desktop {
-  position: absolute;
-  right: -14px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 28px;
-  height: 28px;
-  background: white;
-  border: 1.5px solid #e2e8f0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 50;
-  color: #64748b;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: all 0.2s ease;
-  flex-shrink: 0;
-}
-
-#sidebar-toggle-desktop:hover {
-  background: #2563eb;
-  color: white;
-  border-color: #2563eb;
-  box-shadow: 0 4px 12px rgba(37,99,235,0.3);
-}
-
-#sidebar-toggle-desktop i {
-  transition: transform 0.3s ease;
-  font-size: 11px;
-}
-
-#app-sidebar.sidebar-collapsed #sidebar-toggle-desktop i {
-  transform: rotate(180deg);
-}
-
 /* === TOPBAR BURGER BTN === */
 #menu-toggle-btn {
-  display: none !important;
+  display: flex;
   align-items: center;
   justify-content: center;
   width: 40px;
@@ -272,15 +234,6 @@ body {
   background: #2563eb;
   color: white;
   border-color: #2563eb;
-}
-
-@media (max-width: 1023px) {
-  #menu-toggle-btn {
-    display: flex !important;
-  }
-  #sidebar-toggle-desktop {
-    display: none !important;
-  }
 }
 
 /* ============================================================

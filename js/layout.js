@@ -274,7 +274,7 @@ function injectLayoutStyles() {
 
     /* ============ HAMBURGER BUTTON ============ */
     .tb-hamburger {
-      display: none;
+      display: flex;
       width: 36px; height: 36px; border-radius: 9px;
       background: #f1f5f9; border: 1px solid #e2e8f0;
       color: #475569; cursor: pointer;
@@ -329,11 +329,6 @@ function injectLayoutStyles() {
       }
       #app-sidebar.sb-open { transform:translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.2); }
       #app-content { padding: 1rem !important; }
-    }
-
-    /* ============ DESKTOP ============ */
-    @media (min-width: 1024px) {
-      .tb-hamburger { display: none !important; }
     }
 
     /* ============ MAIN AREA ============ */
@@ -455,7 +450,25 @@ function initLayoutInteractivity() {
     document.body.style.overflow = '';
   }
 
-  if (hamburger) hamburger.onclick = () => sidebar.classList.contains('sb-open') ? closeDrawer() : openDrawer();
+  if (hamburger) {
+    hamburger.onclick = () => {
+      if (isDesktop()) {
+        const DEF_W = 240;
+        const MIN_W = 64;
+        const isCollapsed = sidebar.classList.contains('sb-collapsed');
+        if (isCollapsed) {
+          sidebar.style.width = DEF_W + 'px';
+          sidebar.classList.remove('sb-collapsed');
+        } else {
+          sidebar.style.width = MIN_W + 'px';
+          sidebar.classList.add('sb-collapsed');
+        }
+        try { localStorage.setItem('bilbul_sidebar_width', sidebar.offsetWidth); } catch(_) {}
+      } else {
+        sidebar.classList.contains('sb-open') ? closeDrawer() : openDrawer();
+      }
+    };
+  }
   if (overlay) overlay.onclick = closeDrawer;
 
   window.addEventListener('resize', () => { if (isDesktop()) { closeDrawer(); document.body.style.overflow = ''; } });
