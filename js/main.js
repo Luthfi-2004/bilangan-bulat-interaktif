@@ -52,25 +52,25 @@ function updateProfileUI(user) {
   const loginPath = isSubfolder ? '../login.html' : 'login.html';
 
   profileDiv.innerHTML = `
-    <div class="flex items-center gap-2">
-      <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-xs">
+    <div class="flex items-center gap-3 mb-3 user-info">
+      <div class="w-9 h-9 rounded-full bg-blue-100 text-blue-700 flex items-center justify-center font-bold text-sm flex-shrink-0">
         ${user.name.substring(0, 2).toUpperCase()}
       </div>
-      <div class="hidden sm:block text-left mr-2">
-        <div class="text-xs font-bold text-slate-800 leading-none">${user.name}</div>
-        <div class="text-[10px] text-slate-400 font-semibold uppercase tracking-wider">${isGuru ? 'Pendidik / Guru' : 'Siswa Kelas VII'}</div>
+      <div class="overflow-hidden">
+        <div class="font-bold text-sm text-slate-800 truncate">${user.name}</div>
+        <div class="text-[10px] text-slate-500 truncate uppercase tracking-wider font-semibold">${isGuru ? 'Pendidik / Guru' : 'Siswa Kelas VII'}</div>
       </div>
     </div>
-
-    ${isGuru ? `
-      <a href="${adminPath}" class="px-2.5 py-1.5 text-xs bg-indigo-50 text-indigo-600 hover:bg-indigo-100 rounded-lg transition-colors border border-indigo-200 font-semibold focus:outline-none">
-        <i class="fa-solid fa-chalkboard-user mr-1"></i> Admin Panel
-      </a>
-    ` : ''}
-
-    <button id="logout-btn" class="px-3 py-1.5 text-xs bg-red-50 text-red-600 hover:bg-red-100 rounded-lg transition-colors border border-red-200 font-semibold focus:outline-none">
-      <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
-    </button>
+    <div class="grid ${isGuru ? 'grid-cols-2' : 'grid-cols-1'} gap-2 btn-grid">
+      ${isGuru ? `
+        <a href="${adminPath}" class="px-2 py-1.5 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-xs font-semibold text-center transition-colors focus:outline-none">
+          <i class="fa-solid fa-chalkboard-user mr-1"></i> Admin
+        </a>
+      ` : ''}
+      <button id="logout-btn" class="px-2 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 rounded-lg text-xs font-semibold text-center transition-colors focus:outline-none">
+        <i class="fa-solid fa-right-from-bracket mr-1"></i> Keluar
+      </button>
+    </div>
   `;
 
   document.getElementById('logout-btn')?.addEventListener('click', async () => {

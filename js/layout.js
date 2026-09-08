@@ -88,6 +88,8 @@ const SIDEBAR_HTML = `
     </li>
   </ul>
 </nav>
+
+<div id="student-profile" class="p-4 border-t border-slate-200 bg-white user-footer overflow-hidden"></div>
 `;
 
 // ---- TOPBAR HTML SISWA ----
@@ -102,7 +104,6 @@ const TOPBAR_HTML = `
   </div>
   <div class="tb-right">
     <div id="realtime-clock-student" class="tb-clock" style="display: none;"></div>
-    <div id="student-profile" class="tb-profile"></div>
   </div>
 </div>
 `;
@@ -228,6 +229,7 @@ function injectLayoutStyles() {
       #app-sidebar.sb-collapsed .sb-brand-info { opacity:0; pointer-events:none; }
       #app-sidebar.sb-collapsed .sb-section-label { opacity:0; height:0; padding:0; pointer-events:none; }
       #app-sidebar.sb-collapsed .sb-text { opacity:0; width:0; pointer-events:none; }
+      #app-sidebar.sb-collapsed .user-footer { opacity:0; pointer-events:none; padding: 0; border: none; height: 0; }
 
 
       /* Tooltip on hover when collapsed */
