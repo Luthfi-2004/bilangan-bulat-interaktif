@@ -191,38 +191,33 @@ function injectLayoutStyles() {
     /* ============ NAV LINKS ============ */
     .sb-link {
       display: flex; align-items: center; gap: 12px;
-      padding: 9px 14px;
-      border-radius: 10px;
+      padding: 12px 14px;
+      border-radius: 12px;
       color: #64748b; text-decoration: none;
-      font-size: 0.875rem; font-weight: 500;
+      font-size: 0.875rem; font-weight: 600;
       transition: all 0.2s ease;
-      margin-bottom: 2px;
+      margin-bottom: 4px;
       white-space: nowrap;
       overflow: hidden;
       position: relative;
     }
     .sb-link:hover {
-      color: #0f172a;
+      background: #f1f5f9; 
+      color: #1e293b;
     }
     .sb-link.active {
-      color: #2563eb; 
-      font-weight: 700;
+      background: #2563eb;
+      color: white; 
+      box-shadow: 0 4px 6px -1px rgba(37,99,235,0.3), 0 2px 4px -2px rgba(37,99,235,0.3);
     }
     .sb-icon {
-      width: 32px; height: 32px;
+      width: 24px; height: 24px;
       display: flex; align-items: center; justify-content: center;
-      border-radius: 8px;
-      font-size: 1rem;
+      font-size: 1.125rem;
       flex-shrink: 0;
       background: transparent;
-      color: #94a3b8;
-      transition: all 0.2s ease;
-    }
-    .sb-link:hover .sb-icon { color: #64748b; }
-    .sb-link.active .sb-icon { 
-      background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
-      color: white; 
-      box-shadow: 0 4px 10px rgba(37,99,235,0.3);
+      color: inherit;
+      transition: none;
     }
     .sb-text { overflow: hidden; transition: opacity 0.2s, width 0.3s; }
 
