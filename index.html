@@ -1,699 +1,528 @@
 <!DOCTYPE html>
-<html lang="id" class="scroll-smooth">
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>BilBul - Operasi Campuran Bilangan Bulat | Media Pembelajaran Interaktif SMP Kelas VII</title>
-  <meta name="description" content="Platform media pembelajaran matematika interaktif untuk siswa SMP Kelas VII dalam menguasai Operasi Campuran Bilangan Bulat dengan konsep visual garis bilangan, latihan bertahap, dan kuis evaluasi terarah.">
-  
-  <!-- Google Fonts Inter -->
+  <title>BilBul - Media Pembelajaran Bilangan Bulat Interaktif | SMP Kelas VII</title>
+  <meta name="description" content="BilBul adalah platform media pembelajaran matematika interaktif untuk siswa SMP Kelas VII. Kuasai Operasi Campuran Bilangan Bulat dengan materi dari guru, latihan 4 level, dan kuis evaluasi terarah.">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-  
-  <!-- Tailwind CSS & FontAwesome -->
-  <link rel="stylesheet" href="css/tailwind-compiled.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="css/style.css">
 
   <style>
-    .glow-blue {
-      box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.4);
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    :root{
+      --bg:#0b0f1a;
+      --surf:#111827;
+      --surf2:#1a2235;
+      --border:rgba(255,255,255,.07);
+      --blue:#3b82f6;
+      --blue-dim:rgba(59,130,246,.12);
+      --blue-glow:rgba(59,130,246,.25);
+      --amber:#f59e0b;
+      --amber-dim:rgba(245,158,11,.12);
+      --text:#f1f5f9;
+      --muted:#94a3b8;
+      --faint:#475569;
     }
-    .gradient-text {
-      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .bg-grid-pattern {
-      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
-      background-size: 24px 24px;
-    }
+    html{scroll-behavior:smooth}
+    body{font-family:"Plus Jakarta Sans",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;line-height:1.6}
+    a{text-decoration:none;color:inherit}
+
+    .wrap{max-width:1140px;margin-inline:auto;padding-inline:1.5rem}
+    .sec{padding-block:5.5rem}
+    .surf{background:var(--surf)}
+
+    .badge{display:inline-flex;align-items:center;gap:.5rem;padding:.35rem 1rem;border-radius:999px;font-size:.68rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;border:1px solid rgba(59,130,246,.3);background:var(--blue-dim);color:#93c5fd}
+    .badge .dot{width:6px;height:6px;border-radius:50%;background:var(--blue);animation:pulse 2s infinite}
+
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:.55rem;font-weight:700;font-size:.9rem;border-radius:12px;padding:.85rem 1.75rem;transition:all .2s;cursor:pointer;border:none;font-family:inherit}
+    .btn-blue{background:var(--blue);color:#fff;box-shadow:0 4px 24px var(--blue-glow)}
+    .btn-blue:hover{background:#60a5fa;transform:translateY(-2px);box-shadow:0 6px 32px rgba(96,165,250,.4)}
+    .btn-ghost{background:transparent;color:var(--muted);border:1px solid var(--border)}
+    .btn-ghost:hover{background:var(--surf2);color:var(--text)}
+    .btn-white{background:#fff;color:var(--blue);box-shadow:0 4px 24px rgba(0,0,0,.2)}
+    .btn-white:hover{background:#f0f9ff;transform:translateY(-2px)}
+
+    /* NAVBAR */
+    .navbar{position:sticky;top:0;z-index:100;background:rgba(11,15,26,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--border)}
+    .nav-in{display:flex;align-items:center;justify-content:space-between;height:68px}
+    .brand{display:flex;align-items:center;gap:.75rem}
+    .brand-ic{width:42px;height:42px;border-radius:12px;background:var(--blue);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff;box-shadow:0 4px 16px var(--blue-glow);transition:transform .2s}
+    .brand:hover .brand-ic{transform:scale(1.05)}
+    .brand-name{font-size:1.2rem;font-weight:900;color:#fff;letter-spacing:-.03em}
+    .brand-sub{display:block;font-size:.62rem;font-weight:600;color:var(--faint);letter-spacing:.1em;text-transform:uppercase;margin-top:1px}
+    .nav-links{display:none;align-items:center;gap:2rem;list-style:none}
+    @media(min-width:768px){.nav-links{display:flex}}
+    .nav-links a{font-size:.83rem;font-weight:600;color:var(--muted);transition:color .2s}
+    .nav-links a:hover{color:#fff}
+
+    /* HERO */
+    .hero{position:relative;overflow:hidden;padding-block:5rem 6rem;text-align:center}
+    .hero::before{content:"";position:absolute;inset:0;background-image:linear-gradient(var(--border) 1px,transparent 1px),linear-gradient(90deg,var(--border) 1px,transparent 1px);background-size:48px 48px;pointer-events:none}
+    .hero-glow{position:absolute;width:700px;height:420px;background:radial-gradient(ellipse at center,rgba(59,130,246,.14) 0%,transparent 70%);top:0;left:50%;transform:translateX(-50%);pointer-events:none}
+    .hero-cnt{position:relative;z-index:1;max-width:720px;margin-inline:auto}
+    .hero h1{font-size:clamp(2.2rem,5vw,3.75rem);font-weight:900;line-height:1.1;letter-spacing:-.04em;color:#fff;margin-block:1.2rem}
+    .hero h1 .hl{color:var(--blue)}
+    .hero p{font-size:1rem;color:var(--muted);max-width:560px;margin-inline:auto;line-height:1.75;margin-bottom:2.25rem}
+    .hero-cta{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1rem;margin-bottom:2.75rem}
+    .hero-trust{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:1.5rem;font-size:.75rem;font-weight:600;color:var(--faint)}
+    .hero-trust span{display:flex;align-items:center;gap:.45rem}
+    .hero-trust i{color:var(--blue)}
+
+    /* DEMO CARD */
+    .demo-card{position:relative;z-index:1;max-width:780px;margin-inline:auto;margin-top:3.5rem;background:var(--surf);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+    .demo-hdr{padding:1rem 1.5rem;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+    .dots{display:flex;gap:6px}
+    .dots span{width:10px;height:10px;border-radius:50%}
+    .dots .r{background:#ef4444}.dots .y{background:var(--amber)}.dots .g{background:#22c55e}
+    .demo-title{font-size:.72rem;font-weight:700;color:var(--faint);letter-spacing:.05em}
+    .demo-body{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1px;background:var(--border)}
+    .demo-col{background:var(--surf);padding:1.5rem;text-align:center}
+    .demo-lbl{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.1em;color:var(--faint);margin-bottom:.5rem}
+    .demo-val{font-size:1.35rem;font-weight:900;font-family:"Courier New",monospace}
+    .demo-val.am{color:var(--amber)}.demo-val.bl{color:#93c5fd}.demo-val.gr{color:#4ade80}
+    .demo-ftr{padding:.9rem 1.5rem;display:flex;align-items:center;gap:.5rem;font-size:.73rem;color:var(--faint)}
+    .demo-ftr i{color:var(--amber)}
+
+    /* STATS */
+    .stats{border-top:1px solid var(--border);border-bottom:1px solid var(--border);background:var(--surf)}
+    .stats-g{display:grid;grid-template-columns:repeat(2,1fr)}
+    @media(min-width:640px){.stats-g{grid-template-columns:repeat(4,1fr)}}
+    .stat{padding:2rem 1.5rem;text-align:center;border-right:1px solid var(--border)}
+    .stat:last-child{border-right:none}
+    .stat-n{font-size:2rem;font-weight:900;color:var(--blue);letter-spacing:-.04em;line-height:1;margin-bottom:.35rem}
+    .stat-n.am{color:var(--amber)}
+    .stat-l{font-size:.73rem;font-weight:600;color:var(--faint)}
+
+    /* SECTION HEADER */
+    .sec-hdr{text-align:center;margin-bottom:3.75rem}
+    .eyebrow{font-size:.68rem;font-weight:800;text-transform:uppercase;letter-spacing:.12em;color:var(--blue);display:block;margin-bottom:.7rem}
+    .eyebrow.am{color:var(--amber)}
+    .sec-hdr h2{font-size:clamp(1.75rem,3.5vw,2.5rem);font-weight:900;color:#fff;letter-spacing:-.03em;line-height:1.15;margin-bottom:.7rem}
+    .sec-hdr p{font-size:.9rem;color:var(--muted);max-width:510px;margin-inline:auto}
+
+    /* FEATURES */
+    .feat-g{display:grid;grid-template-columns:1fr;gap:1.2rem}
+    @media(min-width:640px){.feat-g{grid-template-columns:repeat(2,1fr)}}
+    @media(min-width:1024px){.feat-g{grid-template-columns:repeat(3,1fr)}}
+    .feat-c{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:2rem;transition:border-color .25s,transform .25s}
+    .feat-c:hover{border-color:rgba(59,130,246,.4);transform:translateY(-3px)}
+    .feat-ic{width:46px;height:46px;border-radius:12px;background:var(--blue-dim);border:1px solid rgba(59,130,246,.2);display:flex;align-items:center;justify-content:center;font-size:1.15rem;color:var(--blue);margin-bottom:1.2rem;transition:transform .25s}
+    .feat-ic.am{background:var(--amber-dim);border-color:rgba(245,158,11,.2);color:var(--amber)}
+    .feat-c:hover .feat-ic{transform:scale(1.1)}
+    .feat-c h3{font-size:.95rem;font-weight:800;color:#fff;margin-bottom:.5rem}
+    .feat-c p{font-size:.82rem;color:var(--muted);line-height:1.7}
+
+    /* FLOW */
+    .flow-g{display:grid;grid-template-columns:1fr;gap:1rem}
+    @media(min-width:640px){.flow-g{grid-template-columns:repeat(5,1fr)}}
+    .flow-s{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:1.5rem 1.2rem;display:flex;flex-direction:column;gap:.7rem;position:relative}
+    .flow-n{width:34px;height:34px;border-radius:10px;background:var(--blue);color:#fff;font-weight:900;font-size:.82rem;display:flex;align-items:center;justify-content:center}
+    .flow-n.am{background:var(--amber);color:#0b0f1a}
+    .flow-s h4{font-size:.88rem;font-weight:800;color:#fff}
+    .flow-s p{font-size:.76rem;color:var(--muted);line-height:1.65}
+    .flow-tag{font-size:.63rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--blue);padding-top:.5rem;border-top:1px solid var(--border);margin-top:auto}
+    .flow-tag.am{color:var(--amber)}
+    @media(min-width:640px){.flow-s:not(:last-child)::after{content:"&#x2192;";position:absolute;right:-.8rem;top:50%;transform:translateY(-50%);color:var(--faint);font-size:.9rem;z-index:2}}
+
+    /* SIMULATOR */
+    .sim-box{background:var(--surf);border:1px solid var(--border);border-radius:20px;overflow:hidden}
+    .sim-tabs{display:flex;gap:.5rem;padding:1.2rem 1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+    .sim-tab{padding:.42rem .95rem;border-radius:8px;font-size:.76rem;font-weight:700;color:var(--faint);background:transparent;border:1px solid transparent;cursor:pointer;transition:all .2s;font-family:inherit}
+    .sim-tab.active{background:var(--blue);color:#fff;border-color:var(--blue)}
+    .sim-tab:not(.active):hover{background:var(--blue-dim);color:#93c5fd;border-color:rgba(59,130,246,.3)}
+    .sim-body{padding:2rem}
+    #sim-eq{font-family:"Courier New",monospace;font-size:1.7rem;font-weight:900;color:var(--amber);margin-bottom:1.4rem;text-align:center}
+    .sim-steps{display:flex;flex-direction:column;gap:.7rem}
+    .sim-row{display:flex;align-items:flex-start;gap:.9rem;padding:1rem 1.2rem;background:var(--bg);border:1px solid var(--border);border-radius:12px}
+    .sim-num{width:28px;height:28px;border-radius:8px;background:var(--blue-dim);color:var(--blue);font-size:.73rem;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+    .sim-txt{font-size:.86rem;color:var(--muted);line-height:1.65}
+    code{color:#93c5fd;font-family:"Courier New",monospace}
+    .sim-res{display:flex;align-items:center;gap:.5rem;margin-top:1.2rem;padding:.85rem 1.2rem;background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.2);border-radius:12px;font-size:.83rem;color:#93c5fd}
+    .sim-res i{color:var(--blue)}
+
+    /* TWO COL */
+    .two-c{display:grid;grid-template-columns:1fr;gap:1.5rem}
+    @media(min-width:768px){.two-c{grid-template-columns:1fr 1fr}}
+    .info-c{background:var(--surf);border:1px solid var(--border);border-radius:16px;padding:2.5rem}
+    .info-tag{display:inline-flex;align-items:center;gap:.4rem;padding:.3rem .9rem;border-radius:999px;font-size:.66rem;font-weight:700;text-transform:uppercase;letter-spacing:.08em;margin-bottom:1.2rem}
+    .tag-bl{background:var(--blue-dim);border:1px solid rgba(59,130,246,.25);color:#93c5fd}
+    .tag-am{background:var(--amber-dim);border:1px solid rgba(245,158,11,.25);color:#fbbf24}
+    .info-c h3{font-size:1.25rem;font-weight:900;color:#fff;margin-bottom:1.2rem;letter-spacing:-.02em}
+    .chklist{list-style:none;display:flex;flex-direction:column;gap:.95rem}
+    .chklist li{display:flex;align-items:flex-start;gap:.7rem;font-size:.85rem;color:var(--muted)}
+    .chklist li i{color:var(--blue);margin-top:2px;flex-shrink:0}
+    .chklist li strong{color:var(--text)}
+
+    /* FAQ */
+    .faq-l{display:flex;flex-direction:column;gap:.75rem;max-width:760px;margin-inline:auto}
+    .faq-i{background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden}
+    .faq-q{width:100%;text-align:left;padding:1.2rem 1.5rem;background:none;border:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:1rem;font-size:.88rem;font-weight:700;color:#fff;font-family:inherit}
+    .faq-q i{color:var(--faint);font-size:.77rem;transition:transform .2s;flex-shrink:0}
+    .faq-i.open .faq-q i{transform:rotate(180deg);color:var(--blue)}
+    .faq-a{display:none;padding:0 1.5rem 1.2rem;font-size:.84rem;color:var(--muted);line-height:1.75}
+    .faq-i.open .faq-a{display:block}
+
+    /* CTA */
+    .cta{background:var(--blue);text-align:center;padding-block:5rem;position:relative;overflow:hidden}
+    .cta::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 0%,rgba(255,255,255,.08) 0%,transparent 70%)}
+    .cta>*{position:relative;z-index:1}
+    .cta h2{font-size:clamp(1.75rem,4vw,2.9rem);font-weight:900;color:#fff;letter-spacing:-.04em;margin-bottom:.75rem}
+    .cta p{font-size:.95rem;color:rgba(255,255,255,.75);margin-bottom:2rem;max-width:490px;margin-inline:auto}
+
+    /* FOOTER */
+    .foot{background:var(--bg);border-top:1px solid var(--border);padding-block:2.25rem}
+    .foot-in{display:flex;flex-direction:column;align-items:center;gap:1.5rem;text-align:center}
+    @media(min-width:768px){.foot-in{flex-direction:row;justify-content:space-between;text-align:left}}
+    .foot-links{display:flex;gap:1.5rem;list-style:none}
+    .foot-links a{font-size:.78rem;font-weight:600;color:var(--faint);transition:color .2s}
+    .foot-links a:hover{color:#fff}
+    .foot-copy{font-size:.73rem;color:var(--faint)}
+
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+    .anim{animation:fadeUp .65s ease both}
+    .d1{animation-delay:.1s}.d2{animation-delay:.22s}.d3{animation-delay:.36s}.d4{animation-delay:.5s}
   </style>
 </head>
-<body data-no-layout="true" class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-blue-600 selection:text-white">
+<body data-no-layout="true">
 
-  <!-- ==========================================================
-       NAVBAR (Glassmorphic)
-       ========================================================== -->
-  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 transition-all">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
-      
-      <!-- Brand Logo -->
-      <a href="index.html" class="flex items-center gap-3 group">
-        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
-          <i class="fa-solid fa-calculator"></i>
-        </div>
+  <!-- NAVBAR -->
+  <header class="navbar">
+    <div class="wrap nav-in">
+      <a href="index.html" class="brand">
+        <div class="brand-ic"><i class="fa-solid fa-square-root-variable"></i></div>
         <div>
-          <span class="text-xl font-black tracking-tight text-white block leading-tight">
-            BilBul<span class="text-blue-400">.</span>
-          </span>
-          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
-            Matematika SMP Kelas VII
-          </span>
+          <span class="brand-name">BilBul</span>
+          <span class="brand-sub">Matematika &middot; SMP Kelas VII</span>
         </div>
       </a>
-
-      <!-- Desktop Nav Links -->
-      <nav class="hidden md:flex items-center gap-8 font-semibold text-slate-300 text-sm">
-        <a href="#keunggulan" class="hover:text-blue-400 transition-colors">Keunggulan</a>
-        <a href="#alur" class="hover:text-blue-400 transition-colors">Alur Belajar</a>
-        <a href="#simulator" class="hover:text-blue-400 transition-colors">KABATAKU Demo</a>
-        <a href="#guru-siswa" class="hover:text-blue-400 transition-colors">Untuk Siswa & Guru</a>
-        <a href="#faq" class="hover:text-blue-400 transition-colors">FAQ</a>
-      </nav>
-
-      <!-- Action Button -->
-      <div class="flex items-center gap-3">
-        <a id="nav-login-btn" href="login.html" class="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-md hover:shadow-blue-500/25 transition-all">
-          <i class="fa-solid fa-arrow-right-to-bracket mr-2 text-xs"></i>
-          <span>Masuk ke Kelas</span>
-        </a>
-      </div>
-
+      <nav><ul class="nav-links">
+        <li><a href="#fitur">Fitur</a></li>
+        <li><a href="#alur">Alur Belajar</a></li>
+        <li><a href="#simulator">Simulator</a></li>
+        <li><a href="#faq">FAQ</a></li>
+      </ul></nav>
+      <a id="nav-login-btn" href="login.html" class="btn btn-blue" style="padding:.6rem 1.2rem;font-size:.82rem;">
+        <i class="fa-solid fa-arrow-right-to-bracket"></i><span>Masuk</span>
+      </a>
     </div>
   </header>
 
-  <!-- ==========================================================
-       HERO SECTION (High Conversion & Promotional)
-       ========================================================== -->
-  <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-grid-pattern border-b border-slate-800">
-    <!-- Ambient Glow Lights -->
-    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
-    <div class="absolute top-1/3 right-10 w-72 h-72 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
-
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="text-center max-w-3xl mx-auto mb-12">
-        
-        <!-- Eyebrow Badge -->
-        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-bold mb-6 backdrop-blur-md">
-          <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-          Kurikulum Merdeka &bull; Pembelajaran Matematika Mandiri
-        </div>
-
-        <!-- Main Heading -->
-        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.15] mb-6">
-          Kuasai Operasi Campuran <br class="hidden sm:inline">
-          <span class="gradient-text">Bilangan Bulat</span> Lebih Cepat
-        </h1>
-
-        <!-- Subtitle -->
-        <p class="text-base sm:text-xl text-slate-300 mb-8 leading-relaxed font-normal">
-          Media pembelajaran digital terarah untuk siswa SMP Kelas VII. Dilengkapi simulasi garis bilangan, materi interaktif dari guru, latihan bertahap 4 tingkat, dan pembahasan tuntas seketika.
-        </p>
-
-        <!-- CTA Buttons -->
-        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
-          <a id="hero-main-btn" href="login.html" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-500 rounded-2xl shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all">
-            <i class="fa-solid fa-rocket mr-2.5 text-amber-400"></i>
-            <span>Mulai Petualangan Belajar</span>
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="wrap">
+      <div class="hero-cnt">
+        <div class="badge anim"><span class="dot"></span>Kurikulum Merdeka &bull; Bilangan Bulat</div>
+        <h1 class="anim d1">Kuasai <span class="hl">Operasi Campuran</span><br>Bilangan Bulat Lebih Cepat</h1>
+        <p class="anim d2">Platform belajar interaktif untuk siswa SMP Kelas VII &mdash; materi dari guru, latihan 4 level, pembahasan instan, dan kuis evaluasi dalam satu alur terpadu.</p>
+        <div class="hero-cta anim d3">
+          <a id="hero-main-btn" href="login.html" class="btn btn-blue" style="padding:.95rem 2rem;font-size:.95rem;">
+            <i class="fa-solid fa-play" style="font-size:.75rem;"></i>Mulai Belajar Sekarang
           </a>
-          <a href="#alur" class="w-full sm:w-auto inline-flex items-center justify-center px-7 py-4 text-base font-bold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 rounded-2xl transition-all">
-            <i class="fa-solid fa-route mr-2 text-blue-400"></i>
-            <span>Lihat Alur Belajar</span>
-          </a>
+          <a href="#alur" class="btn btn-ghost" style="padding:.95rem 1.75rem;font-size:.95rem;">Lihat Alur Belajar</a>
         </div>
-
-        <!-- Feature Badges -->
-        <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 font-semibold">
-          <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Gratis & Bebas Iklan</span>
-          <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Terintegrasi Guru & CMS Cloud</span>
-          <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Pembahasan Setiap Soal</span>
+        <div class="hero-trust anim d4">
+          <span><i class="fa-solid fa-circle-check"></i>Gratis &amp; Tanpa Iklan</span>
+          <span><i class="fa-solid fa-circle-check"></i>Materi dari Guru</span>
+          <span><i class="fa-solid fa-circle-check"></i>Pembahasan Tiap Soal</span>
         </div>
-
       </div>
 
-      <!-- Live Interactive Math Card Preview -->
-      <div class="max-w-4xl mx-auto mt-8">
-        <div class="rounded-3xl p-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 shadow-2xl glow-blue">
-          <div class="bg-slate-900 rounded-[22px] p-6 sm:p-10 border border-slate-800">
-            <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
-              <div class="flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold border border-blue-500/30">
-                  <i class="fa-solid fa-brain"></i>
-                </div>
-                <div>
-                  <h3 class="font-extrabold text-white text-base sm:text-lg">Pratinjau Alur Operasi KABATAKU</h3>
-                  <p class="text-xs text-slate-400">Kurung &rarr; Kali & Bagi &rarr; Tambah & Kurang</p>
-                </div>
-              </div>
-              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
-                <i class="fa-solid fa-circle-check"></i> Mode Belajar Interaktif
-              </div>
-            </div>
-
-            <!-- Problem Showcase -->
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-center">
-              <div class="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Soal Tantangan</div>
-                <div class="font-mono text-xl sm:text-2xl font-black text-amber-400">(-12) + 4 &times; (-3)</div>
-              </div>
-              <div class="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60">
-                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Langkah 1 (Perkalian)</div>
-                <div class="font-mono text-lg sm:text-xl font-bold text-slate-300">(-12) + <strong class="text-indigo-400">(-12)</strong></div>
-              </div>
-              <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30">
-                <div class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">Hasil Akhir Benar</div>
-                <div class="font-mono text-xl sm:text-2xl font-black text-emerald-400">-24</div>
-              </div>
-            </div>
-
-            <div class="mt-6 pt-4 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
-              <i class="fa-solid fa-lightbulb text-amber-400"></i>
-              <span>Setiap pengerjaan soal di sistem kami selalu dilengkapi uraian langkah demi langkah secara otomatis!</span>
-            </div>
+      <!-- Demo Preview -->
+      <div class="demo-card anim d4">
+        <div class="demo-hdr">
+          <div class="dots"><span class="r"></span><span class="y"></span><span class="g"></span></div>
+          <span class="demo-title">Pratinjau &middot; Alur KABATAKU</span>
+          <span style="font-size:.68rem;color:var(--faint);">Mode Interaktif</span>
+        </div>
+        <div class="demo-body">
+          <div class="demo-col">
+            <div class="demo-lbl">Soal</div>
+            <div class="demo-val am">(-12) + 4 &times; (-3)</div>
+          </div>
+          <div class="demo-col">
+            <div class="demo-lbl">Langkah 1 &middot; Perkalian</div>
+            <div class="demo-val bl">(-12) + <u>(-12)</u></div>
+          </div>
+          <div class="demo-col">
+            <div class="demo-lbl">Hasil Akhir</div>
+            <div class="demo-val gr">= &minus;24 &#x2713;</div>
           </div>
         </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==========================================================
-       METRICS & IMPACT STATS
-       ========================================================== -->
-  <section class="py-12 bg-slate-900 border-b border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
-        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
-          <div class="text-3xl sm:text-4xl font-black text-blue-400 mb-1">4 Level</div>
-          <div class="text-xs sm:text-sm text-slate-400 font-medium">Latihan Bertahap Terarah</div>
-        </div>
-        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
-          <div class="text-3xl sm:text-4xl font-black text-indigo-400 mb-1">100%</div>
-          <div class="text-xs sm:text-sm text-slate-400 font-medium">Pembahasan Detail Tiap Soal</div>
-        </div>
-        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
-          <div class="text-3xl sm:text-4xl font-black text-purple-400 mb-1">Real-time</div>
-          <div class="text-xs sm:text-sm text-slate-400 font-medium">Sinkronisasi Database Cloud</div>
-        </div>
-        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
-          <div class="text-3xl sm:text-4xl font-black text-emerald-400 mb-1">6 Lencana</div>
-          <div class="text-xs sm:text-sm text-slate-400 font-medium">Apresiasi Prestasi Belajar</div>
+        <div class="demo-ftr">
+          <i class="fa-solid fa-lightbulb"></i>
+          Setiap soal dilengkapi uraian langkah demi langkah secara otomatis.
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ==========================================================
-       SECTION: KEUNGGULAN UTAMA
-       ========================================================== -->
-  <section id="keunggulan" class="py-24 bg-slate-950 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-20">
-        <span class="text-xs font-extrabold uppercase tracking-widest text-blue-400 block mb-3">Fitur Platform</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
-          Dirancang Khusus untuk Membangun Pemahaman Konseptual
-        </h2>
-        <p class="text-slate-400 mt-4 text-base sm:text-lg">
-          Matematika bukan tentang menghafal rumus secara buta, melainkan memahami konsep langkah demi langkah.
-        </p>
+  <!-- STATS -->
+  <div class="stats">
+    <div class="wrap">
+      <div class="stats-g">
+        <div class="stat"><div class="stat-n">4</div><div class="stat-l">Level Latihan Bertahap</div></div>
+        <div class="stat"><div class="stat-n">100%</div><div class="stat-l">Soal Dilengkapi Pembahasan</div></div>
+        <div class="stat"><div class="stat-n am">6</div><div class="stat-l">Lencana Prestasi</div></div>
+        <div class="stat" style="border-right:none"><div class="stat-n">Real-time</div><div class="stat-l">Sinkronisasi Database</div></div>
       </div>
+    </div>
+  </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        
-        <!-- Card 1: Garis Bilangan -->
-        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-blue-500/50 transition-all group">
-          <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-arrows-left-right"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3">Garis Bilangan Visual</h3>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Siswa dapat melihat langsung posisi bilangan positif, nol, dan negatif serta memahami arah pergeseran saat melakukan penjumlahan dan pengurangan.
-          </p>
-        </div>
-
-        <!-- Card 2: Latihan Bertahap 4 Level -->
-        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all group">
-          <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-layer-group"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3">Latihan Bertahap 4 Level</h3>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Alur latihan disusun teratur: Level 1 (Konsep), Level 2 (Tambah & Kurang), Level 3 (Kali & Bagi), hingga Level 4 (Tantangan Campuran KABATAKU).
-          </p>
-        </div>
-
-        <!-- Card 3: Pembahasan Tuntas -->
-        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-purple-500/50 transition-all group">
-          <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-list-check"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3">Pembahasan Langkah Demi Langkah</h3>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Tidak ada lagi kebingungan saat salah menjawab. Sistem langsung memberikan kunci jawaban dan uraian pengerjaan yang runut untuk setiap butir soal.
-          </p>
-        </div>
-
-        <!-- Card 4: Kuis Evaluasi Terarah -->
-        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-pink-500/50 transition-all group">
-          <div class="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-stopwatch"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3">Kuis Akhir Evaluasi Kompetensi</h3>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Evaluasi akhir komprehensif berstandar capaian pembelajaran untuk menguji kesiapan dan penguasaan materi siswa secara menyeluruh.
-          </p>
-        </div>
-
-        <!-- Card 5: Lencana Digital -->
-        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-amber-500/50 transition-all group">
-          <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-trophy"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3">Lencana Prestasi Kehormatan</h3>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Siswa termotivasi untuk terus belajar melalui koleksi lencana prestasi digital yang terbuka otomatis saat meraih skor tertentu dan menyelesaikan tahapan.
-          </p>
-        </div>
-
-        <!-- Card 6: CMS Terintegrasi Guru -->
-        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
-          <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-chalkboard-user"></i>
-          </div>
-          <h3 class="text-xl font-bold text-white mb-3">CMS Materi Dinamis & Rekap Guru</h3>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Guru dapat menambah atau menyesuaikan uraian materi kapan saja via dashboard CMS, serta memantau perkembangan nilai seluruh siswa secara real-time.
-          </p>
-        </div>
-
+  <!-- FITUR -->
+  <section id="fitur" class="sec">
+    <div class="wrap">
+      <div class="sec-hdr">
+        <span class="eyebrow">Fitur Platform</span>
+        <h2>Dirancang untuk Membangun<br>Pemahaman Konseptual</h2>
+        <p>Bukan sekadar hafalan &mdash; setiap fitur dirancang membentuk pemahaman mendalam langkah demi langkah.</p>
       </div>
-
+      <div class="feat-g">
+        <div class="feat-c">
+          <div class="feat-ic"><i class="fa-solid fa-minus" style="transform:scaleX(1.5)"></i></div>
+          <h3>Garis Bilangan Visual</h3>
+          <p>Lihat posisi bilangan positif, nol, dan negatif secara nyata. Memahami arah pergeseran saat operasi hitung tanpa hafalan membingungkan.</p>
+        </div>
+        <div class="feat-c">
+          <div class="feat-ic"><i class="fa-solid fa-bars-staggered"></i></div>
+          <h3>Latihan Bertahap 4 Level</h3>
+          <p>Level 1 konsep &rarr; Level 2 tambah/kurang &rarr; Level 3 kali/bagi &rarr; Level 4 tantangan operasi campuran KABATAKU.</p>
+        </div>
+        <div class="feat-c">
+          <div class="feat-ic"><i class="fa-solid fa-magnifying-glass"></i></div>
+          <h3>Pembahasan Langkah demi Langkah</h3>
+          <p>Tidak ada kebingungan saat salah menjawab. Sistem langsung menampilkan uraian pengerjaan yang runut untuk setiap soal.</p>
+        </div>
+        <div class="feat-c">
+          <div class="feat-ic"><i class="fa-solid fa-file-pen"></i></div>
+          <h3>Kuis Evaluasi Akhir</h3>
+          <p>Ujian komprehensif berstandar Kurikulum Merdeka untuk menguji penguasaan dan kesiapan siswa secara menyeluruh.</p>
+        </div>
+        <div class="feat-c">
+          <div class="feat-ic am"><i class="fa-solid fa-medal"></i></div>
+          <h3>Lencana Prestasi</h3>
+          <p>6 lencana digital terbuka otomatis saat siswa meraih skor target dan menyelesaikan tahapan &mdash; motivasi belajar tetap terjaga.</p>
+        </div>
+        <div class="feat-c">
+          <div class="feat-ic"><i class="fa-solid fa-chalkboard"></i></div>
+          <h3>CMS Materi &amp; Rekap Guru</h3>
+          <p>Guru bebas menambah atau memperbarui submateri kapan saja dan memantau nilai seluruh siswa secara real-time dari dashboard.</p>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ==========================================================
-       SECTION: ALUR BELAJAR TERARAH (5 TAHAP UTAMA)
-       ========================================================== -->
-  <section id="alur" class="py-24 bg-slate-900 border-t border-slate-800 relative">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-20">
-        <span class="text-xs font-extrabold uppercase tracking-widest text-blue-400 block mb-3">Roadmap Pembelajaran</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
-          Alur Belajar Terarah Tanpa Lompat-Lompat
-        </h2>
-        <p class="text-slate-400 mt-4 text-base sm:text-lg">
-          Setiap siswa dibimbing melewati 5 tahapan terstruktur untuk memastikan pemahaman terbentuk sempurna.
-        </p>
+  <!-- ALUR BELAJAR -->
+  <section id="alur" class="sec surf">
+    <div class="wrap">
+      <div class="sec-hdr">
+        <span class="eyebrow">Roadmap Pembelajaran</span>
+        <h2>Alur Belajar Terarah,<br>Tanpa Lompat-Lompat</h2>
+        <p>5 tahapan terstruktur agar setiap siswa membangun pemahaman sistematis dari awal hingga tuntas.</p>
       </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
-        
-        <!-- Step 1 -->
-        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
-              1
-            </div>
-            <h4 class="font-bold text-white text-base mb-2">Tes Awal</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Tes diagnostik untuk memetakan pemahaman awal siswa sebelum mempelajari submateri.
-            </p>
-          </div>
-          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-blue-400 flex items-center justify-between">
-            <span>Tahap Awal</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
+      <div class="flow-g">
+        <div class="flow-s">
+          <div class="flow-n">1</div>
+          <h4>Tes Awal</h4>
+          <p>Diagnostik untuk memetakan pemahaman awal sebelum mulai mempelajari submateri.</p>
+          <div class="flow-tag">Tahap Awal &rarr;</div>
         </div>
-
-        <!-- Step 2 -->
-        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
-              2
-            </div>
-            <h4 class="font-bold text-white text-base mb-2">Materi Dinamis</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Mempelajari submateri konsep dasar, sifat operasi, dan aturan KABATAKU yang disusun guru.
-            </p>
-          </div>
-          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-indigo-400 flex items-center justify-between">
-            <span>Pemahaman Konsep</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
+        <div class="flow-s">
+          <div class="flow-n">2</div>
+          <h4>Materi Dinamis</h4>
+          <p>Pelajari konsep dasar dan aturan KABATAKU dari konten yang disusun guru.</p>
+          <div class="flow-tag">Pemahaman &rarr;</div>
         </div>
-
-        <!-- Step 3 -->
-        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
-              3
-            </div>
-            <h4 class="font-bold text-white text-base mb-2">Latihan 4 Tahap</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Mengasah kemampuan secara bertahap dari operasi dasar hingga tantangan operasi campuran.
-            </p>
-          </div>
-          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-purple-400 flex items-center justify-between">
-            <span>Uji Mandiri</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
+        <div class="flow-s">
+          <div class="flow-n">3</div>
+          <h4>Latihan 4 Level</h4>
+          <p>Asah kemampuan bertahap dari operasi dasar hingga tantangan campuran.</p>
+          <div class="flow-tag">Uji Mandiri &rarr;</div>
         </div>
-
-        <!-- Step 4 -->
-        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-pink-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
-              4
-            </div>
-            <h4 class="font-bold text-white text-base mb-2">Kuis Akhir</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Ujian komprehensif untuk menguji kelulusan penguasaan materi operasi campuran.
-            </p>
-          </div>
-          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-pink-400 flex items-center justify-between">
-            <span>Evaluasi Kompetensi</span>
-            <i class="fa-solid fa-arrow-right"></i>
-          </div>
+        <div class="flow-s">
+          <div class="flow-n">4</div>
+          <h4>Kuis Evaluasi</h4>
+          <p>Ujian komprehensif untuk menguji penguasaan keseluruhan materi bilangan bulat.</p>
+          <div class="flow-tag">Evaluasi &rarr;</div>
         </div>
-
-        <!-- Step 5 -->
-        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
-          <div>
-            <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-900 font-black flex items-center justify-center text-sm mb-4 shadow-md">
-              5
-            </div>
-            <h4 class="font-bold text-white text-base mb-2">Hasil & Lencana</h4>
-            <p class="text-xs text-slate-400 leading-relaxed">
-              Melihat transkrip capaian nilai serta membuka koleksi lencana prestasi belajar.
-            </p>
-          </div>
-          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-amber-400 flex items-center justify-between">
-            <span>Pencapaian Akhir</span>
-            <i class="fa-solid fa-award"></i>
-          </div>
+        <div class="flow-s">
+          <div class="flow-n am">5</div>
+          <h4>Hasil &amp; Lencana</h4>
+          <p>Lihat transkrip nilai dan buka koleksi lencana sebagai bukti prestasi belajar.</p>
+          <div class="flow-tag am">Pencapaian &#9733;</div>
         </div>
-
       </div>
-
     </div>
   </section>
 
-  <!-- ==========================================================
-       SECTION: SIMULATOR INTERAKTIF KABATAKU
-       ========================================================== -->
-  <section id="simulator" class="py-24 bg-slate-950 border-t border-slate-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center mb-12">
-        <span class="text-xs font-extrabold uppercase tracking-widest text-amber-400 block mb-2">Demo Interaktif Langsung</span>
-        <h2 class="text-3xl font-black text-white">Coba Aturan Hierarki KABATAKU</h2>
-        <p class="text-slate-400 text-sm mt-2">Pilih salah satu contoh operasi hitung di bawah ini untuk melihat urutan pengerjaannya:</p>
+  <!-- SIMULATOR -->
+  <section id="simulator" class="sec">
+    <div class="wrap" style="max-width:820px">
+      <div class="sec-hdr">
+        <span class="eyebrow am">Demo Interaktif</span>
+        <h2>Coba Simulator KABATAKU</h2>
+        <p>Pilih contoh soal untuk melihat urutan pengerjaan berdasarkan hierarki operasi hitung.</p>
       </div>
-
-      <!-- Simulator Box -->
-      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
-        <!-- Preset Buttons -->
-        <div class="flex flex-wrap gap-2.5 justify-center mb-6">
-          <button onclick="pilihDemo(1)" class="demo-btn px-4 py-2 bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/40 rounded-xl text-xs font-bold transition-all" data-id="1">
-            Contoh 1: 15 + (-3) &times; 4
-          </button>
-          <button onclick="pilihDemo(2)" class="demo-btn px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-xl text-xs font-bold transition-all" data-id="2">
-            Contoh 2: (18 - 6) : (-3) + 7
-          </button>
-          <button onclick="pilihDemo(3)" class="demo-btn px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-xl text-xs font-bold transition-all" data-id="3">
-            Contoh 3: (-24) : 4 &times; (-2) - 5
-          </button>
+      <div class="sim-box">
+        <div class="sim-tabs">
+          <button class="sim-tab active" onclick="pilihDemo(1)" data-id="1">15 + (&minus;3) &times; 4</button>
+          <button class="sim-tab" onclick="pilihDemo(2)" data-id="2">(18 &minus; 6) : (&minus;3) + 7</button>
+          <button class="sim-tab" onclick="pilihDemo(3)" data-id="3">(&minus;24) : 4 &times; (&minus;2) &minus; 5</button>
         </div>
-
-        <!-- Dynamic Output Container -->
-        <div id="demo-result" class="bg-slate-950/90 rounded-2xl p-6 border border-slate-800">
-          <!-- Diisi via JS -->
+        <div class="sim-body">
+          <div id="sim-eq"></div>
+          <div class="sim-steps" id="sim-steps"></div>
+          <div class="sim-res" id="sim-res"></div>
         </div>
       </div>
-
     </div>
   </section>
 
-  <!-- ==========================================================
-       SECTION: NILAI LEBIH UNTUK SISWA & GURU
-       ========================================================== -->
-  <section id="guru-siswa" class="py-24 bg-slate-900 border-t border-slate-800">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center max-w-3xl mx-auto mb-16">
-        <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-400 block mb-3">Kolaborasi Edukatif</span>
-        <h2 class="text-3xl sm:text-4xl font-black text-white">
-          Manfaat Nyata bagi Siswa dan Guru
-        </h2>
+  <!-- SISWA & GURU -->
+  <section id="guru-siswa" class="sec surf">
+    <div class="wrap">
+      <div class="sec-hdr">
+        <span class="eyebrow">Kolaborasi Edukatif</span>
+        <h2>Manfaat Nyata untuk<br>Siswa &amp; Guru</h2>
       </div>
-
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-        
-        <!-- Untuk Siswa -->
-        <div class="bg-gradient-to-b from-slate-850 to-slate-900 p-8 sm:p-10 rounded-3xl border border-slate-800 shadow-xl">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold mb-6 border border-blue-500/20">
-            <i class="fa-solid fa-graduation-cap"></i> Untuk Siswa
-          </div>
-          <h3 class="text-2xl font-black text-white mb-4">Belajar Mandiri Tanpa Rasa Cemas</h3>
-          <ul class="space-y-4 text-slate-300 text-sm">
-            <li class="flex items-start gap-3">
-              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
-              <span><strong>Konsep Visual Garis Bilangan:</strong> Membantu memahami operasi bilangan negatif secara nyata tanpa hafalan membingungkan.</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
-              <span><strong>Umpan Balik Instan:</strong> Mengetahui letak kesalahan seketika dengan pembahasan rumus KABATAKU yang mudah dipahami.</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
-              <span><strong>Lencana Motivasi:</strong> Kumpulkan 6 lencana prestasi untuk membuktikan kemampuan matematika kepada guru dan teman.</span>
-            </li>
+      <div class="two-c">
+        <div class="info-c">
+          <div class="info-tag tag-bl"><i class="fa-solid fa-user-graduate"></i> Untuk Siswa</div>
+          <h3>Belajar Mandiri Tanpa Rasa Cemas</h3>
+          <ul class="chklist">
+            <li><i class="fa-solid fa-check"></i><span><strong>Konsep Visual:</strong> Garis bilangan interaktif membantu memahami bilangan negatif tanpa hafalan membingungkan.</span></li>
+            <li><i class="fa-solid fa-check"></i><span><strong>Umpan Balik Instan:</strong> Tahu letak kesalahan seketika dengan pembahasan KABATAKU yang runut.</span></li>
+            <li><i class="fa-solid fa-check"></i><span><strong>Motivasi Lencana:</strong> Kumpulkan 6 lencana prestasi yang terbuka otomatis saat mencapai target skor.</span></li>
           </ul>
         </div>
-
-        <!-- Untuk Guru -->
-        <div class="bg-gradient-to-b from-slate-850 to-slate-900 p-8 sm:p-10 rounded-3xl border border-slate-800 shadow-xl">
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-bold mb-6 border border-purple-500/20">
-            <i class="fa-solid fa-chalkboard-user"></i> Untuk Guru & Sekolah
-          </div>
-          <h3 class="text-2xl font-black text-white mb-4">Kemudahan Mengelola & Memantau Kelas</h3>
-          <ul class="space-y-4 text-slate-300 text-sm">
-            <li class="flex items-start gap-3">
-              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
-              <span><strong>Kelola Materi (CMS):</strong> Guru bebas menambah, menyunting, atau menyempurnakan submateri sesuai kebutuhan silabus sekolah.</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
-              <span><strong>Rekapitulasi Nilai Otomatis:</strong> Nilai tes awal, latihan tiap tahap, dan kuis akhir terdata otomatis tanpa koreksi manual.</span>
-            </li>
-            <li class="flex items-start gap-3">
-              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
-              <span><strong>Ekspor Laporan CSV:</strong> Data transkrip nilai siswa siap diunduh sekali klik untuk pengisian buku rapor atau arsip guru.</span>
-            </li>
+        <div class="info-c">
+          <div class="info-tag tag-am"><i class="fa-solid fa-chalkboard-user"></i> Untuk Guru &amp; Sekolah</div>
+          <h3>Kemudahan Mengelola &amp; Memantau Kelas</h3>
+          <ul class="chklist">
+            <li><i class="fa-solid fa-check"></i><span><strong>CMS Materi:</strong> Tambah, sunting, atau perbarui konten submateri kapan saja sesuai silabus.</span></li>
+            <li><i class="fa-solid fa-check"></i><span><strong>Rekap Nilai Otomatis:</strong> Nilai tes awal, latihan, dan kuis terdata otomatis tanpa koreksi manual.</span></li>
+            <li><i class="fa-solid fa-check"></i><span><strong>Ekspor CSV:</strong> Unduh transkrip nilai seluruh siswa sekali klik untuk rapor dan arsip.</span></li>
           </ul>
         </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==========================================================
-       SECTION: FAQ (Pertanyaan yang Sering Diajukan)
-       ========================================================== -->
-  <section id="faq" class="py-24 bg-slate-950 border-t border-slate-800">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-      
-      <div class="text-center mb-16">
-        <span class="text-xs font-extrabold uppercase tracking-widest text-blue-400 block mb-2">Bantuan & Informasi</span>
-        <h2 class="text-3xl font-black text-white">Pertanyaan yang Sering Diajukan</h2>
-      </div>
-
-      <div class="space-y-4">
-        
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-          <h4 class="font-bold text-white text-base mb-2">Apakah media pembelajaran BilBul ini gratis digunakan?</h4>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Ya! Platform ini dirancang sebagai media pembelajaran terbuka untuk siswa dan guru SMP Kelas VII dalam mendukung implementasi Kurikulum Merdeka.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-          <h4 class="font-bold text-white text-base mb-2">Bagaimana cara siswa masuk dan menyimpan nilai belajar?</h4>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Siswa cukup membuka halaman Masuk, memilih tab Siswa, dan memasukkan Nama Siswa serta Kelas. Seluruh progres materi, nilai latihan, kuis, dan lencana akan tersimpan otomatis ke database.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-          <h4 class="font-bold text-white text-base mb-2">Apakah Guru dapat mengubah atau menambah materi pembelajaran?</h4>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Tentu! Guru dapat masuk melalui portal Akun Guru dan mengakses menu CMS Materi untuk menambah bab baru, mengedit ringkasan, maupun memperbarui isi konten penjelasan materi.
-          </p>
-        </div>
-
-        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
-          <h4 class="font-bold text-white text-base mb-2">Apakah website ini dapat diakses dari smartphone (HP) atau tablet?</h4>
-          <p class="text-slate-400 text-sm leading-relaxed">
-            Sangat responsif! Seluruh antarmuka dirancang optimal untuk layar smartphone, tablet, maupun komputer desktop sehingga siswa dapat belajar dengan nyaman di mana saja.
-          </p>
-        </div>
-
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ==========================================================
-       SECTION: FINAL CTA PROMOTIONAL BANNER
-       ========================================================== -->
-  <section class="py-20 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white text-center relative overflow-hidden">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-      <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mx-auto mb-6 shadow-inner">
-        <i class="fa-solid fa-graduation-cap text-amber-300"></i>
-      </div>
-      <h2 class="text-3xl sm:text-5xl font-black mb-4 tracking-tight">
-        Siap Tingkatkan Nilai Matematika Bilangan Bulat?
-      </h2>
-      <p class="text-blue-100 text-base sm:text-lg mb-10 max-w-2xl mx-auto font-normal">
-        Bergabunglah sekarang di ruang belajar BilBul dan nikmati kemudahan belajar operasi hitung campuran dengan alur terarah dan menyenangkan.
-      </p>
-      <div>
-        <a id="bottom-cta-btn" href="login.html" class="inline-flex items-center px-10 py-4 bg-white text-blue-700 font-extrabold text-base rounded-2xl shadow-xl hover:bg-slate-50 hover:shadow-2xl hover:scale-105 transition-all">
-          <span>Masuk ke Ruang Belajar</span>
-          <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>
-        </a>
       </div>
     </div>
   </section>
 
-  <!-- ==========================================================
-       FOOTER
-       ========================================================== -->
-  <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
-      <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">
-          <i class="fa-solid fa-calculator text-xs"></i>
+  <!-- FAQ -->
+  <section id="faq" class="sec">
+    <div class="wrap">
+      <div class="sec-hdr">
+        <span class="eyebrow">Bantuan</span>
+        <h2>Pertanyaan yang Sering Diajukan</h2>
+      </div>
+      <div class="faq-l">
+        <div class="faq-i open">
+          <button class="faq-q" onclick="toggleFaq(this)">Apakah media pembelajaran BilBul ini gratis?<i class="fa-solid fa-chevron-down"></i></button>
+          <div class="faq-a">Ya, platform ini dirancang sebagai media pembelajaran terbuka untuk siswa dan guru SMP Kelas VII dalam mendukung Kurikulum Merdeka. Tidak ada biaya dan tidak ada iklan.</div>
         </div>
+        <div class="faq-i">
+          <button class="faq-q" onclick="toggleFaq(this)">Bagaimana cara siswa masuk dan menyimpan nilai?<i class="fa-solid fa-chevron-down"></i></button>
+          <div class="faq-a">Siswa cukup membuka halaman Masuk, pilih tab Siswa, lalu masukkan nama dan kelas. Seluruh progres, nilai latihan, kuis, dan lencana tersimpan otomatis ke database cloud.</div>
+        </div>
+        <div class="faq-i">
+          <button class="faq-q" onclick="toggleFaq(this)">Apakah guru dapat mengubah atau menambah materi?<i class="fa-solid fa-chevron-down"></i></button>
+          <div class="faq-a">Tentu! Guru masuk melalui portal Akun Guru dan mengakses CMS Materi untuk menambah bab baru, mengedit, atau memperbarui konten sesuai kebutuhan.</div>
+        </div>
+        <div class="faq-i">
+          <button class="faq-q" onclick="toggleFaq(this)">Apakah bisa diakses dari smartphone atau tablet?<i class="fa-solid fa-chevron-down"></i></button>
+          <div class="faq-a">Sangat responsif! Seluruh antarmuka dioptimalkan untuk smartphone, tablet, dan komputer desktop sehingga siswa dapat belajar dari perangkat apa pun.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA BANNER -->
+  <section class="cta">
+    <h2>Siap Tingkatkan Nilai Matematika?</h2>
+    <p>Bergabunglah di BilBul dan nikmati kemudahan belajar operasi hitung campuran dengan alur terstruktur dan pembahasan tuntas.</p>
+    <a id="bottom-cta-btn" href="login.html" class="btn btn-white" style="padding:1rem 2.25rem;font-size:1rem;">
+      <span>Masuk ke Ruang Belajar</span><i class="fa-solid fa-arrow-right" style="font-size:.83rem;"></i>
+    </a>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="foot">
+    <div class="wrap foot-in">
+      <div class="brand">
+        <div class="brand-ic" style="width:36px;height:36px;font-size:.88rem;"><i class="fa-solid fa-square-root-variable"></i></div>
         <div>
-          <span class="font-bold text-white text-sm">BilBul Interaktif</span>
-          <p class="text-[11px] text-slate-500">Operasi Campuran Bilangan Bulat &bull; Kelas VII SMP</p>
+          <span class="brand-name" style="font-size:.97rem;">BilBul Interaktif</span>
+          <span class="brand-sub">Operasi Campuran &bull; Kelas VII SMP</span>
         </div>
       </div>
-
-      <div class="flex items-center gap-6 text-slate-400 font-semibold">
-        <a href="#keunggulan" class="hover:text-white transition-colors">Keunggulan</a>
-        <a href="#alur" class="hover:text-white transition-colors">Alur Belajar</a>
-        <a href="#simulator" class="hover:text-white transition-colors">Simulator KABATAKU</a>
-        <a href="login.html" class="hover:text-white transition-colors">Portal Masuk</a>
-      </div>
-
-      <p class="text-slate-500 text-center sm:text-right">
-        &copy; 2024 BilBul. Media Pembelajaran Matematika SMP Kelas VII.
-      </p>
+      <ul class="foot-links">
+        <li><a href="#fitur">Fitur</a></li>
+        <li><a href="#alur">Alur Belajar</a></li>
+        <li><a href="#simulator">Simulator</a></li>
+        <li><a href="login.html">Masuk</a></li>
+      </ul>
+      <p class="foot-copy">&copy; 2024 BilBul. Media Pembelajaran Matematika SMP.</p>
     </div>
   </footer>
 
-  <!-- ==========================================================
-       CLIENT SCRIPT (Simulator & Auth State Detection)
-       ========================================================== -->
   <script>
-    // Data Preset Demo KABATAKU
-    const DEMO_DATA = {
-      1: {
-        soal: "15 + (-3) &times; 4",
-        langkah1: "Dahulukan operasi <strong>Perkalian</strong>: <code class='text-amber-400 font-mono'>(-3) &times; 4 = -12</code>",
-        langkah2: "Lanjutkan operasi <strong>Penjumlahan</strong>: <code class='text-blue-400 font-mono'>15 + (-12)</code>",
-        hasil: "3",
-        penjelasan: "Perkalian memiliki hierarki prioritas lebih tinggi daripada penjumlahan, sehingga (-3) &times; 4 harus diselesaikan terlebih dahulu."
+    const DEMO = {
+      1:{
+        eq:'15 + (\u22123) \u00d7 4',
+        steps:[
+          {n:1,t:'Dahulukan <strong>Perkalian</strong>: <code>(\u22123) \u00d7 4 = \u221212</code>'},
+          {n:2,t:'Selesaikan <strong>Penjumlahan</strong>: <code>15 + (\u221212) = 3</code>'}
+        ],
+        res:'Hasil akhir: <strong>3</strong>. Perkalian dikerjakan dahulu karena KABATAKU mendahulukan Kali/Bagi sebelum Tambah/Kurang.'
       },
-      2: {
-        soal: "(18 - 6) : (-3) + 7",
-        langkah1: "Dahulukan operasi di dalam <strong>Tanda Kurung</strong>: <code class='text-amber-400 font-mono'>18 - 6 = 12</code>",
-        langkah2: "Lanjutkan operasi <strong>Pembagian</strong>: <code class='text-blue-400 font-mono'>12 : (-3) = -4</code>, lalu tambah 7: <code class='text-emerald-400 font-mono'>-4 + 7</code>",
-        hasil: "3",
-        penjelasan: "Operasi di dalam kurung selalu dikerjakan pertama kali, disusul pembagian, dan terakhir penjumlahan."
+      2:{
+        eq:'(18 \u2212 6) : (\u22123) + 7',
+        steps:[
+          {n:1,t:'Dahulukan operasi dalam <strong>Kurung</strong>: <code>18 \u2212 6 = 12</code>'},
+          {n:2,t:'Lanjutkan <strong>Pembagian</strong>: <code>12 : (\u22123) = \u22124</code>, kemudian <strong>Penjumlahan</strong>: <code>\u22124 + 7 = 3</code>'}
+        ],
+        res:'Hasil akhir: <strong>3</strong>. Kurung dikerjakan pertama, diikuti pembagian, lalu penjumlahan.'
       },
-      3: {
-        soal: "(-24) : 4 &times; (-2) - 5",
-        langkah1: "Operasi Pembagian dan Perkalian setara, kerjakan dari <strong>Kiri ke Kanan</strong>: <code class='text-amber-400 font-mono'>(-24) : 4 = -6</code>",
-        langkah2: "Lanjutkan perkalian: <code class='text-blue-400 font-mono'>(-6) &times; (-2) = 12</code>, lalu kurangkan: <code class='text-emerald-400 font-mono'>12 - 5</code>",
-        hasil: "7",
-        penjelasan: "Tanda bagi dan kali memiliki derajat prioritas sama kuat, maka aturan KABATAKU mewajibkan pengerjaan berurutan dari sisi paling kiri."
+      3:{
+        eq:'(\u221224) : 4 \u00d7 (\u22122) \u2212 5',
+        steps:[
+          {n:1,t:'Bagi dan Kali <strong>setara</strong>, kerjakan dari kiri: <code>(\u221224) : 4 = \u22126</code>'},
+          {n:2,t:'Lanjutkan perkalian: <code>(\u22126) \u00d7 (\u22122) = 12</code>, lalu <strong>Pengurangan</strong>: <code>12 \u2212 5 = 7</code>'}
+        ],
+        res:'Hasil akhir: <strong>7</strong>. Bagi dan Kali berderajat sama sehingga dikerjakan dari kiri ke kanan.'
       }
     };
-
-    function pilihDemo(id) {
-      const item = DEMO_DATA[id];
-      if (!item) return;
-
-      // Update button styling
-      document.querySelectorAll('.demo-btn').forEach(btn => {
-        if (btn.getAttribute('data-id') == id) {
-          btn.className = "demo-btn px-4 py-2 bg-blue-600 text-white border border-blue-500 rounded-xl text-xs font-bold transition-all shadow-md";
-        } else {
-          btn.className = "demo-btn px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-xl text-xs font-bold transition-all";
-        }
-      });
-
-      const container = document.getElementById('demo-result');
-      if (container) {
-        container.innerHTML = `
-          <div class="space-y-4">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
-              <div>
-                <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Persamaan Matematika</span>
-                <div class="text-xl sm:text-2xl font-black font-mono text-amber-300 mt-0.5">${item.soal}</div>
-              </div>
-              <div class="text-right sm:text-right">
-                <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Hasil Akhir</span>
-                <div class="text-2xl sm:text-3xl font-black font-mono text-emerald-400 mt-0.5">= ${item.hasil}</div>
-              </div>
-            </div>
-
-            <div class="space-y-2.5 pt-2">
-              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800/80 flex items-start gap-3">
-                <div class="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</div>
-                <div class="text-xs sm:text-sm text-slate-300 leading-relaxed">${item.langkah1}</div>
-              </div>
-              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800/80 flex items-start gap-3">
-                <div class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</div>
-                <div class="text-xs sm:text-sm text-slate-300 leading-relaxed">${item.langkah2}</div>
-              </div>
-            </div>
-
-            <div class="p-3.5 rounded-xl bg-blue-950/40 border border-blue-800/40 text-xs text-blue-200 leading-relaxed flex items-center gap-2.5">
-              <i class="fa-solid fa-circle-info text-blue-400"></i>
-              <span>${item.penjelasan}</span>
-            </div>
-          </div>
-        `;
-      }
+    function pilihDemo(id){
+      const d=DEMO[id];if(!d)return;
+      document.querySelectorAll('.sim-tab').forEach(t=>t.classList.toggle('active',t.getAttribute('data-id')==id));
+      document.getElementById('sim-eq').textContent=d.eq;
+      document.getElementById('sim-steps').innerHTML=d.steps.map(s=>`<div class="sim-row"><div class="sim-num">${s.n}</div><div class="sim-txt">${s.t}</div></div>`).join('');
+      document.getElementById('sim-res').innerHTML=`<i class="fa-solid fa-circle-check"></i><span>${d.res}</span>`;
     }
-
-    // Inisialisasi awal demo
     pilihDemo(1);
-
-    // Cek jika pengguna sudah login sebelumnya
-    document.addEventListener('DOMContentLoaded', () => {
-      try {
-        const student = localStorage.getItem('math_student');
-        const user = localStorage.getItem('math_current_user');
-        if (student || user) {
-          const targetUrl = 'dashboard.html';
-          const navBtn = document.getElementById('nav-login-btn');
-          const heroBtn = document.getElementById('hero-main-btn');
-          const bottomBtn = document.getElementById('bottom-cta-btn');
-
-          if (navBtn) {
-            navBtn.href = targetUrl;
-            navBtn.innerHTML = `<i class="fa-solid fa-house mr-2 text-xs"></i> <span>Buka Dashboard</span>`;
-          }
-          if (heroBtn) {
-            heroBtn.href = targetUrl;
-            heroBtn.innerHTML = `<i class="fa-solid fa-play mr-2.5 text-amber-400"></i> <span>Lanjutkan Belajar</span>`;
-          }
-          if (bottomBtn) {
-            bottomBtn.href = targetUrl;
-            bottomBtn.innerHTML = `<span>Buka Ruang Belajar</span> <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>`;
-          }
+    function toggleFaq(btn){
+      const item=btn.closest('.faq-i'),isOpen=item.classList.contains('open');
+      document.querySelectorAll('.faq-i').forEach(i=>i.classList.remove('open'));
+      if(!isOpen)item.classList.add('open');
+    }
+    document.addEventListener('DOMContentLoaded',()=>{
+      try{
+        const s=localStorage.getItem('math_student'),u=localStorage.getItem('math_current_user');
+        if(s||u){
+          const url='dashboard.html';
+          const nb=document.getElementById('nav-login-btn');
+          if(nb){nb.href=url;nb.innerHTML="<i class='fa-solid fa-house'></i><span>Dashboard</span>";}
+          const hb=document.getElementById('hero-main-btn');
+          if(hb){hb.href=url;hb.innerHTML="<i class='fa-solid fa-play' style='font-size:.75rem;'></i>Lanjutkan Belajar";}
+          const bb=document.getElementById('bottom-cta-btn');
+          if(bb){bb.href=url;bb.innerHTML="<span>Buka Ruang Belajar</span><i class='fa-solid fa-arrow-right' style='font-size:.83rem;'></i>";}
         }
-      } catch (_) {}
+      }catch(_){}
     });
   </script>
 </body>
