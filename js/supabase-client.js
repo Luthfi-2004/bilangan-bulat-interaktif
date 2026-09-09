@@ -892,11 +892,11 @@ export async function getAllStudentsProgress() {
       const latihanCampuran = studentTests.find(t => t.jenis === 'latihan_campuran')?.skor ?? '-';
       const kuis = studentTests.find(t => t.jenis === 'kuis')?.skor ?? '-';
 
-      // Hitung rata-rata penguasaan materi
+      // Hitung penguasaan materi dari total 9 submateri kurikulum
       let avgProgress = 0;
       if (studentProgress.length > 0) {
-        const total = studentProgress.reduce((acc, curr) => acc + (curr.persentase_penguasaan || 0), 0);
-        avgProgress = Math.round(total / studentProgress.length);
+        const completedCount = studentProgress.filter(p => (p.persentase_penguasaan || 0) > 0).length;
+        avgProgress = Math.min(100, Math.round((completedCount / 9) * 100));
       }
 
       return {
@@ -943,123 +943,255 @@ export function subscribeToRealtimeProgress(onUpdateCallback) {
 
 export async function saveTestResult(studentId, jenis, skor) {
   const student = await getCurrentUser();
+  const validStudentId = studentId || student?.id;
   const studentName = student?.name || 'Siswa';
+
+  if (!validStudentId) {
+    console.warn("saveTestResult: Tidak ada ID siswa yang valid.");
+    return false;
+  }
+
+  // Simpan juga ke cache lokal sebagai cadangan instan
+  try {
+    const localKey = `math_results_${validStudentId}`;
+    const cached = JSON.parse(localStorage.getItem(localKey) || '[]');
+    cached.unshift({ student_id: validStudentId, student_name: studentName, jenis, skor, created_at: new Date().toISOString() });
+    localStorage.setItem(localKey, JSON.stringify(cached.slice(0, 50)));
+  } catch (_) {}
 
   if (!supabase) return { success: true, localOnly: true };
 
-  const { data, error } = await supabase
+  // 1. Coba insert dengan student_name
+  let { error } = await supabase
     .from('test_results')
     .insert([{ 
-      student_id: studentId, 
+      student_id: validStudentId, 
+      student_name: studentName,
       jenis, 
       skor 
     }]);
 
+  // 2. Jika kolom student_name belum ada di tabel Supabase (Error 42703), retry tanpa student_name
+  if (error && (error.code === '42703' || error.message?.includes('student_name'))) {
+    const retry = await supabase
+      .from('test_results')
+      .insert([{ 
+        student_id: validStudentId, 
+        jenis, 
+        skor 
+      }]);
+    error = retry.error;
+  }
+
   if (error) {
-    console.error("Gagal simpan test result:", error);
+    console.error("Gagal simpan test result ke Supabase:", error);
     return false;
   }
   return true;
 }
 
 export async function getTestResults(studentId) {
-  if (!supabase) return [];
+  const student = await getCurrentUser();
+  const validStudentId = studentId || student?.id;
+  if (!validStudentId) return [];
 
-  const { data, error } = await supabase
-    .from('test_results')
-    .select('*')
-    .eq('student_id', studentId)
-    .order('created_at', { ascending: false });
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('test_results')
+      .select('*')
+      .eq('student_id', validStudentId)
+      .order('created_at', { ascending: false });
 
-  if (error) {
-    console.error("Gagal ambil test results:", error);
+    if (!error && data) {
+      return data;
+    }
+    console.warn("Gagal ambil test results dari Supabase, mencoba cache lokal:", error);
+  }
+
+  // Fallback ke cache lokal jika database offline atau gagal
+  try {
+    const localKey = `math_results_${validStudentId}`;
+    const cached = localStorage.getItem(localKey);
+    return cached ? JSON.parse(cached) : [];
+  } catch (_) {
     return [];
   }
-  return data;
 }
 
 export async function saveStudentProgress(studentId, materi, persentase) {
   const student = await getCurrentUser();
+  const validStudentId = studentId || student?.id;
   const studentName = student?.name || 'Siswa';
+
+  if (!validStudentId) return { success: false };
+
+  // Cache lokal
+  try {
+    const localKey = `math_progress_${validStudentId}`;
+    const cached = JSON.parse(localStorage.getItem(localKey) || '{}');
+    if (!cached[materi] || persentase > cached[materi]) {
+      cached[materi] = persentase;
+      localStorage.setItem(localKey, JSON.stringify(cached));
+    }
+  } catch (_) {}
 
   if (!supabase) return { success: true };
   
   const { data: existing } = await supabase
     .from('student_progress')
     .select('*')
-    .eq('student_id', studentId)
+    .eq('student_id', validStudentId)
     .eq('materi', materi)
     .maybeSingle();
     
   if (existing) {
     if (persentase > existing.persentase_penguasaan) {
-      const { error } = await supabase
+      let { error } = await supabase
         .from('student_progress')
-        .update({ persentase_penguasaan: persentase, updated_at: new Date().toISOString() })
+        .update({ 
+          persentase_penguasaan: persentase, 
+          student_name: studentName,
+          updated_at: new Date().toISOString() 
+        })
         .eq('id', existing.id);
+
+      if (error && (error.code === '42703' || error.message?.includes('student_name'))) {
+        const retry = await supabase
+          .from('student_progress')
+          .update({ 
+            persentase_penguasaan: persentase, 
+            updated_at: new Date().toISOString() 
+          })
+          .eq('id', existing.id);
+        error = retry.error;
+      }
+
       return !error;
     }
     return true;
   } else {
-    const { error } = await supabase
+    let { error } = await supabase
       .from('student_progress')
       .insert([{ 
-        student_id: studentId, 
+        student_id: validStudentId, 
+        student_name: studentName,
         materi, 
         persentase_penguasaan: persentase 
       }]);
+
+    if (error && (error.code === '42703' || error.message?.includes('student_name'))) {
+      const retry = await supabase
+        .from('student_progress')
+        .insert([{ 
+          student_id: validStudentId, 
+          materi, 
+          persentase_penguasaan: persentase 
+        }]);
+      error = retry.error;
+    }
+
     return !error;
   }
 }
 
 export async function unlockBadge(studentId, badgeId) {
   const student = await getCurrentUser();
+  const validStudentId = studentId || student?.id;
   const studentName = student?.name || 'Siswa';
+
+  if (!validStudentId) return { success: false };
+
+  // Cache lokal
+  try {
+    const localKey = `math_badges_${validStudentId}`;
+    const cached = JSON.parse(localStorage.getItem(localKey) || '[]');
+    if (!cached.includes(badgeId)) {
+      cached.push(badgeId);
+      localStorage.setItem(localKey, JSON.stringify(cached));
+    }
+  } catch (_) {}
 
   if (!supabase) return { success: true };
   
   const { data: existing } = await supabase
     .from('student_badges')
     .select('*')
-    .eq('student_id', studentId)
+    .eq('student_id', validStudentId)
     .eq('badge_id', badgeId)
     .maybeSingle();
     
   if (!existing) {
-    const { error } = await supabase
+    let { error } = await supabase
       .from('student_badges')
       .insert([{ 
-        student_id: studentId, 
+        student_id: validStudentId, 
+        student_name: studentName,
         badge_id: badgeId 
       }]);
+
+    if (error && (error.code === '42703' || error.message?.includes('student_name'))) {
+      const retry = await supabase
+        .from('student_badges')
+        .insert([{ 
+          student_id: validStudentId, 
+          badge_id: badgeId 
+        }]);
+      error = retry.error;
+    }
+
     return !error;
   }
   return true;
 }
 
 export async function getStudentBadges(studentId) {
-  if (!supabase) return [];
+  const student = await getCurrentUser();
+  const validStudentId = studentId || student?.id;
+  if (!validStudentId) return [];
   
-  const { data, error } = await supabase
-    .from('student_badges')
-    .select('badge_id')
-    .eq('student_id', studentId);
-    
-  if (error) return [];
-  return data.map(b => b.badge_id);
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('student_badges')
+      .select('badge_id')
+      .eq('student_id', validStudentId);
+      
+    if (!error && data) return data.map(b => b.badge_id);
+  }
+
+  // Fallback cache lokal
+  try {
+    const localKey = `math_badges_${validStudentId}`;
+    const cached = localStorage.getItem(localKey);
+    return cached ? JSON.parse(cached) : [];
+  } catch (_) {
+    return [];
+  }
 }
 
 export async function getStudentProgress(studentId) {
-  if (!supabase) return [];
+  const student = await getCurrentUser();
+  const validStudentId = studentId || student?.id;
+  if (!validStudentId) return [];
   
-  const { data, error } = await supabase
-    .from('student_progress')
-    .select('*')
-    .eq('student_id', studentId);
-    
-  if (error) {
-    console.error("Gagal ambil student progress:", error);
-    return [];
+  if (supabase) {
+    const { data, error } = await supabase
+      .from('student_progress')
+      .select('*')
+      .eq('student_id', validStudentId);
+      
+    if (!error && data) return data;
+    console.warn("Gagal ambil student progress dari Supabase:", error);
   }
-  return data;
+
+  // Fallback cache lokal
+  try {
+    const localKey = `math_progress_${validStudentId}`;
+    const cached = localStorage.getItem(localKey);
+    if (cached) {
+      const obj = JSON.parse(cached);
+      return Object.keys(obj).map(materi => ({ materi, persentase_penguasaan: obj[materi] }));
+    }
+  } catch (_) {}
+
+  return [];
 }

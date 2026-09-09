@@ -1,4 +1,34 @@
-import { getCurrentUser, signOut } from './supabase-client.js';
+import { getCurrentUser, signOut, saveStudentProgress } from './supabase-client.js';
+import { checkAndUnlockBadges } from './badge-engine.js';
+
+// Fungsi pelacak otomatis pengerjaan / pembacaan materi pembelajaran
+async function trackMateriReading() {
+  const path = window.location.pathname;
+  if (!path.includes('/materi/')) return;
+
+  let slug = null;
+  if (path.includes('baca.html')) {
+    const params = new URLSearchParams(window.location.search);
+    slug = params.get('slug');
+  } else {
+    const match = path.match(/\/materi\/([^\/\?#]+)\.html/i);
+    if (match && match[1] && match[1] !== 'index') {
+      slug = match[1];
+    }
+  }
+
+  if (slug) {
+    const student = window.getCurrentStudent();
+    if (student) {
+      try {
+        await saveStudentProgress(student.id, slug, 100);
+        await checkAndUnlockBadges(student.id, true);
+      } catch (err) {
+        console.warn("Auto-track materi warning:", err);
+      }
+    }
+  }
+}
 
 // Tangani Back/Forward Cache (BFCache) agar browser tidak memulihkan halaman dari memori saat logout
 window.addEventListener('pageshow', async (event) => {
@@ -58,11 +88,15 @@ document.addEventListener('DOMContentLoaded', async () => {
     document.body.style.display = originalDisplay;
 
     // Set timeout kecil agar topbar layout selesai di-inject
-    setTimeout(() => updateProfileUI(currentUser), 200);
+    setTimeout(() => {
+      updateProfileUI(currentUser);
+      trackMateriReading();
+    }, 200);
 
     // Responsif terhadap perpindahan halaman SPA
     window.addEventListener('spa:navigated', () => {
       updateProfileUI(currentUser);
+      trackMateriReading();
     });
   } catch (err) {
     loadingOverlay.remove();

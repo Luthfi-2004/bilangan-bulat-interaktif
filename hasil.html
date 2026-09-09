@@ -86,10 +86,21 @@
 
       if (!student) {
         if (notLoggedIn) notLoggedIn.style.display = 'block';
+        if (resultsDashboard) resultsDashboard.style.display = 'none';
         return;
       }
       
+      if (notLoggedIn) notLoggedIn.style.display = 'none';
       if (resultsDashboard) resultsDashboard.style.display = 'block';
+      
+      if (scoreList) {
+        scoreList.innerHTML = `
+          <li class="p-8 text-center text-slate-400">
+            <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-blue-500"></i>
+            <p class="text-sm">Memuat data nilai...</p>
+          </li>
+        `;
+      }
       
       const results = await getTestResults(student.id);
       
@@ -101,15 +112,20 @@
         results.forEach(r => {
           const isKuis = r.jenis === 'kuis';
           const isTesAwal = r.jenis === 'tes_awal';
+          const isGame = r.jenis === 'game';
           
           if (isKuis && r.skor > highestKuis) highestKuis = r.skor;
           if (isTesAwal) hasTesAwal = true;
           
-          const title = r.jenis.replace('_', ' ').toUpperCase();
+          let title = r.jenis.replace('_', ' ').toUpperCase();
+          if (isGame) title = 'GAME EDUKASI';
+          
           const colorClass = r.skor >= 80 ? 'text-emerald-500' : (r.skor >= 60 ? 'text-blue-500' : 'text-amber-500');
           const bgIconClass = r.skor >= 80 ? 'bg-emerald-50 text-emerald-500' : (r.skor >= 60 ? 'bg-blue-50 text-blue-500' : 'bg-amber-50 text-amber-500');
-          const iconType = isKuis ? 'fa-stopwatch' : (isTesAwal ? 'fa-clipboard-list' : 'fa-pen-to-square');
+          const iconType = isKuis ? 'fa-stopwatch' : (isTesAwal ? 'fa-clipboard-list' : (isGame ? 'fa-gamepad' : 'fa-pen-to-square'));
           
+          const dateStr = r.created_at ? new Date(r.created_at).toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : '-';
+
           html += `
             <li class="flex items-center justify-between p-4 md:p-6 hover:bg-slate-50 transition-colors">
               <div class="flex items-center gap-4">
@@ -118,7 +134,7 @@
                 </div>
                 <div>
                   <strong class="text-slate-800 text-lg">${title}</strong><br>
-                  <span class="text-sm text-slate-500"><i class="fa-regular fa-calendar-days mr-1"></i> ${new Date(r.created_at).toLocaleDateString('id-ID')}</span>
+                  <span class="text-sm text-slate-500"><i class="fa-regular fa-calendar-days mr-1"></i> ${dateStr}</span>
                 </div>
               </div>
               <div class="text-3xl font-black ${colorClass}">${r.skor}</div>
@@ -131,14 +147,28 @@
         const recBox = document.querySelector('#app-content #recommendation-box') || document.getElementById('recommendation-box');
         if (recBox) {
           if (!hasTesAwal) {
-          recBox.innerHTML = "Sebaiknya kamu mengerjakan <strong class='text-blue-600'>Tes Awal</strong> terlebih dahulu untuk melihat kemampuan dasarmu.";
-        } else if (highestKuis >= 90) {
-          recBox.innerHTML = "<div class='text-4xl text-emerald-500 mb-3'><i class='fa-solid fa-crown'></i></div> <strong class='text-slate-800'>Luar Biasa!</strong> Pemahamanmu tentang bilangan bulat sudah sangat baik. Pertahankan prestasimu!";
-        } else if (highestKuis >= 70) {
-          recBox.innerHTML = "<div class='text-4xl text-blue-500 mb-3'><i class='fa-solid fa-thumbs-up'></i></div> <strong class='text-slate-800'>Bagus!</strong> Kamu sudah memahami sebagian besar materi. Coba kerjakan ulang bagian latihan campuran untuk mendapat nilai maksimal.";
+            recBox.innerHTML = "Sebaiknya kamu mengerjakan <strong class='text-blue-600'>Tes Awal</strong> terlebih dahulu untuk melihat kemampuan dasarmu.";
+          } else if (highestKuis >= 90) {
+            recBox.innerHTML = "<div class='text-4xl text-emerald-500 mb-3'><i class='fa-solid fa-crown'></i></div> <strong class='text-slate-800'>Luar Biasa!</strong> Pemahamanmu tentang bilangan bulat sudah sangat baik. Pertahankan prestasimu!";
+          } else if (highestKuis >= 70) {
+            recBox.innerHTML = "<div class='text-4xl text-blue-500 mb-3'><i class='fa-solid fa-thumbs-up'></i></div> <strong class='text-slate-800'>Bagus!</strong> Kamu sudah memahami sebagian besar materi. Coba kerjakan ulang bagian latihan campuran untuk mendapat nilai maksimal.";
           } else if (results.length > 0) {
             recBox.innerHTML = "<div class='text-4xl text-amber-500 mb-3'><i class='fa-solid fa-dumbbell'></i></div> <strong class='text-slate-800'>Jangan Menyerah!</strong> Matematika itu butuh latihan. Mari baca ulang materi <em>Operasi Hitung Campuran</em> secara perlahan.";
           }
+        }
+      } else {
+        if (scoreList) {
+          scoreList.innerHTML = `
+            <li class="p-8 text-center text-slate-400">
+              <i class="fa-solid fa-clipboard-question text-3xl mb-2 text-slate-300 block"></i>
+              Belum ada riwayat pengerjaan tes atau kuis.
+              <div class="mt-3">
+                <a href="tes-awal.html" class="inline-flex items-center px-4 py-2 bg-blue-50 text-blue-600 rounded-lg font-bold text-xs hover:bg-blue-100 transition-colors">
+                  Mulai dari Tes Awal <i class="fa-solid fa-arrow-right ml-1.5"></i>
+                </a>
+              </div>
+            </li>
+          `;
         }
       }
     }
@@ -150,11 +180,15 @@
         if (contentContainer && pageContainer) {
           contentContainer.innerHTML = pageContainer.innerHTML;
         }
+        loadResults();
       }, 100);
     });
 
-    // Jalankan langsung untuk memastikan data dimuat setelah script dievaluasi
-    loadResults();
+    window.addEventListener('spa:navigated', () => {
+      if (window.location.pathname.includes('/hasil.html')) {
+        loadResults();
+      }
+    });
   </script>
 </body>
 </html>

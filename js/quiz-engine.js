@@ -1,4 +1,5 @@
 import { saveTestResult } from './supabase-client.js';
+import { checkAndUnlockBadges } from './badge-engine.js';
 
 export class QuizEngine {
   constructor(containerId, soalArray, jenis, onComplete) {
@@ -132,6 +133,7 @@ export class QuizEngine {
     const student = window.getCurrentStudent();
     if (student) {
       await saveTestResult(student.id, this.jenis, this.skor);
+      await checkAndUnlockBadges(student.id, true);
     }
     
     if (this.onComplete) {

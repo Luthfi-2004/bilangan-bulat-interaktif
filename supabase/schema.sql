@@ -54,8 +54,14 @@ CREATE TABLE IF NOT EXISTS public.test_results (
     student_name TEXT NOT NULL,
     jenis TEXT NOT NULL, -- 'tes_awal', 'latihan_dasar', 'latihan_campuran', 'kuis'
     skor INTEGER NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT TIMEZONE('utc'::text, NOW()) NOT NULL
 );
+
+-- Pastikan student_name tidak memblokir insert jika ada record lama atau perbedaan struktur
+ALTER TABLE public.test_results ADD COLUMN IF NOT EXISTS student_name TEXT DEFAULT 'Siswa';
+ALTER TABLE public.test_results ALTER COLUMN student_name DROP NOT NULL;
+ALTER TABLE public.test_results ALTER COLUMN student_name SET DEFAULT 'Siswa';
+ALTER TABLE public.student_progress ADD COLUMN IF NOT EXISTS student_name TEXT DEFAULT 'Siswa';
+ALTER TABLE public.student_badges ADD COLUMN IF NOT EXISTS student_name TEXT DEFAULT 'Siswa';
 
 -- 5. TABEL: student_progress (Kemajuan per Materi)
 CREATE TABLE IF NOT EXISTS public.student_progress (

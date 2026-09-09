@@ -219,9 +219,11 @@
       
       try {
         const { saveTestResult } = await import('./js/supabase-client.js');
+        const { checkAndUnlockBadges } = await import('./js/badge-engine.js');
         const student = window.getCurrentStudent();
         if (student) {
           await saveTestResult(student.id, 'game', score);
+          await checkAndUnlockBadges(student.id, true);
         }
       } catch(e) {
         console.warn("Gagal menyimpan skor game:", e);
