@@ -34,9 +34,10 @@
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-3">A. Operasi Dasar</h3>
             <p class="text-slate-500 mb-6 flex-1">Latihan penjumlahan, pengurangan, perkalian, dan pembagian dasar.</p>
-            <button class="w-full py-3 px-4 border border-blue-600 text-blue-600 font-semibold rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors">
-              Mulai Latihan Dasar
-            </button>
+            <div class="w-full py-3 px-4 border border-blue-600 text-blue-600 font-semibold rounded-lg group-hover:bg-blue-600 group-hover:text-white transition-colors flex items-center justify-center gap-2">
+              <span>Mulai Latihan Dasar</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
           </div>
         </div>
         
@@ -48,9 +49,10 @@
             </div>
             <h3 class="text-xl font-bold text-slate-800 mb-3">B. Operasi Campuran</h3>
             <p class="text-slate-500 mb-6 flex-1">Latihan hitung campuran yang lebih menantang (menggunakan prioritas kurung, kali, bagi).</p>
-            <button class="w-full py-3 px-4 border border-indigo-600 text-indigo-600 font-semibold rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors">
-              Mulai Latihan Campuran
-            </button>
+            <div class="w-full py-3 px-4 border border-indigo-600 text-indigo-600 font-semibold rounded-lg group-hover:bg-indigo-600 group-hover:text-white transition-colors flex items-center justify-center gap-2">
+              <span>Mulai Latihan Campuran</span>
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
           </div>
         </div>
       </div>
@@ -80,25 +82,25 @@
         judul: "Latihan 1: Konsep & Garis Bilangan",
         deskripsi: "Latihan pemahaman nilai mutlak, bilangan positif/negatif, dan tanda perbandingan.",
         jenis: "latihan_dasar",
-        nextAction: { label: "Lanjut ke Materi 3: Penjumlahan", url: "materi/3-penjumlahan.html" }
+        nextAction: { label: "Lanjut ke Latihan 2: Penjumlahan & Pengurangan", url: "latihan.html?tahap=2" }
       },
       2: {
         judul: "Latihan 2: Penjumlahan & Pengurangan",
         deskripsi: "Latihan menghitung penjumlahan dan pengurangan bilangan bertanda sama maupun beda.",
         jenis: "latihan_dasar",
-        nextAction: { label: "Lanjut ke Materi 6: Perkalian", url: "materi/6-perkalian.html" }
+        nextAction: { label: "Lanjut ke Latihan 3: Perkalian & Pembagian", url: "latihan.html?tahap=3" }
       },
       3: {
         judul: "Latihan 3: Perkalian & Pembagian",
         deskripsi: "Latihan menguji aturan perkalian dan pembagian tanda sejenis maupun berbeda.",
         jenis: "latihan_dasar",
-        nextAction: { label: "Lanjut ke Materi 8: Operasi Campuran", url: "materi/8-operasi-campuran.html" }
+        nextAction: { label: "Lanjut ke Latihan 4: Operasi Hitung Campuran", url: "latihan.html?tahap=4" }
       },
       4: {
         judul: "Latihan 4: Operasi Hitung Campuran",
         deskripsi: "Tantangan penerapan hierarki KABATAKU (kurung, kali/bagi, tambah/kurang).",
         jenis: "latihan_campuran",
-        nextAction: { label: "Lanjut ke Materi 9: Penerapan & Soal Cerita", url: "materi/9-penerapan.html" }
+        nextAction: { label: "Lanjut ke Kuis Akhir Evaluasi", url: "kuis.html" }
       }
     };
 
@@ -145,8 +147,8 @@
       const soal = await getQuestions('latihan_dasar');
       if (quizContainer) quizContainer.innerHTML = '';
       new QuizEngine('#app-content #quiz-container', soal, 'latihan_dasar', null, {
-        label: 'Lanjut ke Operasi Campuran',
-        url: 'materi/8-operasi-campuran.html'
+        label: 'Lanjut ke Kuis Akhir Evaluasi',
+        url: 'kuis.html'
       });
     };
     

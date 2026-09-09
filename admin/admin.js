@@ -697,8 +697,7 @@ async function loadMateriCMS() {
 
     let html = '';
     allMateriCache.forEach(m => {
-      const isStatic = ['1-definisi', '2-garis-bilangan', '3-penjumlahan', '4-sifat-penjumlahan', '5-pengurangan', '6-perkalian', '7-pembagian', '8-operasi-campuran', '9-penerapan'].includes(m.slug);
-      const previewUrl = isStatic ? `../materi/${m.slug}.html` : `../materi/baca.html?slug=${encodeURIComponent(m.slug)}`;
+      const previewUrl = `../materi/baca.html?slug=${encodeURIComponent(m.slug)}`;
 
       html += `
         <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-xs hover:border-blue-200 transition-all">

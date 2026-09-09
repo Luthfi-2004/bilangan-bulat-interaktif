@@ -189,8 +189,8 @@ export class QuizEngine {
               nextUrl = this.nextAction.url;
               nextLabel = this.nextAction.label || nextLabel;
             } else if (this.jenis === 'tes_awal') {
-              nextUrl = 'materi/1-definisi.html';
-              nextLabel = 'Mulai Materi 1: Definisi Bilangan Bulat';
+              nextUrl = 'materi/index.html';
+              nextLabel = 'Mulai Pelajari Materi';
             } else if (this.jenis === 'kuis') {
               nextUrl = 'hasil.html';
               nextLabel = 'Lihat Hasil Belajar & Lencana';

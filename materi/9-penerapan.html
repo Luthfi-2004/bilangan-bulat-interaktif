@@ -1,119 +1,15 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Materi 9 - Penerapan Bilangan Bulat</title>
-  
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  
-  <link rel="stylesheet" href="../css/tailwind-compiled.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <link rel="stylesheet" href="../css/style.css">
-</head>
-<body class="bg-slate-50 text-slate-800 antialiased font-sans">
-
-  <div id="page-container" style="display: none;">
-    <div class="max-w-4xl mx-auto">
-      
-      <div class="mb-6">
-        <a href="index.html" class="inline-flex items-center text-sm font-medium text-slate-500 hover:text-blue-600 transition-colors">
-          <i class="fa-solid fa-arrow-left mr-2"></i> Kembali ke Daftar Materi
-        </a>
-      </div>
-
-      <h1 class="text-3xl font-bold text-slate-800 mb-8 border-b border-slate-200 pb-4">
-        <span class="text-blue-600 mr-2">9.</span> Penerapan Bilangan Bulat
-      </h1>
-      <p class="text-slate-500 mb-8 text-lg">Konsep bilangan bulat sangat banyak kita temui di kehidupan sehari-hari lho!</p>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start gap-4 hover:shadow-md transition-shadow group">
-          <div class="w-14 h-14 rounded-full bg-blue-50 text-blue-500 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-temperature-half"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-800 text-lg mb-2">1. Suhu / Temperatur</h4>
-            <p class="text-slate-600 text-sm leading-relaxed mb-3">Suhu di bawah nol derajat celcius dinyatakan dengan bilangan negatif.</p>
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono text-sm">
-              <strong class="text-blue-600 font-sans block mb-1">Contoh:</strong> Suhu di kutub bisa mencapai <span class="text-red-500 font-bold">âˆ’30Â°C</span>.
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start gap-4 hover:shadow-md transition-shadow group">
-          <div class="w-14 h-14 rounded-full bg-emerald-50 text-emerald-500 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-water"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-800 text-lg mb-2">2. Kedalaman Laut</h4>
-            <p class="text-slate-600 text-sm leading-relaxed mb-3">Permukaan air laut dianggap sebagai titik nol (0).</p>
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono text-sm">
-              <strong class="text-emerald-600 font-sans block mb-1">Contoh:</strong> Kapal selam berada di kedalaman 500m (<span class="text-red-500 font-bold">âˆ’500m</span>).
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start gap-4 hover:shadow-md transition-shadow group">
-          <div class="w-14 h-14 rounded-full bg-amber-50 text-amber-500 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-wallet"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-800 text-lg mb-2">3. Keuangan & Bisnis</h4>
-            <p class="text-slate-600 text-sm leading-relaxed mb-3">Keuntungan (+) dan Kerugian / Utang (-).</p>
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono text-sm">
-              <strong class="text-amber-600 font-sans block mb-1">Contoh:</strong> Budi rugi Rp10.000 (<span class="text-red-500 font-bold">âˆ’10.000</span>).
-            </div>
-          </div>
-        </div>
-        
-        <div class="bg-white rounded-xl shadow-sm border border-slate-200 p-6 flex items-start gap-4 hover:shadow-md transition-shadow group">
-          <div class="w-14 h-14 rounded-full bg-purple-50 text-purple-500 flex items-center justify-center text-2xl group-hover:scale-110 transition-transform">
-            <i class="fa-solid fa-building"></i>
-          </div>
-          <div>
-            <h4 class="font-bold text-slate-800 text-lg mb-2">4. Lantai Gedung</h4>
-            <p class="text-slate-600 text-sm leading-relaxed mb-3">Lantai dasar (0). Lantai di atasnya (+). Basement / parkiran bawah tanah (-).</p>
-            <div class="bg-slate-50 p-3 rounded-lg border border-slate-100 font-mono text-sm">
-              <strong class="text-purple-600 font-sans block mb-1">Contoh:</strong> Budi parkir mobil di Basement 2 (<span class="text-red-500 font-bold">âˆ’2</span>).
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-blue-600 text-white rounded-xl shadow-md p-8 md:p-12 text-center mb-8 relative overflow-hidden group">
-        <div class="absolute inset-0 bg-white opacity-0 group-hover:opacity-5 transition-opacity"></div>
-        <div class="text-5xl mb-6"><i class="fa-solid fa-graduation-cap"></i></div>
-        <h2 class="text-3xl font-black mb-4">Selamat! Kamu Telah Menyelesaikan Semua Materi!</h2>
-        <p class="text-blue-100 text-lg max-w-2xl mx-auto mb-8">
-          Sekarang saatnya untuk berlatih menggunakan konsep-konsep ini pada Soal Latihan dan Soal Cerita.
-        </p>
-        <div class="flex flex-wrap justify-center gap-4">
-          <a href="../latihan.html" class="px-8 py-3 bg-white text-blue-700 font-bold rounded-lg shadow-sm hover:bg-slate-50 transition-colors">
-            <i class="fa-solid fa-pen-to-square mr-2"></i> Latihan Soal
-          </a>
-          <a href="../soal-cerita.html" class="px-8 py-3 bg-blue-500 border border-blue-400 text-white font-bold rounded-lg shadow-sm hover:bg-blue-400 transition-colors">
-            <i class="fa-solid fa-comment-dots mr-2"></i> Soal Cerita
-          </a>
-        </div>
-      </div>
-      
-    </div>
-  </div>
-
-  <script src="../js/layout.js"></script>
-  <script type="module" src="../js/main.js"></script>
+  <meta http-equiv="refresh" content="0; url=baca.html?slug=9-penerapan">
+  <title>Materi Pembelajaran - Penerapan Nyata</title>
   <script>
-    document.addEventListener('DOMContentLoaded', () => {
-      setTimeout(() => {
-        const contentContainer = document.getElementById('app-content');
-        const pageContainer = document.getElementById('page-container');
-        if (contentContainer && pageContainer) contentContainer.innerHTML = pageContainer.innerHTML;
-      }, 100);
-    });
+    window.location.replace("baca.html?slug=9-penerapan");
   </script>
+</head>
+<body style="font-family: sans-serif; text-align: center; padding: 40px; color: #64748b;">
+  <p>Membuka materi pembelajaran...</p>
+  <p><a href="baca.html?slug=9-penerapan" style="color: #2563eb;">Klik di sini jika tidak diarahkan secara otomatis.</a></p>
 </body>
 </html>
-

@@ -34,35 +34,27 @@
       </p>
       
       <p class="max-w-2xl mx-auto text-base md:text-lg mb-8 leading-relaxed text-blue-50">
-        Selamat datang di ruang belajarmu! Mulai perjalananmu dari Tes Awal diagnostik, pelajari konsep interaktif, lalu buktikan kehebatanmu lewat latihan dan game.
+        Selamat datang di ruang belajarmu! Mulai perjalananmu dari Tes Awal diagnostik, pelajari materi terstruktur dari Guru, lalu buktikan kehebatanmu lewat latihan soal dan kuis akhir.
       </p>
       
-      <div class="flex flex-wrap justify-center gap-4">
-        <a href="tes-awal.html" class="inline-flex items-center justify-center px-6 py-3.5 text-base font-bold text-blue-700 bg-white rounded-xl shadow-md hover:bg-slate-50 hover:shadow-lg transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300">
-          <i class="fa-solid fa-rocket mr-2 text-amber-500"></i> Mulai Tes Awal
-        </a>
-        <a href="materi/index.html" class="inline-flex items-center justify-center px-6 py-3.5 text-base font-semibold text-white border border-white/30 bg-white/10 rounded-xl hover:bg-white/20 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-white/30 backdrop-blur-sm">
-          <i class="fa-solid fa-book-open mr-2"></i> Buka Materi Lengkap
+      <div class="flex justify-center">
+        <a id="hero-action-btn" href="tes-awal.html" class="inline-flex items-center justify-center px-8 py-4 text-base font-extrabold text-blue-700 bg-white rounded-2xl shadow-lg hover:bg-slate-50 hover:shadow-xl hover:-translate-y-0.5 transition-all duration-200 focus:outline-none focus:ring-4 focus:ring-blue-300">
+          <i class="fa-solid fa-play mr-2.5 text-amber-500"></i>
+          <span id="hero-action-label">Mulai Petualangan Belajar</span>
         </a>
       </div>
     </div>
     
     <!-- Alur Belajar Terarah (Learning Journey Roadmap) -->
     <div class="mb-10 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden">
-      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6 mb-6">
-        <div>
-          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-2 border border-blue-100">
-            <i class="fa-solid fa-map-location-dot"></i> Jalur Belajar Terarah
-          </div>
-          <h2 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2.5">
-            Petualangan Bilangan Bulat
-          </h2>
-          <p class="text-sm text-slate-500 mt-1">Ikuti langkah belajar berurutan: Materi interaktif &rarr; Latihan bertahap &rarr; Game &rarr; Kuis Akhir.</p>
+      <div class="border-b border-slate-100 pb-6 mb-6">
+        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-2 border border-blue-100">
+          <i class="fa-solid fa-map-location-dot"></i> Jalur Belajar Terarah
         </div>
-        
-        <div id="resume-container" class="flex-shrink-0">
-          <!-- Tombol Lanjutkan Belajar Diinjeksi oleh JS -->
-        </div>
+        <h2 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2.5">
+          Petualangan Bilangan Bulat
+        </h2>
+        <p class="text-sm text-slate-500 mt-1">Ikuti langkah belajar terarah secara berurutan dari Tes Awal hingga Hasil Belajar.</p>
       </div>
 
       <!-- Grid Langkah Belajar -->
@@ -71,50 +63,8 @@
       </div>
     </div>
 
-    <!-- Alur Belajar Ringkas -->
-    <div class="mb-8">
-      <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
-        <i class="fa-solid fa-route text-blue-600 mr-2"></i> Pilihan Aktivitas Belajar
-      </h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        
-        <a href="materi/index.html" class="block bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-blue-400 hover:-translate-y-1 transition-all duration-300 group">
-          <div class="w-12 h-12 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-4 group-hover:bg-blue-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-            <i class="fa-solid fa-book-open-reader text-2xl"></i>
-          </div>
-          <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-blue-600 transition-colors">1. Materi Interaktif</h3>
-          <p class="text-sm text-slate-500">Konsep dasar, garis bilangan hidup, sifat operasi, hingga hirarki operasi KABATAKU.</p>
-        </a>
-        
-        <a href="latihan.html" class="block bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-emerald-400 hover:-translate-y-1 transition-all duration-300 group">
-          <div class="w-12 h-12 bg-emerald-50 rounded-lg flex items-center justify-center text-emerald-600 mb-4 group-hover:bg-emerald-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-            <i class="fa-solid fa-pencil text-2xl"></i>
-          </div>
-          <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-emerald-600 transition-colors">2. Latihan Soal</h3>
-          <p class="text-sm text-slate-500">Uji kemampuan dengan umpan balik langsung benar/salah dan pembahasan tuntas.</p>
-        </a>
-        
-        <a href="game.html" class="block bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-purple-400 hover:-translate-y-1 transition-all duration-300 group">
-          <div class="w-12 h-12 bg-purple-50 rounded-lg flex items-center justify-center text-purple-600 mb-4 group-hover:bg-purple-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-            <i class="fa-solid fa-gamepad text-2xl"></i>
-          </div>
-          <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-purple-600 transition-colors">3. Game Edukasi</h3>
-          <p class="text-sm text-slate-500">Tantang kecepatan berpikirmu melawan waktu dan uji ketangkasan matematika.</p>
-        </a>
-        
-        <a href="pencapaian.html" class="block bg-white p-6 rounded-xl shadow-sm border border-slate-200 hover:shadow-lg hover:border-amber-400 hover:-translate-y-1 transition-all duration-300 group">
-          <div class="w-12 h-12 bg-amber-50 rounded-lg flex items-center justify-center text-amber-600 mb-4 group-hover:bg-amber-600 group-hover:text-white transition-colors duration-300 shadow-sm">
-            <i class="fa-solid fa-medal text-2xl"></i>
-          </div>
-          <h3 class="text-lg font-bold text-slate-800 mb-2 group-hover:text-amber-600 transition-colors">4. Lencana & Skor</h3>
-          <p class="text-sm text-slate-500">Kumpulkan 7 lencana kehormatan dan pantau grafik penguasaan materimu.</p>
-        </a>
-        
-      </div>
-    </div>
-
     <!-- Quick Tip Card -->
-    <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-xl p-6 flex flex-col sm:flex-row items-center gap-4">
+    <div class="bg-gradient-to-r from-amber-50 to-orange-50 border border-amber-200 rounded-2xl p-6 flex flex-col sm:flex-row items-center gap-4">
       <div class="w-12 h-12 rounded-full bg-amber-400 text-white flex items-center justify-center text-2xl flex-shrink-0 shadow-sm">
         <i class="fa-solid fa-lightbulb"></i>
       </div>
@@ -122,9 +72,6 @@
         <h4 class="font-bold text-slate-800">Tips Sukses Belajar Operasi Campuran</h4>
         <p class="text-sm text-slate-600 mt-0.5">Ingat selalu aturan <strong>KABATAKU</strong>: Kerjakan tanda kurung dulu, lalu perkalian/pembagian dari kiri ke kanan, terakhir penjumlahan/pengurangan!</p>
       </div>
-      <a href="soal-cerita.html" class="px-4 py-2 bg-white text-amber-700 font-semibold text-sm rounded-lg border border-amber-200 hover:bg-amber-100 transition-colors shadow-sm whitespace-nowrap">
-        Coba Soal Cerita <i class="fa-solid fa-arrow-right ml-1"></i>
-      </a>
     </div>
 
   </div>
@@ -149,20 +96,16 @@
       const completed = getCompletedStepIds();
       const resumeStep = getResumeStep();
 
-      // Render Tombol Lanjutkan Belajar
-      const resumeContainer = document.querySelector('#app-content #resume-container') || document.getElementById('resume-container');
-      if (resumeContainer) {
-        resumeContainer.innerHTML = `
-          <a href="${resumeStep.url}" class="inline-flex items-center gap-3 px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-300 group">
-            <div class="text-left">
-              <div class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Langkah Berikutnya</div>
-              <div class="text-sm font-black truncate max-w-[200px]">${resumeStep.judul}</div>
-            </div>
-            <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
-              <i class="fa-solid fa-arrow-right"></i>
-            </div>
-          </a>
-        `;
+      // Update Tombol Utama di Hero
+      const heroBtn = document.querySelector('#app-content #hero-action-btn') || document.getElementById('hero-action-btn');
+      const heroLabel = document.querySelector('#app-content #hero-action-label') || document.getElementById('hero-action-label');
+      if (heroBtn && heroLabel) {
+        heroBtn.href = resumeStep.url;
+        if (completed.length === 0) {
+          heroLabel.textContent = "Mulai Petualangan Belajar";
+        } else {
+          heroLabel.textContent = `Lanjutkan: ${resumeStep.judul}`;
+        }
       }
 
       // Render Kartu Roadmap

@@ -17,25 +17,14 @@
 
   <div id="page-container" class="max-w-5xl mx-auto space-y-8">
     <!-- Header Section -->
-    <div class="border-b border-slate-200/80 pb-6 flex flex-col md:flex-row md:items-center justify-between gap-4">
-      <div>
-        <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold mb-2 border border-blue-100">
-          <i class="fa-solid fa-graduation-cap"></i> Kurikulum Matematika Kelas VII
-        </div>
-        <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
-          <i class="fa-solid fa-book-open text-blue-600"></i> Silabus Pembelajaran Mandiri
-        </h1>
-        <p class="text-slate-500 mt-1 text-sm md:text-base">Pilih submateri yang ingin kamu pelajari atau tinjau kembali hari ini.</p>
+    <div class="border-b border-slate-200/80 pb-6">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-semibold mb-2 border border-blue-100">
+        <i class="fa-solid fa-graduation-cap"></i> Kurikulum Matematika Kelas VII
       </div>
-
-      <div class="flex items-center gap-2">
-        <a href="../tes-awal.html" class="px-4 py-2 bg-white border border-slate-200 hover:border-blue-300 text-slate-700 hover:text-blue-600 text-xs font-bold rounded-xl transition-all shadow-xs flex items-center gap-1.5">
-          <i class="fa-solid fa-clipboard-check text-blue-600"></i> Tes Awal
-        </a>
-        <a href="../latihan.html" class="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold rounded-xl transition-all shadow-xs flex items-center gap-1.5">
-          <i class="fa-solid fa-pen-to-square"></i> Latihan Soal
-        </a>
-      </div>
+      <h1 class="text-2xl md:text-3xl font-black text-slate-900 tracking-tight flex items-center gap-3">
+        <i class="fa-solid fa-book-open text-blue-600"></i> Silabus Pembelajaran Mandiri
+      </h1>
+      <p class="text-slate-500 mt-1 text-sm md:text-base">Pilih submateri yang ingin kamu pelajari atau tinjau kembali hari ini.</p>
     </div>
     
     <!-- Dynamic Lessons Grid Container -->
@@ -50,26 +39,35 @@
   <script src="../js/layout.js"></script>
   <script type="module" src="../js/main.js"></script>
   <script type="module">
-    import { getAllMateri } from '../js/supabase-client.js';
-
-    const STATIC_FILES = [
-      '1-definisi', '2-garis-bilangan', '3-penjumlahan', 
-      '4-sifat-penjumlahan', '5-pengurangan', '6-perkalian', 
-      '7-pembagian', '8-operasi-campuran', '9-penerapan'
-    ];
+    import { getAllMateri, getStudentProgress } from '../js/supabase-client.js';
 
     async function loadMateriCatalog() {
       const container = document.querySelector('#app-content #materi-grid') || document.getElementById('materi-grid');
       if (!container) return;
 
       try {
+        const student = window.getCurrentStudent ? window.getCurrentStudent() : null;
+        let progressMap = {};
+        if (student) {
+          try {
+            const prog = await getStudentProgress(student.id);
+            if (Array.isArray(prog)) {
+              prog.forEach(p => {
+                if (p.materi_id || p.slug) {
+                  progressMap[p.materi_id || p.slug] = p.persentase_penguasaan || 0;
+                }
+              });
+            }
+          } catch (_) {}
+        }
+
         const list = await getAllMateri();
         if (!list || list.length === 0) {
           container.innerHTML = `
             <div class="col-span-full bg-white rounded-2xl p-12 text-center border border-slate-200">
               <i class="fa-solid fa-folder-open text-4xl text-slate-300 mb-3"></i>
               <h3 class="text-base font-bold text-slate-700">Belum Ada Materi Tersedia</h3>
-              <p class="text-xs text-slate-500 mt-1">Bapak/Ibu Guru belum menginputkan materi pembelajaran ke sistem.</p>
+              <p class="text-xs text-slate-500 mt-1">Bapak/Ibu Guru belum menambahkan materi pembelajaran ke dalam sistem.</p>
             </div>
           `;
           return;
@@ -78,24 +76,19 @@
         let html = '';
         list.forEach((item, index) => {
           const num = item.urutan || (index + 1);
-          const isHighlight = item.slug === '8-operasi-campuran';
-          
-          // Tentukan target link: jika file html statis ada, buka file tersebut; jika custom guru, buka baca.html
-          let targetUrl = `${item.slug}.html`;
-          if (!STATIC_FILES.includes(item.slug)) {
-            targetUrl = `baca.html?slug=${encodeURIComponent(item.slug)}`;
-          }
+          const isDone = (progressMap[item.slug] || progressMap[item.id] || 0) >= 100;
+          const targetUrl = `baca.html?slug=${encodeURIComponent(item.slug)}`;
 
           html += `
-            <a href="${targetUrl}" class="group block relative bg-white rounded-2xl border ${isHighlight ? 'border-indigo-300 ring-1 ring-indigo-200' : 'border-slate-200'} p-6 shadow-xs hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col justify-between">
+            <a href="${targetUrl}" class="group block relative bg-white rounded-2xl border ${isDone ? 'border-emerald-200' : 'border-slate-200'} p-6 shadow-xs hover:shadow-md hover:border-blue-400 transition-all duration-200 flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between mb-4">
-                  <div class="w-10 h-10 rounded-xl ${isHighlight ? 'bg-indigo-50 text-indigo-700 border-indigo-200' : 'bg-slate-100 text-slate-700 border-slate-200'} border flex items-center justify-center font-black text-sm group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
+                  <div class="w-10 h-10 rounded-xl ${isDone ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-blue-50 text-blue-700 border-blue-100'} border flex items-center justify-center font-black text-sm group-hover:bg-blue-600 group-hover:text-white group-hover:border-blue-600 transition-all">
                     ${num}
                   </div>
-                  ${isHighlight ? `
-                    <span class="text-[10px] font-bold tracking-wider uppercase px-2.5 py-1 rounded-full bg-indigo-50 text-indigo-700 border border-indigo-200">
-                      Materi Inti
+                  ${isDone ? `
+                    <span class="inline-flex items-center gap-1 text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-0.5 rounded-full">
+                      <i class="fa-solid fa-circle-check"></i> Selesai
                     </span>
                   ` : `
                     <span class="text-[11px] font-medium text-slate-400">Submateri #${num}</span>
@@ -106,13 +99,13 @@
                   ${item.judul || 'Materi Belajar'}
                 </h3>
                 
-                <p class="text-xs text-slate-500 leading-relaxed line-clamp-2">
-                  ${item.ringkasan || 'Pelajari konsep lengkap bilangan bulat pada bab ini.'}
+                <p class="text-xs text-slate-500 leading-relaxed line-clamp-3">
+                  ${item.ringkasan || 'Pelajari konsep materi bilangan bulat yang disusun oleh guru.'}
                 </p>
               </div>
 
               <div class="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600 group-hover:translate-x-0.5 transition-transform">
-                <span>Pelajari Materi</span>
+                <span>${isDone ? 'Buka Kembali Materi' : 'Pelajari Materi'}</span>
                 <i class="fa-solid fa-arrow-right text-[11px]"></i>
               </div>
             </a>
@@ -131,9 +124,6 @@
       }
     }
 
-    // Inisialisasi awal dan saat navigasi SPA
-    // Karena script ini bertipe module, ia akan dieksekusi secara asynchronous oleh browser.
-    // Menjalankan langsung lebih aman daripada mendengarkan event yang mungkin sudah lewat.
     loadMateriCatalog();
   </script>
 </body>

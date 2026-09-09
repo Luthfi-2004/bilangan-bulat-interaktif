@@ -2,12 +2,12 @@ import { getTestResults, getStudentBadges, unlockBadge, getStudentProgress } fro
 
 export const BADGES = [
   { id: "b_pemula", icon: "🔰", nama: "Pemula", deskripsi: "Menyelesaikan Tes Awal" },
-  { id: "b_rajin_belajar", icon: "📚", nama: "Rajin Belajar", deskripsi: "Membuka seluruh 9 materi pembelajaran" },
-  { id: "b_rajin_berlatih", icon: "✏️", nama: "Rajin Berlatih", deskripsi: "Menyelesaikan semua jenis latihan" },
-  { id: "b_pemburu_skor", icon: "🎮", nama: "Pemburu Skor", deskripsi: "Mendapatkan skor game >= 80" },
-  { id: "b_jago_bilbul", icon: "🧠", nama: "Jago Bilangan Bulat", deskripsi: "Rata-rata nilai latihan (dasar & campuran) >= 80" },
-  { id: "b_master", icon: "🏆", nama: "Master Operasi Campuran", deskripsi: "Mendapatkan nilai Kuis Akhir >= 90" },
-  { id: "b_champion", icon: "👑", nama: "Math Champion", deskripsi: "Mendapatkan semua 6 badge lainnya" }
+  { id: "b_rajin_belajar", icon: "📚", nama: "Rajin Belajar", deskripsi: "Mempelajari materi pembelajaran" },
+  { id: "b_rajin_berlatih", icon: "✏️", nama: "Rajin Berlatih", deskripsi: "Menyelesaikan seluruh tahap latihan soal" },
+  { id: "b_bintang_latihan", icon: "⭐", nama: "Bintang Latihan", deskripsi: "Mendapatkan skor latihan minimal 85" },
+  { id: "b_jago_bilbul", icon: "🧠", nama: "Jago Bilangan Bulat", deskripsi: "Rata-rata nilai latihan >= 80" },
+  { id: "b_master", icon: "🏆", nama: "Master Operasi Campuran", deskripsi: "Mendapatkan nilai Kuis Akhir >= 85" },
+  { id: "b_champion", icon: "👑", nama: "Math Champion", deskripsi: "Meraih seluruh 6 lencana pembelajaran" }
 ];
 
 export async function checkAndUnlockBadges(studentId, shouldNotify = false) {
@@ -25,19 +25,21 @@ export async function checkAndUnlockBadges(studentId, shouldNotify = false) {
   const hasLatihanDasar = results.some(r => r.jenis === 'latihan_dasar');
   const hasLatihanCampuran = results.some(r => r.jenis === 'latihan_campuran');
   
-  const maxGameScore = results.filter(r => r.jenis === 'game').reduce((max, r) => r.skor > max ? r.skor : max, 0);
   const maxKuisScore = results.filter(r => r.jenis === 'kuis').reduce((max, r) => r.skor > max ? r.skor : max, 0);
   
   const latihanDasarMax = results.filter(r => r.jenis === 'latihan_dasar').reduce((max, r) => r.skor > max ? r.skor : max, 0);
   const latihanCampuranMax = results.filter(r => r.jenis === 'latihan_campuran').reduce((max, r) => r.skor > max ? r.skor : max, 0);
-  const avgLatihan = (hasLatihanDasar && hasLatihanCampuran) ? (latihanDasarMax + latihanCampuranMax) / 2 : 0;
+  const maxLatihanScore = Math.max(latihanDasarMax, latihanCampuranMax);
+  const avgLatihan = (hasLatihanDasar && hasLatihanCampuran) ? (latihanDasarMax + latihanCampuranMax) / 2 : maxLatihanScore;
   
-  // Total materi = 9 (berdasarkan default materi dan slug 1-9)
+  // Materi yang telah dibaca
   const uniqueMateriCompleted = progress ? progress.filter(p => (p.persentase_penguasaan || 0) > 0).length : 0;
   
-  // Logic check badge 1-6
+  // Logic check badge
   const checkAndAdd = async (condition, badgeId) => {
-    if (condition && !currentBadges.includes(badgeId)) {
+    // Juga anggap b_pemburu_skor sebagai b_bintang_latihan jika sudah pernah ada
+    const alreadyHas = currentBadges.includes(badgeId) || (badgeId === "b_bintang_latihan" && currentBadges.includes("b_pemburu_skor"));
+    if (condition && !alreadyHas) {
       await unlockBadge(studentId, badgeId);
       const badgeInfo = BADGES.find(b => b.id === badgeId);
       if (badgeInfo) newBadgesUnlocked.push(badgeInfo);
@@ -47,13 +49,17 @@ export async function checkAndUnlockBadges(studentId, shouldNotify = false) {
 
   await checkAndAdd(hasTesAwal, "b_pemula");
   await checkAndAdd(hasLatihanDasar && hasLatihanCampuran, "b_rajin_berlatih");
-  await checkAndAdd(uniqueMateriCompleted >= 9, "b_rajin_belajar");
-  await checkAndAdd(maxGameScore >= 80, "b_pemburu_skor");
+  await checkAndAdd(uniqueMateriCompleted >= 1, "b_rajin_belajar");
+  await checkAndAdd(maxLatihanScore >= 85, "b_bintang_latihan");
   await checkAndAdd(avgLatihan >= 80, "b_jago_bilbul");
-  await checkAndAdd(maxKuisScore >= 90, "b_master");
+  await checkAndAdd(maxKuisScore >= 85, "b_master");
   
   // Badge ke-7: Jika sudah memiliki 6 badge lainnya, beri Math Champion
-  if (currentBadges.length >= 6 && !currentBadges.includes("b_champion")) {
+  const baseBadgeCount = BADGES.filter(b => b.id !== "b_champion").filter(b => 
+    currentBadges.includes(b.id) || (b.id === "b_bintang_latihan" && currentBadges.includes("b_pemburu_skor"))
+  ).length;
+
+  if (baseBadgeCount >= 6 && !currentBadges.includes("b_champion")) {
     await unlockBadge(studentId, "b_champion");
     const champ = BADGES.find(b => b.id === "b_champion");
     if (champ) newBadgesUnlocked.push(champ);

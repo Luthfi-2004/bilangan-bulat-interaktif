@@ -53,18 +53,6 @@ const SIDEBAR_HTML = `
       </a>
     </li>
     <li>
-      <a href="./soal-cerita.html" data-path="/soal-cerita.html" class="sb-link">
-        <span class="sb-icon"><i class="fa-solid fa-comment-dots"></i></span>
-        <span class="sb-text">Soal Cerita</span>
-      </a>
-    </li>
-    <li>
-      <a href="./game.html" data-path="/game.html" class="sb-link">
-        <span class="sb-icon"><i class="fa-solid fa-gamepad"></i></span>
-        <span class="sb-text">Game Edukasi</span>
-      </a>
-    </li>
-    <li>
       <a href="./kuis.html" data-path="/kuis.html" class="sb-link">
         <span class="sb-icon"><i class="fa-solid fa-stopwatch"></i></span>
         <span class="sb-text">Kuis Akhir</span>

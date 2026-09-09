@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -52,14 +52,19 @@
       </div>
     </div>
 
-    <!-- Bottom Navigation Bar -->
-    <div class="flex items-center justify-between pt-4 border-t border-slate-200">
-      <a href="index.html" class="px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-bold transition-all shadow-xs flex items-center gap-2">
-        <i class="fa-solid fa-arrow-left"></i> Semua Materi
+    <!-- Bottom Navigation Bar (Dynamic) -->
+    <div id="materi-nav-bar" class="flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-slate-200">
+      <a id="btn-materi-prev" href="index.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl border border-slate-200 bg-white text-slate-700 hover:bg-slate-50 text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2">
+        <i class="fa-solid fa-arrow-left"></i> <span>Daftar Materi</span>
       </a>
-      <a href="../latihan.html" class="px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs flex items-center gap-2">
-        <span>Uji di Latihan Soal</span>
-        <i class="fa-solid fa-arrow-right"></i>
+
+      <div id="materi-position-indicator" class="text-xs font-semibold text-slate-500 text-center">
+        <!-- Posisi Materi -->
+      </div>
+
+      <a id="btn-materi-next" href="../latihan.html" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 group">
+        <span>Lanjut Belajar</span>
+        <i class="fa-solid fa-arrow-right group-hover:translate-x-0.5 transition-transform"></i>
       </a>
     </div>
 
@@ -68,7 +73,7 @@
   <script src="../js/layout.js"></script>
   <script type="module" src="../js/main.js"></script>
   <script type="module">
-    import { getMateri, saveStudentProgress } from '../js/supabase-client.js';
+    import { getMateri, getAllMateri, saveStudentProgress } from '../js/supabase-client.js';
 
     async function renderMateriDetail() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -79,6 +84,10 @@
       const numberEl = document.getElementById('materi-number');
       const badgeEl = document.getElementById('materi-badge');
       const bodyEl = document.getElementById('materi-body');
+
+      const prevBtn = document.getElementById('btn-materi-prev');
+      const nextBtn = document.getElementById('btn-materi-next');
+      const posIndicator = document.getElementById('materi-position-indicator');
 
       if (!slug) {
         if (titleEl) titleEl.textContent = "Materi Tidak Ditemukan";
@@ -92,13 +101,18 @@
       }
 
       try {
-        const item = await getMateri(slug);
+        const [item, allList] = await Promise.all([
+          getMateri(slug),
+          getAllMateri()
+        ]);
+
         if (!item) {
           if (titleEl) titleEl.textContent = "Materi Belum Tersedia";
           if (summaryEl) summaryEl.textContent = `Materi dengan slug "${slug}" belum dibuat atau telah dihapus oleh guru.`;
           if (bodyEl) bodyEl.innerHTML = `
             <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center">
-              <a href="index.html" class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl">Kembali ke Daftar Materi</a>
+              <p class="text-sm text-slate-500 mb-4">Bapak/Ibu Guru belum menambahkan uraian untuk topik ini.</p>
+              <a href="index.html" class="px-4 py-2 bg-blue-600 text-white text-xs font-bold rounded-xl">Kembali ke Silabus Materi</a>
             </div>
           `;
           return;
@@ -107,23 +121,69 @@
         document.title = `${item.judul} - Operasi Campuran Bilangan Bulat`;
         if (titleEl) titleEl.textContent = item.judul;
         if (summaryEl) summaryEl.textContent = item.ringkasan || '';
-        if (numberEl) numberEl.textContent = item.urutan || '1';
+        if (numberEl) numberEl.textContent = item.urutan || '#';
         if (badgeEl) badgeEl.textContent = `Submateri #${item.urutan || 1}`;
 
         if (bodyEl) {
           if (item.konten && item.konten.trim().length > 0) {
-            bodyEl.innerHTML = item.konten;
+            bodyEl.innerHTML = `
+              <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs text-slate-800 leading-relaxed space-y-4">
+                ${item.konten}
+              </div>
+            `;
           } else {
             bodyEl.innerHTML = `
-              <div class="bg-white rounded-2xl border border-slate-200 p-8 text-center text-slate-500">
-                <p class="text-sm">Guru belum mengisi detail uraian lengkap untuk materi ini.</p>
+              <div class="bg-white rounded-2xl border border-slate-200 p-12 text-center text-slate-500">
+                <i class="fa-solid fa-feather-pointed text-3xl text-slate-300 mb-3"></i>
+                <p class="text-sm font-semibold">Guru belum mengisi detail uraian lengkap untuk materi ini.</p>
+                <p class="text-xs text-slate-400 mt-1">Silakan tanyakan kepada Bapak/Ibu Guru atau lanjutkan ke materi lainnya.</p>
               </div>
             `;
           }
         }
-        
+
+        // Hitung navigasi dinamis Sebelumnya dan Selanjutnya
+        if (Array.isArray(allList) && allList.length > 0) {
+          const currentIndex = allList.findIndex(m => m.slug === slug || m.id === item.id);
+          const totalMateri = allList.length;
+
+          if (posIndicator && currentIndex !== -1) {
+            posIndicator.innerHTML = `
+              <span class="inline-block px-3 py-1 bg-slate-100 rounded-full text-slate-600 font-semibold text-[11px]">
+                Materi ${currentIndex + 1} dari ${totalMateri}
+              </span>
+            `;
+          }
+
+          // Tombol Prev
+          if (prevBtn) {
+            if (currentIndex > 0) {
+              const prevItem = allList[currentIndex - 1];
+              prevBtn.href = `baca.html?slug=${encodeURIComponent(prevItem.slug)}`;
+              prevBtn.innerHTML = `<i class="fa-solid fa-arrow-left"></i> <span class="truncate max-w-[140px] sm:max-w-[180px]">Sebelumnya: ${prevItem.judul}</span>`;
+            } else {
+              prevBtn.href = `index.html`;
+              prevBtn.innerHTML = `<i class="fa-solid fa-list-ul"></i> <span>Daftar Materi</span>`;
+            }
+          }
+
+          // Tombol Next
+          if (nextBtn) {
+            if (currentIndex >= 0 && currentIndex < totalMateri - 1) {
+              const nextItem = allList[currentIndex + 1];
+              nextBtn.href = `baca.html?slug=${encodeURIComponent(nextItem.slug)}`;
+              nextBtn.innerHTML = `<span class="truncate max-w-[140px] sm:max-w-[180px]">Lanjut: ${nextItem.judul}</span> <i class="fa-solid fa-arrow-right"></i>`;
+            } else {
+              // Materi terakhir dari guru -> Lanjut ke Latihan Soal
+              nextBtn.href = `../latihan.html`;
+              nextBtn.className = "w-full sm:w-auto px-6 py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition-all shadow-xs flex items-center justify-center gap-2 group";
+              nextBtn.innerHTML = `<span>Lanjut ke Latihan Soal</span> <i class="fa-solid fa-pen-to-square"></i>`;
+            }
+          }
+        }
+
         // Simpan progress baca materi (100%)
-        const student = window.getCurrentStudent();
+        const student = window.getCurrentStudent ? window.getCurrentStudent() : null;
         if (student) {
           saveStudentProgress(student.id, slug, 100).catch(err => {
             console.warn("Gagal menyimpan progres:", err);

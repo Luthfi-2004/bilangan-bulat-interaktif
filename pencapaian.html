@@ -45,7 +45,8 @@
       "b_pemula": { icon: "fa-shield-halved", color: "text-blue-500", bg: "bg-blue-50" },
       "b_rajin_belajar": { icon: "fa-book-open", color: "text-indigo-500", bg: "bg-indigo-50" },
       "b_rajin_berlatih": { icon: "fa-pencil", color: "text-emerald-500", bg: "bg-emerald-50" },
-      "b_pemburu_skor": { icon: "fa-gamepad", color: "text-purple-500", bg: "bg-purple-50" },
+      "b_bintang_latihan": { icon: "fa-star", color: "text-purple-500", bg: "bg-purple-50" },
+      "b_pemburu_skor": { icon: "fa-star", color: "text-purple-500", bg: "bg-purple-50" },
       "b_jago_bilbul": { icon: "fa-brain", color: "text-pink-500", bg: "bg-pink-50" },
       "b_master": { icon: "fa-trophy", color: "text-amber-500", bg: "bg-amber-50" },
       "b_champion": { icon: "fa-crown", color: "text-amber-400", bg: "bg-amber-50" }
@@ -58,6 +59,10 @@
       if (student) {
         await checkAndUnlockBadges(student.id);
         unlockedIds = await getStudentBadges(student.id);
+        // Map b_pemburu_skor ke b_bintang_latihan jika ada
+        if (unlockedIds.includes("b_pemburu_skor") && !unlockedIds.includes("b_bintang_latihan")) {
+          unlockedIds.push("b_bintang_latihan");
+        }
       }
       
       const container = document.querySelector('#app-content #badge-container') || document.getElementById('badge-container');
