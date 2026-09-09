@@ -1,10 +1,10 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id" class="scroll-smooth">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>BilBul - Operasi Campuran Bilangan Bulat | Media Pembelajaran Interaktif SMP Kelas VII</title>
-  <meta name="description" content="Platform media pembelajaran matematika interaktif untuk siswa SMP Kelas VII dalam menguasai Operasi Campuran Bilangan Bulat dengan mudah dan terarah.">
+  <meta name="description" content="Platform media pembelajaran matematika interaktif untuk siswa SMP Kelas VII dalam menguasai Operasi Campuran Bilangan Bulat dengan konsep visual garis bilangan, latihan bertahap, dan kuis evaluasi terarah.">
   
   <!-- Google Fonts Inter -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,42 +15,59 @@
   <link rel="stylesheet" href="css/tailwind-compiled.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    .glow-blue {
+      box-shadow: 0 0 40px -10px rgba(59, 130, 246, 0.4);
+    }
+    .gradient-text {
+      background: linear-gradient(135deg, #38bdf8 0%, #818cf8 50%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .bg-grid-pattern {
+      background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+  </style>
 </head>
-<body data-no-layout="true" class="bg-slate-50 text-slate-800 font-sans antialiased selection:bg-blue-100 selection:text-blue-700">
+<body data-no-layout="true" class="bg-slate-900 text-slate-100 font-sans antialiased selection:bg-blue-600 selection:text-white">
 
   <!-- ==========================================================
-       NAVBAR
+       NAVBAR (Glassmorphic)
        ========================================================== -->
-  <header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-slate-200/80 transition-all">
+  <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 transition-all">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
       
       <!-- Brand Logo -->
-      <a href="index.html" class="flex items-center gap-3">
-        <div class="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white text-lg font-bold shadow-sm">
+      <a href="index.html" class="flex items-center gap-3 group">
+        <div class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-500 flex items-center justify-center text-white text-xl font-bold shadow-lg shadow-blue-500/25 group-hover:scale-105 transition-transform">
           <i class="fa-solid fa-calculator"></i>
         </div>
         <div>
-          <span class="text-xl font-bold tracking-tight text-slate-900 block leading-tight">
-            BilBul
+          <span class="text-xl font-black tracking-tight text-white block leading-tight">
+            BilBul<span class="text-blue-400">.</span>
           </span>
-          <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block">
-            Matematika SMP
+          <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest block">
+            Matematika SMP Kelas VII
           </span>
         </div>
       </a>
 
       <!-- Desktop Nav Links -->
-      <nav class="hidden md:flex items-center gap-8 font-medium text-slate-600 text-sm">
-        <a href="#keunggulan" class="hover:text-blue-600 transition-colors">Keunggulan</a>
-        <a href="#materi" class="hover:text-blue-600 transition-colors">Materi Belajar</a>
-        <a href="#alur" class="hover:text-blue-600 transition-colors">Alur Belajar</a>
-        <a href="#testimoni" class="hover:text-blue-600 transition-colors">Testimoni</a>
+      <nav class="hidden md:flex items-center gap-8 font-semibold text-slate-300 text-sm">
+        <a href="#keunggulan" class="hover:text-blue-400 transition-colors">Keunggulan</a>
+        <a href="#alur" class="hover:text-blue-400 transition-colors">Alur Belajar</a>
+        <a href="#simulator" class="hover:text-blue-400 transition-colors">KABATAKU Demo</a>
+        <a href="#guru-siswa" class="hover:text-blue-400 transition-colors">Untuk Siswa & Guru</a>
+        <a href="#faq" class="hover:text-blue-400 transition-colors">FAQ</a>
       </nav>
 
-      <!-- Single CTA Button -->
-      <div>
-        <a href="login.html" class="inline-flex items-center px-5 py-2.5 text-sm font-semibold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-sm hover:shadow transition-all">
-          <i class="fa-solid fa-arrow-right-to-bracket mr-2 text-xs"></i> Masuk ke Kelas
+      <!-- Action Button -->
+      <div class="flex items-center gap-3">
+        <a id="nav-login-btn" href="login.html" class="inline-flex items-center px-5 py-2.5 text-xs sm:text-sm font-bold text-white bg-blue-600 hover:bg-blue-500 rounded-xl shadow-md hover:shadow-blue-500/25 transition-all">
+          <i class="fa-solid fa-arrow-right-to-bracket mr-2 text-xs"></i>
+          <span>Masuk ke Kelas</span>
         </a>
       </div>
 
@@ -58,57 +75,94 @@
   </header>
 
   <!-- ==========================================================
-       HERO SECTION
+       HERO SECTION (High Conversion & Promotional)
        ========================================================== -->
-  <section class="relative pt-16 pb-20 md:pt-24 md:pb-28 bg-white border-b border-slate-200/70">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-      
-      <!-- Badge Kategori -->
-      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-50 border border-blue-200 text-blue-700 text-xs font-semibold mb-6">
-        <span class="w-2 h-2 rounded-full bg-blue-600"></span>
-        Media Pembelajaran Interaktif SMP Kelas VII
+  <section class="relative pt-12 pb-20 md:pt-20 md:pb-32 overflow-hidden bg-grid-pattern border-b border-slate-800">
+    <!-- Ambient Glow Lights -->
+    <div class="absolute top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-blue-600/20 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="absolute top-1/3 right-10 w-72 h-72 bg-purple-600/15 rounded-full blur-3xl pointer-events-none"></div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="text-center max-w-3xl mx-auto mb-12">
+        
+        <!-- Eyebrow Badge -->
+        <div class="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full bg-blue-500/10 border border-blue-500/30 text-blue-300 text-xs font-bold mb-6 backdrop-blur-md">
+          <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
+          Kurikulum Merdeka &bull; Pembelajaran Matematika Mandiri
+        </div>
+
+        <!-- Main Heading -->
+        <h1 class="text-4xl sm:text-6xl font-black text-white tracking-tight leading-[1.15] mb-6">
+          Kuasai Operasi Campuran <br class="hidden sm:inline">
+          <span class="gradient-text">Bilangan Bulat</span> Lebih Cepat
+        </h1>
+
+        <!-- Subtitle -->
+        <p class="text-base sm:text-xl text-slate-300 mb-8 leading-relaxed font-normal">
+          Media pembelajaran digital terarah untuk siswa SMP Kelas VII. Dilengkapi simulasi garis bilangan, materi interaktif dari guru, latihan bertahap 4 tingkat, dan pembahasan tuntas seketika.
+        </p>
+
+        <!-- CTA Buttons -->
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mb-12">
+          <a id="hero-main-btn" href="login.html" class="w-full sm:w-auto inline-flex items-center justify-center px-8 py-4 text-base font-extrabold text-white bg-blue-600 hover:bg-blue-500 rounded-2xl shadow-xl hover:shadow-blue-500/30 hover:-translate-y-0.5 transition-all">
+            <i class="fa-solid fa-rocket mr-2.5 text-amber-400"></i>
+            <span>Mulai Petualangan Belajar</span>
+          </a>
+          <a href="#alur" class="w-full sm:w-auto inline-flex items-center justify-center px-7 py-4 text-base font-bold text-slate-300 hover:text-white bg-slate-800/80 hover:bg-slate-800 border border-slate-700 rounded-2xl transition-all">
+            <i class="fa-solid fa-route mr-2 text-blue-400"></i>
+            <span>Lihat Alur Belajar</span>
+          </a>
+        </div>
+
+        <!-- Feature Badges -->
+        <div class="flex flex-wrap items-center justify-center gap-6 text-xs text-slate-400 font-semibold">
+          <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Gratis & Bebas Iklan</span>
+          <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Terintegrasi Guru & CMS Cloud</span>
+          <span class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-emerald-400"></i> Pembahasan Setiap Soal</span>
+        </div>
+
       </div>
 
-      <!-- Main Heading -->
-      <h1 class="text-3xl sm:text-5xl lg:text-6xl font-extrabold text-slate-900 tracking-tight leading-tight mb-4">
-        Operasi Campuran Bilangan Bulat
-      </h1>
+      <!-- Live Interactive Math Card Preview -->
+      <div class="max-w-4xl mx-auto mt-8">
+        <div class="rounded-3xl p-1 bg-gradient-to-r from-blue-500 via-indigo-500 to-purple-500 shadow-2xl glow-blue">
+          <div class="bg-slate-900 rounded-[22px] p-6 sm:p-10 border border-slate-800">
+            <div class="flex flex-col md:flex-row items-center justify-between gap-6 pb-6 border-b border-slate-800">
+              <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-lg font-bold border border-blue-500/30">
+                  <i class="fa-solid fa-brain"></i>
+                </div>
+                <div>
+                  <h3 class="font-extrabold text-white text-base sm:text-lg">Pratinjau Alur Operasi KABATAKU</h3>
+                  <p class="text-xs text-slate-400">Kurung &rarr; Kali & Bagi &rarr; Tambah & Kurang</p>
+                </div>
+              </div>
+              <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 text-xs font-bold">
+                <i class="fa-solid fa-circle-check"></i> Mode Belajar Interaktif
+              </div>
+            </div>
 
-      <!-- Slogan / Subtitle -->
-      <p class="text-lg sm:text-xl font-semibold text-blue-600 mb-6">
-        Kenali Bilangannya, Kuasai Operasinya!
-      </p>
+            <!-- Problem Showcase -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mt-6 text-center">
+              <div class="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Soal Tantangan</div>
+                <div class="font-mono text-xl sm:text-2xl font-black text-amber-400">(-12) + 4 &times; (-3)</div>
+              </div>
+              <div class="p-4 rounded-2xl bg-slate-800/60 border border-slate-700/60">
+                <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Langkah 1 (Perkalian)</div>
+                <div class="font-mono text-lg sm:text-xl font-bold text-slate-300">(-12) + <strong class="text-indigo-400">(-12)</strong></div>
+              </div>
+              <div class="p-4 rounded-2xl bg-emerald-950/40 border border-emerald-500/30">
+                <div class="text-[11px] font-bold text-emerald-400 uppercase tracking-wider mb-1">Hasil Akhir Benar</div>
+                <div class="font-mono text-xl sm:text-2xl font-black text-emerald-400">-24</div>
+              </div>
+            </div>
 
-      <!-- Description -->
-      <p class="text-base sm:text-lg text-slate-600 mb-10 leading-relaxed max-w-2xl mx-auto font-normal">
-        Pelajari konsep bilangan bulat dengan simulasi garis bilangan, latihan bertahap dengan pembahasan lengkap, mini game edukatif, dan kuis evaluasi terarah.
-      </p>
-
-      <!-- Single Hero CTA Button -->
-      <div class="flex justify-center">
-        <a href="login.html" class="inline-flex items-center justify-center px-8 py-4 text-base font-bold text-white bg-blue-600 hover:bg-blue-700 rounded-xl shadow-md hover:shadow-lg transition-all">
-          <span>Mulai Belajar Sekarang</span>
-          <i class="fa-solid fa-arrow-right ml-2.5 text-sm"></i>
-        </a>
-      </div>
-
-      <!-- Metrics Row -->
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-16 pt-10 border-t border-slate-100">
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-2xl sm:text-3xl font-bold text-slate-900">100%</div>
-          <div class="text-xs sm:text-sm text-slate-500 mt-1">Interaktif & Terarah</div>
-        </div>
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-2xl sm:text-3xl font-bold text-slate-900">4 Submateri</div>
-          <div class="text-xs sm:text-sm text-slate-500 mt-1">Standar Kurikulum</div>
-        </div>
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-2xl sm:text-3xl font-bold text-slate-900">Realtime</div>
-          <div class="text-xs sm:text-sm text-slate-500 mt-1">Pantauan Progres Kelas</div>
-        </div>
-        <div class="p-4 rounded-xl bg-slate-50 border border-slate-100">
-          <div class="text-2xl sm:text-3xl font-bold text-slate-900">7 Lencana</div>
-          <div class="text-xs sm:text-sm text-slate-500 mt-1">Pencapaian Prestasi</div>
+            <div class="mt-6 pt-4 text-center text-xs text-slate-400 flex items-center justify-center gap-2">
+              <i class="fa-solid fa-lightbulb text-amber-400"></i>
+              <span>Setiap pengerjaan soal di sistem kami selalu dilengkapi uraian langkah demi langkah secara otomatis!</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -116,86 +170,112 @@
   </section>
 
   <!-- ==========================================================
-       SECTION: KEUNGGULAN (WARNA HARMONIS BLUE & SLATE)
+       METRICS & IMPACT STATS
        ========================================================== -->
-  <section id="keunggulan" class="py-20 bg-slate-50">
+  <section class="py-12 bg-slate-900 border-b border-slate-800">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
+          <div class="text-3xl sm:text-4xl font-black text-blue-400 mb-1">4 Level</div>
+          <div class="text-xs sm:text-sm text-slate-400 font-medium">Latihan Bertahap Terarah</div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
+          <div class="text-3xl sm:text-4xl font-black text-indigo-400 mb-1">100%</div>
+          <div class="text-xs sm:text-sm text-slate-400 font-medium">Pembahasan Detail Tiap Soal</div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
+          <div class="text-3xl sm:text-4xl font-black text-purple-400 mb-1">Real-time</div>
+          <div class="text-xs sm:text-sm text-slate-400 font-medium">Sinkronisasi Database Cloud</div>
+        </div>
+        <div class="p-6 rounded-2xl bg-slate-800/40 border border-slate-800">
+          <div class="text-3xl sm:text-4xl font-black text-emerald-400 mb-1">6 Lencana</div>
+          <div class="text-xs sm:text-sm text-slate-400 font-medium">Apresiasi Prestasi Belajar</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       SECTION: KEUNGGULAN UTAMA
+       ========================================================== -->
+  <section id="keunggulan" class="py-24 bg-slate-950 text-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <span class="text-xs font-bold uppercase tracking-widest text-blue-600 block mb-2">Fitur Utama</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Dirancang untuk Pemahaman Konseptual Siswa
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-blue-400 block mb-3">Fitur Platform</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
+          Dirancang Khusus untuk Membangun Pemahaman Konseptual
         </h2>
-        <p class="text-slate-500 mt-2 text-sm sm:text-base">
-          Metode pembelajaran bertahap yang membantu siswa memahami konsep dari dasar hingga aplikasi soal.
+        <p class="text-slate-400 mt-4 text-base sm:text-lg">
+          Matematika bukan tentang menghafal rumus secara buta, melainkan memahami konsep langkah demi langkah.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         
-        <!-- Card 1 -->
-        <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition-colors">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl mb-5">
-            <i class="fa-solid fa-arrows-left-right-to-line"></i>
+        <!-- Card 1: Garis Bilangan -->
+        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-blue-500/50 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-blue-500/10 border border-blue-500/20 text-blue-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-arrows-left-right"></i>
           </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Garis Bilangan Visual</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Visualisasi posisi bilangan positif dan negatif mempermudah siswa memahami arah perpindahan langkah dalam operasi hitung.
+          <h3 class="text-xl font-bold text-white mb-3">Garis Bilangan Visual</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Siswa dapat melihat langsung posisi bilangan positif, nol, dan negatif serta memahami arah pergeseran saat melakukan penjumlahan dan pengurangan.
           </p>
         </div>
 
-        <!-- Card 2 -->
-        <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition-colors">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl mb-5">
-            <i class="fa-solid fa-pen-ruler"></i>
+        <!-- Card 2: Latihan Bertahap 4 Level -->
+        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-indigo-500/50 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-layer-group"></i>
           </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Latihan Mandiri & Pembahasan</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Latihan operasi dasar hingga campuran dengan verifikasi jawaban langsung dan langkah penyelesaian rinci.
+          <h3 class="text-xl font-bold text-white mb-3">Latihan Bertahap 4 Level</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Alur latihan disusun teratur: Level 1 (Konsep), Level 2 (Tambah & Kurang), Level 3 (Kali & Bagi), hingga Level 4 (Tantangan Campuran KABATAKU).
           </p>
         </div>
 
-        <!-- Card 3 -->
-        <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition-colors">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl mb-5">
-            <i class="fa-solid fa-gamepad"></i>
+        <!-- Card 3: Pembahasan Tuntas -->
+        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-purple-500/50 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-purple-500/10 border border-purple-500/20 text-purple-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-list-check"></i>
           </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Game Ketangkasan Berhitung</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Tantangan waktu 15 detik dan tebak Benar/Salah untuk melatih kecepatan dan intuisi berhitung siswa.
+          <h3 class="text-xl font-bold text-white mb-3">Pembahasan Langkah Demi Langkah</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Tidak ada lagi kebingungan saat salah menjawab. Sistem langsung memberikan kunci jawaban dan uraian pengerjaan yang runut untuk setiap butir soal.
           </p>
         </div>
 
-        <!-- Card 4 -->
-        <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition-colors">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl mb-5">
+        <!-- Card 4: Kuis Evaluasi Terarah -->
+        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-pink-500/50 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-pink-500/10 border border-pink-500/20 text-pink-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-stopwatch"></i>
+          </div>
+          <h3 class="text-xl font-bold text-white mb-3">Kuis Akhir Evaluasi Kompetensi</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Evaluasi akhir komprehensif berstandar capaian pembelajaran untuk menguji kesiapan dan penguasaan materi siswa secara menyeluruh.
+          </p>
+        </div>
+
+        <!-- Card 5: Lencana Digital -->
+        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-amber-500/50 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-amber-500/10 border border-amber-500/20 text-amber-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
             <i class="fa-solid fa-trophy"></i>
           </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Lencana Pencapaian</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Apresiasi proses belajar dengan koleksi 7 lencana digital yang terbuka seiring penyelesaian materi dan kuis.
+          <h3 class="text-xl font-bold text-white mb-3">Lencana Prestasi Kehormatan</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Siswa termotivasi untuk terus belajar melalui koleksi lencana prestasi digital yang terbuka otomatis saat meraih skor tertentu dan menyelesaikan tahapan.
           </p>
         </div>
 
-        <!-- Card 5 -->
-        <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition-colors">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl mb-5">
-            <i class="fa-solid fa-chart-line"></i>
+        <!-- Card 6: CMS Terintegrasi Guru -->
+        <div class="bg-slate-900/80 p-8 rounded-3xl border border-slate-800 hover:border-emerald-500/50 transition-all group">
+          <div class="w-14 h-14 rounded-2xl bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 flex items-center justify-center text-2xl mb-6 group-hover:scale-110 transition-transform">
+            <i class="fa-solid fa-chalkboard-user"></i>
           </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Monitoring Progres Realtime</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Guru dapat memantau perolehan skor dan penguasaan materi siswa secara terpusat dan diperbarui otomatis.
-          </p>
-        </div>
-
-        <!-- Card 6 -->
-        <div class="bg-white p-7 rounded-2xl border border-slate-200/80 shadow-sm hover:border-blue-300 transition-colors">
-          <div class="w-12 h-12 rounded-xl bg-blue-50 border border-blue-100 text-blue-600 flex items-center justify-center text-xl mb-5">
-            <i class="fa-solid fa-database"></i>
-          </div>
-          <h3 class="text-lg font-bold text-slate-900 mb-2">Bank Soal Cloud Dinamis</h3>
-          <p class="text-slate-500 text-sm leading-relaxed">
-            Seluruh data soal tes, latihan, dan kuis tersimpan di database cloud Supabase dan dapat diperbarui secara dinamis.
+          <h3 class="text-xl font-bold text-white mb-3">CMS Materi Dinamis & Rekap Guru</h3>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Guru dapat menambah atau menyesuaikan uraian materi kapan saja via dashboard CMS, serta memantau perkembangan nilai seluruh siswa secara real-time.
           </p>
         </div>
 
@@ -205,80 +285,105 @@
   </section>
 
   <!-- ==========================================================
-       SECTION: YANG AKAN DIPELAJARI (4 SUBMATERI)
+       SECTION: ALUR BELAJAR TERARAH (5 TAHAP UTAMA)
        ========================================================== -->
-  <section id="materi" class="py-20 bg-white border-t border-slate-200/70">
+  <section id="alur" class="py-24 bg-slate-900 border-t border-slate-800 relative">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <span class="text-xs font-bold uppercase tracking-widest text-blue-600 block mb-2">Struktur Modul</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Yang Akan Kamu Pelajari
+      <div class="text-center max-w-3xl mx-auto mb-20">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-blue-400 block mb-3">Roadmap Pembelajaran</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-white tracking-tight">
+          Alur Belajar Terarah Tanpa Lompat-Lompat
         </h2>
-        <p class="text-slate-500 mt-2 text-sm sm:text-base">
-          Materi disajikan secara berurutan agar pemahaman terbentuk dengan kokoh.
+        <p class="text-slate-400 mt-4 text-base sm:text-lg">
+          Setiap siswa dibimbing melewati 5 tahapan terstruktur untuk memastikan pemahaman terbentuk sempurna.
         </p>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-5 gap-4">
         
-        <!-- Materi 1 -->
-        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+        <!-- Step 1 -->
+        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
           <div>
-            <span class="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-2">Submateri 1</span>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">Mengenal Bilangan Bulat</h3>
-            <p class="text-slate-500 text-sm leading-relaxed mb-6">
-              Pengertian bilangan positif, nol, negatif, serta contoh penerapannya dalam kehidupan nyata.
+            <div class="w-10 h-10 rounded-xl bg-blue-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
+              1
+            </div>
+            <h4 class="font-bold text-white text-base mb-2">Tes Awal</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Tes diagnostik untuk memetakan pemahaman awal siswa sebelum mempelajari submateri.
             </p>
           </div>
-          <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>15 Menit</span>
-            <span class="text-blue-600 font-semibold">Tersedia di Kelas</span>
+          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-blue-400 flex items-center justify-between">
+            <span>Tahap Awal</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
 
-        <!-- Materi 2 -->
-        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+        <!-- Step 2 -->
+        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
           <div>
-            <span class="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-2">Submateri 2</span>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">Garis Bilangan & Nilai Mutlak</h3>
-            <p class="text-slate-500 text-sm leading-relaxed mb-6">
-              Perbandingan urutan bilangan serta konsep jarak titik ke titik nol tanpa memandang arah.
+            <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
+              2
+            </div>
+            <h4 class="font-bold text-white text-base mb-2">Materi Dinamis</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Mempelajari submateri konsep dasar, sifat operasi, dan aturan KABATAKU yang disusun guru.
             </p>
           </div>
-          <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>20 Menit</span>
-            <span class="text-blue-600 font-semibold">Tersedia di Kelas</span>
+          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-indigo-400 flex items-center justify-between">
+            <span>Pemahaman Konsep</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
 
-        <!-- Materi 3 -->
-        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+        <!-- Step 3 -->
+        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
           <div>
-            <span class="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-2">Submateri 3</span>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">Sifat-Sifat Operasi Hitung</h3>
-            <p class="text-slate-500 text-sm leading-relaxed mb-6">
-              Memahami sifat komutatif, asosiatif, distributif, elemen netral identitas, dan invers penjumlahan.
+            <div class="w-10 h-10 rounded-xl bg-purple-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
+              3
+            </div>
+            <h4 class="font-bold text-white text-base mb-2">Latihan 4 Tahap</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Mengasah kemampuan secara bertahap dari operasi dasar hingga tantangan operasi campuran.
             </p>
           </div>
-          <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>25 Menit</span>
-            <span class="text-blue-600 font-semibold">Tersedia di Kelas</span>
+          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-purple-400 flex items-center justify-between">
+            <span>Uji Mandiri</span>
+            <i class="fa-solid fa-arrow-right"></i>
           </div>
         </div>
 
-        <!-- Materi 4 -->
-        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
+        <!-- Step 4 -->
+        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
           <div>
-            <span class="text-xs font-bold text-blue-600 uppercase tracking-wider block mb-2">Submateri 4</span>
-            <h3 class="text-lg font-bold text-slate-900 mb-2">Operasi Campuran (KABATAKU)</h3>
-            <p class="text-slate-500 text-sm leading-relaxed mb-6">
-              Hirarki pengerjaan: dahulukan tanda kurung, kali dan bagi dari kiri, lalu tambah dan kurang.
+            <div class="w-10 h-10 rounded-xl bg-pink-600 text-white font-black flex items-center justify-center text-sm mb-4 shadow-md">
+              4
+            </div>
+            <h4 class="font-bold text-white text-base mb-2">Kuis Akhir</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Ujian komprehensif untuk menguji kelulusan penguasaan materi operasi campuran.
             </p>
           </div>
-          <div class="pt-4 border-t border-slate-200/80 flex items-center justify-between text-xs text-slate-500 font-medium">
-            <span>30 Menit</span>
-            <span class="text-blue-600 font-semibold">Tersedia di Kelas</span>
+          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-pink-400 flex items-center justify-between">
+            <span>Evaluasi Kompetensi</span>
+            <i class="fa-solid fa-arrow-right"></i>
+          </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="bg-slate-800/70 p-6 rounded-2xl border border-slate-700/80 relative flex flex-col justify-between">
+          <div>
+            <div class="w-10 h-10 rounded-xl bg-amber-500 text-slate-900 font-black flex items-center justify-center text-sm mb-4 shadow-md">
+              5
+            </div>
+            <h4 class="font-bold text-white text-base mb-2">Hasil & Lencana</h4>
+            <p class="text-xs text-slate-400 leading-relaxed">
+              Melihat transkrip capaian nilai serta membuka koleksi lencana prestasi belajar.
+            </p>
+          </div>
+          <div class="mt-6 pt-3 border-t border-slate-700/50 text-[11px] font-semibold text-amber-400 flex items-center justify-between">
+            <span>Pencapaian Akhir</span>
+            <i class="fa-solid fa-award"></i>
           </div>
         </div>
 
@@ -288,129 +393,98 @@
   </section>
 
   <!-- ==========================================================
-       SECTION: ALUR BELAJAR (ROADMAP KONSISTEN)
+       SECTION: SIMULATOR INTERAKTIF KABATAKU
        ========================================================== -->
-  <section id="alur" class="py-20 bg-slate-900 text-white">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+  <section id="simulator" class="py-24 bg-slate-950 border-t border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <span class="text-xs font-bold uppercase tracking-widest text-blue-400 block mb-2">Alur Pembelajaran</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-white tracking-tight">
-          7 Langkah Penguasaan Materi
-        </h2>
-        <p class="text-slate-400 mt-2 text-sm sm:text-base">
-          Alur terstruktur dari pengenalan awal hingga evaluasi kompetensi akhir.
-        </p>
+      <div class="text-center mb-12">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-amber-400 block mb-2">Demo Interaktif Langsung</span>
+        <h2 class="text-3xl font-black text-white">Coba Aturan Hierarki KABATAKU</h2>
+        <p class="text-slate-400 text-sm mt-2">Pilih salah satu contoh operasi hitung di bawah ini untuk melihat urutan pengerjaannya:</p>
       </div>
 
-      <!-- Unified Roadmap Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-3">
-        
-        <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl text-center flex flex-col items-center">
-          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs mb-3">1</div>
-          <h4 class="font-bold text-white text-sm mb-1">Tes Awal</h4>
-          <p class="text-xs text-slate-400">Diagnostik awal</p>
+      <!-- Simulator Box -->
+      <div class="bg-slate-900 border border-slate-800 rounded-3xl p-6 sm:p-8 shadow-2xl">
+        <!-- Preset Buttons -->
+        <div class="flex flex-wrap gap-2.5 justify-center mb-6">
+          <button onclick="pilihDemo(1)" class="demo-btn px-4 py-2 bg-blue-600/30 hover:bg-blue-600 text-blue-300 hover:text-white border border-blue-500/40 rounded-xl text-xs font-bold transition-all" data-id="1">
+            Contoh 1: 15 + (-3) &times; 4
+          </button>
+          <button onclick="pilihDemo(2)" class="demo-btn px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-xl text-xs font-bold transition-all" data-id="2">
+            Contoh 2: (18 - 6) : (-3) + 7
+          </button>
+          <button onclick="pilihDemo(3)" class="demo-btn px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-xl text-xs font-bold transition-all" data-id="3">
+            Contoh 3: (-24) : 4 &times; (-2) - 5
+          </button>
         </div>
 
-        <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl text-center flex flex-col items-center">
-          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs mb-3">2</div>
-          <h4 class="font-bold text-white text-sm mb-1">Materi</h4>
-          <p class="text-xs text-slate-400">Konsep interaktif</p>
+        <!-- Dynamic Output Container -->
+        <div id="demo-result" class="bg-slate-950/90 rounded-2xl p-6 border border-slate-800">
+          <!-- Diisi via JS -->
         </div>
-
-        <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl text-center flex flex-col items-center">
-          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs mb-3">3</div>
-          <h4 class="font-bold text-white text-sm mb-1">Latihan</h4>
-          <p class="text-xs text-slate-400">Umpan balik langsung</p>
-        </div>
-
-        <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl text-center flex flex-col items-center">
-          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs mb-3">4</div>
-          <h4 class="font-bold text-white text-sm mb-1">Soal Cerita</h4>
-          <p class="text-xs text-slate-400">Aplikasi kontekstual</p>
-        </div>
-
-        <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl text-center flex flex-col items-center">
-          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs mb-3">5</div>
-          <h4 class="font-bold text-white text-sm mb-1">Game</h4>
-          <p class="text-xs text-slate-400">Asah ketangkasan</p>
-        </div>
-
-        <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl text-center flex flex-col items-center">
-          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs mb-3">6</div>
-          <h4 class="font-bold text-white text-sm mb-1">Kuis Akhir</h4>
-          <p class="text-xs text-slate-400">Uji kompetensi</p>
-        </div>
-
-        <div class="bg-slate-800 border border-slate-700 p-5 rounded-xl text-center flex flex-col items-center">
-          <div class="w-8 h-8 rounded-lg bg-blue-600 text-white font-bold flex items-center justify-center text-xs mb-3">7</div>
-          <h4 class="font-bold text-white text-sm mb-1">Pencapaian</h4>
-          <p class="text-xs text-slate-400">Koleksi lencana</p>
-        </div>
-
       </div>
 
     </div>
   </section>
 
   <!-- ==========================================================
-       SECTION: TESTIMONI
+       SECTION: NILAI LEBIH UNTUK SISWA & GURU
        ========================================================== -->
-  <section id="testimoni" class="py-20 bg-white border-t border-slate-200/70">
+  <section id="guru-siswa" class="py-24 bg-slate-900 border-t border-slate-800">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="text-center max-w-2xl mx-auto mb-16">
-        <span class="text-xs font-bold uppercase tracking-widest text-blue-600 block mb-2">Tanggapan Pengguna</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 tracking-tight">
-          Pengalaman Belajar dengan BilBul
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-indigo-400 block mb-3">Kolaborasi Edukatif</span>
+        <h2 class="text-3xl sm:text-4xl font-black text-white">
+          Manfaat Nyata bagi Siswa dan Guru
         </h2>
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
         
-        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
-          <div>
-            <div class="flex text-amber-500 mb-3 text-xs gap-1">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
-              "Garis bilangan interaktifnya sangat membantu saya memahami perkalian dan pembagian bilangan negatif yang sebelumnya sering membingungkan."
-            </p>
+        <!-- Untuk Siswa -->
+        <div class="bg-gradient-to-b from-slate-850 to-slate-900 p-8 sm:p-10 rounded-3xl border border-slate-800 shadow-xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 text-blue-400 text-xs font-bold mb-6 border border-blue-500/20">
+            <i class="fa-solid fa-graduation-cap"></i> Untuk Siswa
           </div>
-          <div class="pt-4 border-t border-slate-200">
-            <h4 class="font-bold text-slate-900 text-sm">Rafi Ananda</h4>
-            <p class="text-xs text-slate-500">Siswa Kelas VII SMP</p>
-          </div>
+          <h3 class="text-2xl font-black text-white mb-4">Belajar Mandiri Tanpa Rasa Cemas</h3>
+          <ul class="space-y-4 text-slate-300 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Konsep Visual Garis Bilangan:</strong> Membantu memahami operasi bilangan negatif secara nyata tanpa hafalan membingungkan.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Umpan Balik Instan:</strong> Mengetahui letak kesalahan seketika dengan pembahasan rumus KABATAKU yang mudah dipahami.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Lencana Motivasi:</strong> Kumpulkan 6 lencana prestasi untuk membuktikan kemampuan matematika kepada guru dan teman.</span>
+            </li>
+          </ul>
         </div>
 
-        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
-          <div>
-            <div class="flex text-amber-500 mb-3 text-xs gap-1">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
-              "Monitoring realtime memudahkan saya memetakan materi mana yang belum dikuasai oleh siswa di kelas tanpa harus memeriksa lembar kertas secara manual."
-            </p>
+        <!-- Untuk Guru -->
+        <div class="bg-gradient-to-b from-slate-850 to-slate-900 p-8 sm:p-10 rounded-3xl border border-slate-800 shadow-xl">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-500/10 text-purple-400 text-xs font-bold mb-6 border border-purple-500/20">
+            <i class="fa-solid fa-chalkboard-user"></i> Untuk Guru & Sekolah
           </div>
-          <div class="pt-4 border-t border-slate-200">
-            <h4 class="font-bold text-slate-900 text-sm">Siti Rahmawati, S.Pd.</h4>
-            <p class="text-xs text-slate-500">Guru Matematika SMP</p>
-          </div>
-        </div>
-
-        <div class="bg-slate-50 p-6 rounded-2xl border border-slate-200 flex flex-col justify-between">
-          <div>
-            <div class="flex text-amber-500 mb-3 text-xs gap-1">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </div>
-            <p class="text-slate-600 text-sm leading-relaxed mb-6">
-              "Fitur lencana pencapaian membuat kami lebih semangat menyelesaikan semua latihan soal dan kuis sampai nilainya sempurna."
-            </p>
-          </div>
-          <div class="pt-4 border-t border-slate-200">
-            <h4 class="font-bold text-slate-900 text-sm">Dinda Kirana</h4>
-            <p class="text-xs text-slate-500">Siswa Kelas VII SMP</p>
-          </div>
+          <h3 class="text-2xl font-black text-white mb-4">Kemudahan Mengelola & Memantau Kelas</h3>
+          <ul class="space-y-4 text-slate-300 text-sm">
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Kelola Materi (CMS):</strong> Guru bebas menambah, menyunting, atau menyempurnakan submateri sesuai kebutuhan silabus sekolah.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Rekapitulasi Nilai Otomatis:</strong> Nilai tes awal, latihan tiap tahap, dan kuis akhir terdata otomatis tanpa koreksi manual.</span>
+            </li>
+            <li class="flex items-start gap-3">
+              <i class="fa-solid fa-check text-emerald-400 mt-1"></i>
+              <span><strong>Ekspor Laporan CSV:</strong> Data transkrip nilai siswa siap diunduh sekali klik untuk pengisian buku rapor atau arsip guru.</span>
+            </li>
+          </ul>
         </div>
 
       </div>
@@ -419,20 +493,69 @@
   </section>
 
   <!-- ==========================================================
-       SECTION: FINAL CTA BANNER (HANYA 1 TOMBOL)
+       SECTION: FAQ (Pertanyaan yang Sering Diajukan)
        ========================================================== -->
-  <section class="py-16 bg-blue-600 text-white text-center">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-      <h2 class="text-2xl sm:text-3xl font-extrabold mb-3 tracking-tight">
-        Siap Memulai Pembelajaran?
+  <section id="faq" class="py-24 bg-slate-950 border-t border-slate-800">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <div class="text-center mb-16">
+        <span class="text-xs font-extrabold uppercase tracking-widest text-blue-400 block mb-2">Bantuan & Informasi</span>
+        <h2 class="text-3xl font-black text-white">Pertanyaan yang Sering Diajukan</h2>
+      </div>
+
+      <div class="space-y-4">
+        
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+          <h4 class="font-bold text-white text-base mb-2">Apakah media pembelajaran BilBul ini gratis digunakan?</h4>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Ya! Platform ini dirancang sebagai media pembelajaran terbuka untuk siswa dan guru SMP Kelas VII dalam mendukung implementasi Kurikulum Merdeka.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+          <h4 class="font-bold text-white text-base mb-2">Bagaimana cara siswa masuk dan menyimpan nilai belajar?</h4>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Siswa cukup membuka halaman Masuk, memilih tab Siswa, dan memasukkan Nama Siswa serta Kelas. Seluruh progres materi, nilai latihan, kuis, dan lencana akan tersimpan otomatis ke database.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+          <h4 class="font-bold text-white text-base mb-2">Apakah Guru dapat mengubah atau menambah materi pembelajaran?</h4>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Tentu! Guru dapat masuk melalui portal Akun Guru dan mengakses menu CMS Materi untuk menambah bab baru, mengedit ringkasan, maupun memperbarui isi konten penjelasan materi.
+          </p>
+        </div>
+
+        <div class="p-6 rounded-2xl bg-slate-900 border border-slate-800">
+          <h4 class="font-bold text-white text-base mb-2">Apakah website ini dapat diakses dari smartphone (HP) atau tablet?</h4>
+          <p class="text-slate-400 text-sm leading-relaxed">
+            Sangat responsif! Seluruh antarmuka dirancang optimal untuk layar smartphone, tablet, maupun komputer desktop sehingga siswa dapat belajar dengan nyaman di mana saja.
+          </p>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ==========================================================
+       SECTION: FINAL CTA PROMOTIONAL BANNER
+       ========================================================== -->
+  <section class="py-20 bg-gradient-to-r from-blue-700 via-indigo-700 to-purple-800 text-white text-center relative overflow-hidden">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+      <div class="w-16 h-16 rounded-2xl bg-white/10 backdrop-blur-md flex items-center justify-center text-3xl mx-auto mb-6 shadow-inner">
+        <i class="fa-solid fa-graduation-cap text-amber-300"></i>
+      </div>
+      <h2 class="text-3xl sm:text-5xl font-black mb-4 tracking-tight">
+        Siap Tingkatkan Nilai Matematika Bilangan Bulat?
       </h2>
-      <p class="text-blue-100 text-sm sm:text-base mb-8">
-        Silakan masuk dengan akun yang telah terdaftar untuk melanjutkan ke ruang belajar.
+      <p class="text-blue-100 text-base sm:text-lg mb-10 max-w-2xl mx-auto font-normal">
+        Bergabunglah sekarang di ruang belajar BilBul dan nikmati kemudahan belajar operasi hitung campuran dengan alur terarah dan menyenangkan.
       </p>
       <div>
-        <a href="login.html" class="inline-flex items-center px-8 py-3.5 bg-white text-blue-700 font-bold text-sm rounded-xl shadow-md hover:bg-slate-100 transition-all">
-          <span>Masuk ke Kelas</span>
-          <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+        <a id="bottom-cta-btn" href="login.html" class="inline-flex items-center px-10 py-4 bg-white text-blue-700 font-extrabold text-base rounded-2xl shadow-xl hover:bg-slate-50 hover:shadow-2xl hover:scale-105 transition-all">
+          <span>Masuk ke Ruang Belajar</span>
+          <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>
         </a>
       </div>
     </div>
@@ -441,17 +564,137 @@
   <!-- ==========================================================
        FOOTER
        ========================================================== -->
-  <footer class="bg-slate-900 text-slate-400 py-10 text-xs">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-      <div class="flex items-center gap-2 text-white font-bold text-sm">
-        <i class="fa-solid fa-calculator text-blue-500"></i> BilBul Interaktif
+  <footer class="bg-slate-950 text-slate-400 py-12 border-t border-slate-800 text-xs">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-6">
+      <div class="flex items-center gap-3">
+        <div class="w-8 h-8 rounded-xl bg-blue-600 flex items-center justify-center text-white font-bold">
+          <i class="fa-solid fa-calculator text-xs"></i>
+        </div>
+        <div>
+          <span class="font-bold text-white text-sm">BilBul Interaktif</span>
+          <p class="text-[11px] text-slate-500">Operasi Campuran Bilangan Bulat &bull; Kelas VII SMP</p>
+        </div>
       </div>
+
+      <div class="flex items-center gap-6 text-slate-400 font-semibold">
+        <a href="#keunggulan" class="hover:text-white transition-colors">Keunggulan</a>
+        <a href="#alur" class="hover:text-white transition-colors">Alur Belajar</a>
+        <a href="#simulator" class="hover:text-white transition-colors">Simulator KABATAKU</a>
+        <a href="login.html" class="hover:text-white transition-colors">Portal Masuk</a>
+      </div>
+
       <p class="text-slate-500 text-center sm:text-right">
-        Media Pembelajaran Operasi Campuran Bilangan Bulat Kelas VII SMP.
+        &copy; 2024 BilBul. Media Pembelajaran Matematika SMP Kelas VII.
       </p>
     </div>
   </footer>
 
+  <!-- ==========================================================
+       CLIENT SCRIPT (Simulator & Auth State Detection)
+       ========================================================== -->
+  <script>
+    // Data Preset Demo KABATAKU
+    const DEMO_DATA = {
+      1: {
+        soal: "15 + (-3) &times; 4",
+        langkah1: "Dahulukan operasi <strong>Perkalian</strong>: <code class='text-amber-400 font-mono'>(-3) &times; 4 = -12</code>",
+        langkah2: "Lanjutkan operasi <strong>Penjumlahan</strong>: <code class='text-blue-400 font-mono'>15 + (-12)</code>",
+        hasil: "3",
+        penjelasan: "Perkalian memiliki hierarki prioritas lebih tinggi daripada penjumlahan, sehingga (-3) &times; 4 harus diselesaikan terlebih dahulu."
+      },
+      2: {
+        soal: "(18 - 6) : (-3) + 7",
+        langkah1: "Dahulukan operasi di dalam <strong>Tanda Kurung</strong>: <code class='text-amber-400 font-mono'>18 - 6 = 12</code>",
+        langkah2: "Lanjutkan operasi <strong>Pembagian</strong>: <code class='text-blue-400 font-mono'>12 : (-3) = -4</code>, lalu tambah 7: <code class='text-emerald-400 font-mono'>-4 + 7</code>",
+        hasil: "3",
+        penjelasan: "Operasi di dalam kurung selalu dikerjakan pertama kali, disusul pembagian, dan terakhir penjumlahan."
+      },
+      3: {
+        soal: "(-24) : 4 &times; (-2) - 5",
+        langkah1: "Operasi Pembagian dan Perkalian setara, kerjakan dari <strong>Kiri ke Kanan</strong>: <code class='text-amber-400 font-mono'>(-24) : 4 = -6</code>",
+        langkah2: "Lanjutkan perkalian: <code class='text-blue-400 font-mono'>(-6) &times; (-2) = 12</code>, lalu kurangkan: <code class='text-emerald-400 font-mono'>12 - 5</code>",
+        hasil: "7",
+        penjelasan: "Tanda bagi dan kali memiliki derajat prioritas sama kuat, maka aturan KABATAKU mewajibkan pengerjaan berurutan dari sisi paling kiri."
+      }
+    };
+
+    function pilihDemo(id) {
+      const item = DEMO_DATA[id];
+      if (!item) return;
+
+      // Update button styling
+      document.querySelectorAll('.demo-btn').forEach(btn => {
+        if (btn.getAttribute('data-id') == id) {
+          btn.className = "demo-btn px-4 py-2 bg-blue-600 text-white border border-blue-500 rounded-xl text-xs font-bold transition-all shadow-md";
+        } else {
+          btn.className = "demo-btn px-4 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white border border-slate-700 rounded-xl text-xs font-bold transition-all";
+        }
+      });
+
+      const container = document.getElementById('demo-result');
+      if (container) {
+        container.innerHTML = `
+          <div class="space-y-4">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-slate-800">
+              <div>
+                <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Persamaan Matematika</span>
+                <div class="text-xl sm:text-2xl font-black font-mono text-amber-300 mt-0.5">${item.soal}</div>
+              </div>
+              <div class="text-right sm:text-right">
+                <span class="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Hasil Akhir</span>
+                <div class="text-2xl sm:text-3xl font-black font-mono text-emerald-400 mt-0.5">= ${item.hasil}</div>
+              </div>
+            </div>
+
+            <div class="space-y-2.5 pt-2">
+              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800/80 flex items-start gap-3">
+                <div class="w-6 h-6 rounded-lg bg-blue-500/20 text-blue-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">1</div>
+                <div class="text-xs sm:text-sm text-slate-300 leading-relaxed">${item.langkah1}</div>
+              </div>
+              <div class="p-3.5 rounded-xl bg-slate-900 border border-slate-800/80 flex items-start gap-3">
+                <div class="w-6 h-6 rounded-lg bg-indigo-500/20 text-indigo-400 font-bold text-xs flex items-center justify-center flex-shrink-0 mt-0.5">2</div>
+                <div class="text-xs sm:text-sm text-slate-300 leading-relaxed">${item.langkah2}</div>
+              </div>
+            </div>
+
+            <div class="p-3.5 rounded-xl bg-blue-950/40 border border-blue-800/40 text-xs text-blue-200 leading-relaxed flex items-center gap-2.5">
+              <i class="fa-solid fa-circle-info text-blue-400"></i>
+              <span>${item.penjelasan}</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    // Inisialisasi awal demo
+    pilihDemo(1);
+
+    // Cek jika pengguna sudah login sebelumnya
+    document.addEventListener('DOMContentLoaded', () => {
+      try {
+        const student = localStorage.getItem('math_student');
+        const user = localStorage.getItem('math_current_user');
+        if (student || user) {
+          const targetUrl = 'dashboard.html';
+          const navBtn = document.getElementById('nav-login-btn');
+          const heroBtn = document.getElementById('hero-main-btn');
+          const bottomBtn = document.getElementById('bottom-cta-btn');
+
+          if (navBtn) {
+            navBtn.href = targetUrl;
+            navBtn.innerHTML = `<i class="fa-solid fa-house mr-2 text-xs"></i> <span>Buka Dashboard</span>`;
+          }
+          if (heroBtn) {
+            heroBtn.href = targetUrl;
+            heroBtn.innerHTML = `<i class="fa-solid fa-play mr-2.5 text-amber-400"></i> <span>Lanjutkan Belajar</span>`;
+          }
+          if (bottomBtn) {
+            bottomBtn.href = targetUrl;
+            bottomBtn.innerHTML = `<span>Buka Ruang Belajar</span> <i class="fa-solid fa-arrow-right ml-3 text-sm"></i>`;
+          }
+        }
+      } catch (_) {}
+    });
+  </script>
 </body>
 </html>
-
