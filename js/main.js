@@ -1,5 +1,6 @@
 import { getCurrentUser, signOut, saveStudentProgress } from './supabase-client.js';
 import { checkAndUnlockBadges } from './badge-engine.js';
+import { renderBottomFlowBar } from './learning-flow.js';
 
 // Fungsi pelacak otomatis pengerjaan / pembacaan materi pembelajaran
 async function trackMateriReading() {
@@ -91,12 +92,14 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => {
       updateProfileUI(currentUser);
       trackMateriReading();
+      renderBottomFlowBar();
     }, 200);
 
     // Responsif terhadap perpindahan halaman SPA
     window.addEventListener('spa:navigated', () => {
       updateProfileUI(currentUser);
       trackMateriReading();
+      renderBottomFlowBar();
     });
   } catch (err) {
     loadingOverlay.remove();

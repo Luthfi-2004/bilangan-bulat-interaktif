@@ -65,7 +65,10 @@
       if (introContainer) introContainer.style.display = 'none';
       if (quizContainer) quizContainer.style.display = 'block';
       
-      new QuizEngine('#app-content #quiz-container', questions, 'kuis');
+      new QuizEngine('#app-content #quiz-container', questions, 'kuis', null, {
+        label: 'Lihat Hasil Belajar & Lencana',
+        url: 'hasil.html'
+      });
     };
 
     document.addEventListener('DOMContentLoaded', () => {

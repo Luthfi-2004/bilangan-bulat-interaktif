@@ -73,8 +73,61 @@
   <script type="module">
     import { getQuestions } from './js/supabase-client.js';
     import { QuizEngine } from './js/quiz-engine.js';
+    import { getSoalLatihanByTahap } from './js/soal-data.js';
     
+    const TAHAP_CONFIG = {
+      1: {
+        judul: "Latihan 1: Konsep & Garis Bilangan",
+        deskripsi: "Latihan pemahaman nilai mutlak, bilangan positif/negatif, dan tanda perbandingan.",
+        jenis: "latihan_dasar",
+        nextAction: { label: "Lanjut ke Materi 3: Penjumlahan", url: "materi/3-penjumlahan.html" }
+      },
+      2: {
+        judul: "Latihan 2: Penjumlahan & Pengurangan",
+        deskripsi: "Latihan menghitung penjumlahan dan pengurangan bilangan bertanda sama maupun beda.",
+        jenis: "latihan_dasar",
+        nextAction: { label: "Lanjut ke Materi 6: Perkalian", url: "materi/6-perkalian.html" }
+      },
+      3: {
+        judul: "Latihan 3: Perkalian & Pembagian",
+        deskripsi: "Latihan menguji aturan perkalian dan pembagian tanda sejenis maupun berbeda.",
+        jenis: "latihan_dasar",
+        nextAction: { label: "Lanjut ke Materi 8: Operasi Campuran", url: "materi/8-operasi-campuran.html" }
+      },
+      4: {
+        judul: "Latihan 4: Operasi Hitung Campuran",
+        deskripsi: "Tantangan penerapan hierarki KABATAKU (kurung, kali/bagi, tambah/kurang).",
+        jenis: "latihan_campuran",
+        nextAction: { label: "Lanjut ke Materi 9: Penerapan & Soal Cerita", url: "materi/9-penerapan.html" }
+      }
+    };
+
+    window.mulaiLatihanTahap = async function(tahapNum) {
+      const cfg = TAHAP_CONFIG[tahapNum] || TAHAP_CONFIG[1];
+      const latihanMenu = document.querySelector('#app-content #latihan-menu') || document.getElementById('latihan-menu');
+      const quizContainer = document.querySelector('#app-content #quiz-container') || document.getElementById('quiz-container');
+      const backBtnContainer = document.querySelector('#app-content #back-btn-container') || document.getElementById('back-btn-container');
+
+      if (latihanMenu) latihanMenu.style.display = 'none';
+      if (quizContainer) quizContainer.style.display = 'block';
+      if (backBtnContainer) backBtnContainer.style.display = 'block';
+      
+      const titleEl = document.querySelector('#app-content h1') || document.querySelector('h1');
+      if (titleEl) {
+        titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600 mr-3"></i> ${cfg.judul}`;
+      }
+
+      const soal = getSoalLatihanByTahap(tahapNum);
+      if (quizContainer) quizContainer.innerHTML = '';
+      new QuizEngine('#app-content #quiz-container', soal, cfg.jenis, null, cfg.nextAction);
+    };
+
     window.mulaiLatihan = async function(kategori) {
+      if (kategori === 'campuran') {
+        window.mulaiLatihanTahap(4);
+        return;
+      }
+      // Default ke dasar tahap 1 atau gabungan
       const latihanMenu = document.querySelector('#app-content #latihan-menu') || document.getElementById('latihan-menu');
       const quizContainer = document.querySelector('#app-content #quiz-container') || document.getElementById('quiz-container');
       const backBtnContainer = document.querySelector('#app-content #back-btn-container') || document.getElementById('back-btn-container');
@@ -89,17 +142,15 @@
         </div>
       `;
       
-      const jenis = (kategori === 'dasar') ? 'latihan_dasar' : 'latihan_campuran';
-      const soal = await getQuestions(jenis);
-      
+      const soal = await getQuestions('latihan_dasar');
       if (quizContainer) quizContainer.innerHTML = '';
-      new QuizEngine('#app-content #quiz-container', soal, jenis, (skor) => {
-        // Callback saat selesai
+      new QuizEngine('#app-content #quiz-container', soal, 'latihan_dasar', null, {
+        label: 'Lanjut ke Operasi Campuran',
+        url: 'materi/8-operasi-campuran.html'
       });
     };
     
     window.kembaliKeMenu = function() {
-      // Perbaikan class flex/grid pada Tailwind
       const latihanMenu = document.querySelector('#app-content #latihan-menu') || document.getElementById('latihan-menu');
       const quizContainer = document.querySelector('#app-content #quiz-container') || document.getElementById('quiz-container');
       const backBtnContainer = document.querySelector('#app-content #back-btn-container') || document.getElementById('back-btn-container');
@@ -110,10 +161,29 @@
       }
       if (quizContainer) {
         quizContainer.style.display = 'none';
-        quizContainer.innerHTML = ''; // bersihkan state
+        quizContainer.innerHTML = '';
       }
       if (backBtnContainer) backBtnContainer.style.display = 'none';
+
+      const titleEl = document.querySelector('#app-content h1') || document.querySelector('h1');
+      if (titleEl) {
+        titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600 mr-3"></i> Latihan Soal`;
+      }
     };
+
+    function checkTahapFromUrl() {
+      const params = new URLSearchParams(window.location.search);
+      const tahap = params.get('tahap');
+      const kategori = params.get('kategori');
+
+      if (tahap && [1, 2, 3, 4].includes(parseInt(tahap))) {
+        window.mulaiLatihanTahap(parseInt(tahap));
+      } else if (kategori === 'campuran') {
+        window.mulaiLatihanTahap(4);
+      } else if (kategori === 'dasar') {
+        window.mulaiLatihan('dasar');
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => {
@@ -122,14 +192,13 @@
         if (contentContainer && pageContainer) {
           contentContainer.innerHTML = pageContainer.innerHTML;
         }
+        checkTahapFromUrl();
       }, 100);
     });
 
     window.addEventListener('spa:navigated', () => {
       if (window.location.pathname.includes('/latihan.html')) {
-        if (typeof window.kembaliKeMenu === 'function') {
-          window.kembaliKeMenu();
-        }
+        setTimeout(checkTahapFromUrl, 100);
       }
     });
   </script>

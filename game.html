@@ -78,9 +78,15 @@
         <div id="game-over" style="display: none;" class="mt-8">
           <h2 class="text-4xl font-black text-red-500 mb-4 tracking-wider"><i class="fa-solid fa-skull-crossbones mr-3"></i>GAME OVER</h2>
           <div id="game-over-msg" class="text-xl text-slate-600 mb-8 bg-slate-50 p-6 rounded-xl border border-slate-200"></div>
-          <button class="px-8 py-3 bg-blue-600 text-white font-bold rounded-lg shadow-md hover:bg-blue-700 transition-colors focus:outline-none" onclick="kembaliKeMenu()">
-            <i class="fa-solid fa-rotate-left mr-2"></i> Main Lagi
-          </button>
+          <div class="flex flex-wrap justify-center gap-3">
+            <button class="px-6 py-3 border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-xl shadow-xs transition-colors focus:outline-none" onclick="kembaliKeMenu()">
+              <i class="fa-solid fa-rotate-left mr-2"></i> Main Lagi
+            </button>
+            <a href="kuis.html" class="inline-flex items-center px-7 py-3 bg-blue-600 text-white font-bold rounded-xl shadow-md hover:bg-blue-700 hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-300">
+              <span>Lanjut ke Kuis Akhir</span>
+              <i class="fa-solid fa-arrow-right ml-2"></i>
+            </a>
+          </div>
         </div>
       </div>
     </div>

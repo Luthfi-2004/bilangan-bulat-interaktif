@@ -2,11 +2,12 @@ import { saveTestResult } from './supabase-client.js';
 import { checkAndUnlockBadges } from './badge-engine.js';
 
 export class QuizEngine {
-  constructor(containerId, soalArray, jenis, onComplete) {
+  constructor(containerId, soalArray, jenis, onComplete, nextAction = null) {
     this.container = document.querySelector(containerId.includes('#') ? containerId : `#${containerId}`) || document.getElementById(containerId);
     this.soalArray = soalArray;
     this.jenis = jenis; // 'tes_awal', 'kuis', 'latihan'
     this.onComplete = onComplete;
+    this.nextAction = nextAction;
     
     this.currentIndex = 0;
     this.jawabanSiswa = new Array(this.soalArray.length).fill(null);
@@ -180,10 +181,26 @@ export class QuizEngine {
           <span class="font-medium">${feedback}</span>
         </div>
         
-        <div class="mt-10">
-          <a href="materi/index.html" class="inline-flex items-center px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 shadow-sm transition-colors">
-            Lanjut ke Materi <i class="fa-solid fa-arrow-right ml-2"></i>
-          </a>
+        <div class="mt-10 flex flex-wrap justify-center gap-3">
+          ${(() => {
+            let nextUrl = 'materi/index.html';
+            let nextLabel = 'Lanjut ke Tahap Berikutnya';
+            if (this.nextAction) {
+              nextUrl = this.nextAction.url;
+              nextLabel = this.nextAction.label || nextLabel;
+            } else if (this.jenis === 'tes_awal') {
+              nextUrl = 'materi/1-definisi.html';
+              nextLabel = 'Mulai Materi 1: Definisi Bilangan Bulat';
+            } else if (this.jenis === 'kuis') {
+              nextUrl = 'hasil.html';
+              nextLabel = 'Lihat Hasil Belajar & Lencana';
+            }
+            return `
+              <a href="${nextUrl}" class="inline-flex items-center px-8 py-3.5 bg-blue-600 text-white font-bold text-sm sm:text-base rounded-xl hover:bg-blue-700 shadow-md hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-300">
+                ${nextLabel} <i class="fa-solid fa-arrow-right ml-2"></i>
+              </a>
+            `;
+          })()}
         </div>
       </div>
       

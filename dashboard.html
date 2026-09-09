@@ -47,6 +47,30 @@
       </div>
     </div>
     
+    <!-- Alur Belajar Terarah (Learning Journey Roadmap) -->
+    <div class="mb-10 bg-white rounded-2xl p-6 sm:p-8 border border-slate-200 shadow-sm relative overflow-hidden">
+      <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-6 mb-6">
+        <div>
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-50 text-blue-700 text-xs font-bold mb-2 border border-blue-100">
+            <i class="fa-solid fa-map-location-dot"></i> Jalur Belajar Terarah
+          </div>
+          <h2 class="text-2xl font-black text-slate-800 tracking-tight flex items-center gap-2.5">
+            Petualangan Bilangan Bulat
+          </h2>
+          <p class="text-sm text-slate-500 mt-1">Ikuti langkah belajar berurutan: Materi interaktif &rarr; Latihan bertahap &rarr; Game &rarr; Kuis Akhir.</p>
+        </div>
+        
+        <div id="resume-container" class="flex-shrink-0">
+          <!-- Tombol Lanjutkan Belajar Diinjeksi oleh JS -->
+        </div>
+      </div>
+
+      <!-- Grid Langkah Belajar -->
+      <div id="roadmap-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        <!-- Dirender via JS -->
+      </div>
+    </div>
+
     <!-- Alur Belajar Ringkas -->
     <div class="mb-8">
       <h2 class="text-xl font-bold text-slate-800 mb-4 flex items-center">
@@ -109,6 +133,7 @@
   <script type="module" src="js/main.js"></script>
   <script type="module">
     import { getCurrentUser } from './js/supabase-client.js';
+    import { FLOW_STEPS, getCompletedStepIds, getResumeStep } from './js/learning-flow.js';
 
     // Cegah akses kembali via tombol Back browser (BFCache)
     window.addEventListener('pageshow', async (event) => {
@@ -119,6 +144,71 @@
         }
       }
     });
+
+    function renderDashboardRoadmap() {
+      const completed = getCompletedStepIds();
+      const resumeStep = getResumeStep();
+
+      // Render Tombol Lanjutkan Belajar
+      const resumeContainer = document.querySelector('#app-content #resume-container') || document.getElementById('resume-container');
+      if (resumeContainer) {
+        resumeContainer.innerHTML = `
+          <a href="${resumeStep.url}" class="inline-flex items-center gap-3 px-6 py-3.5 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all focus:ring-4 focus:ring-blue-300 group">
+            <div class="text-left">
+              <div class="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">Langkah Berikutnya</div>
+              <div class="text-sm font-black truncate max-w-[200px]">${resumeStep.judul}</div>
+            </div>
+            <div class="w-8 h-8 rounded-lg bg-white/20 flex items-center justify-center group-hover:translate-x-1 transition-transform">
+              <i class="fa-solid fa-arrow-right"></i>
+            </div>
+          </a>
+        `;
+      }
+
+      // Render Kartu Roadmap
+      const grid = document.querySelector('#app-content #roadmap-grid') || document.getElementById('roadmap-grid');
+      if (grid) {
+        let html = '';
+        FLOW_STEPS.forEach((step, idx) => {
+          const isDone = completed.includes(step.id);
+          const isCurrent = step.id === resumeStep.id;
+
+          let cardBorder = 'border-slate-200 hover:border-blue-400';
+          let badgeStatus = '<span class="text-[10px] font-semibold text-slate-400"><i class="fa-regular fa-circle mr-1"></i> Belum Selesai</span>';
+          let numBg = 'bg-slate-100 text-slate-600';
+
+          if (isDone) {
+            cardBorder = 'border-emerald-300 bg-emerald-50/30 hover:border-emerald-400';
+            badgeStatus = '<span class="text-[10px] font-bold text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200"><i class="fa-solid fa-check mr-1"></i> Selesai</span>';
+            numBg = 'bg-emerald-600 text-white';
+          } else if (isCurrent) {
+            cardBorder = 'border-blue-500 ring-2 ring-blue-200 bg-blue-50/20';
+            badgeStatus = '<span class="text-[10px] font-bold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200 animate-pulse"><i class="fa-solid fa-play mr-1"></i> Sedang Aktif</span>';
+            numBg = 'bg-blue-600 text-white';
+          }
+
+          html += `
+            <a href="${step.url}" class="block bg-white p-4 sm:p-5 rounded-xl border ${cardBorder} transition-all duration-200 hover:shadow-sm flex flex-col justify-between group">
+              <div>
+                <div class="flex items-center justify-between mb-3">
+                  <div class="w-8 h-8 rounded-lg ${numBg} flex items-center justify-center font-bold text-xs shadow-xs">
+                    ${isDone ? '<i class="fa-solid fa-check"></i>' : (idx + 1)}
+                  </div>
+                  ${badgeStatus}
+                </div>
+                <h4 class="font-bold text-slate-800 text-sm mb-1 group-hover:text-blue-600 transition-colors line-clamp-1">${step.judul}</h4>
+                <p class="text-xs text-slate-500 line-clamp-2 leading-relaxed">${step.deskripsi}</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs text-blue-600 font-semibold">
+                <span>Buka Tahap</span>
+                <i class="fa-solid fa-arrow-right text-[10px] group-hover:translate-x-1 transition-transform"></i>
+              </div>
+            </a>
+          `;
+        });
+        grid.innerHTML = html;
+      }
+    }
 
     document.addEventListener('DOMContentLoaded', async () => {
       // Auth Guard: Pastikan user sudah login
@@ -135,7 +225,14 @@
         if (contentContainer && homeContent) {
           contentContainer.innerHTML = homeContent.innerHTML;
         }
+        renderDashboardRoadmap();
       }, 100); 
+    });
+
+    window.addEventListener('spa:navigated', () => {
+      if (window.location.pathname.includes('/dashboard.html') || window.location.pathname === '/') {
+        setTimeout(renderDashboardRoadmap, 100);
+      }
     });
   </script>
 </body>

@@ -27,6 +27,66 @@ export const SOAL_LATIHAN_CAMPURAN = [
   { id: "LC05", pertanyaan: "150 + 50 ÷ (−10) − (−5) × 4 = ...", pilihan: ["165", "125", "105", "145"], jawaban_benar: "165", pembahasan: "Bagi: 50÷(-10)=-5. Kali: (-5)×4=-20. Persamaan: 150 + (-5) - (-20) = 145 + 20 = 165." }
 ];
 
+export const SOAL_LATIHAN_TAHAP_1 = [
+  { 
+    id: "LT1_01", 
+    pertanyaan: "Manakah di antara bilangan-bilangan berikut yang memiliki nilai paling kecil?", 
+    pilihan: ["−8", "−2", "0", "5"], 
+    jawaban_benar: "−8", 
+    pembahasan: "Pada garis bilangan, semakin jauh letak bilangan di sebelah kiri 0, maka nilainya semakin kecil. -8 terletak paling kiri dibanding pilihan lainnya." 
+  },
+  { 
+    id: "LT1_02", 
+    pertanyaan: "Nilai mutlak dari |−15| adalah ...", 
+    pilihan: ["−15", "0", "15", "±15"], 
+    jawaban_benar: "15", 
+    pembahasan: "Nilai mutlak menyatakan jarak suatu bilangan terhadap titik 0. Karena jarak selalu bernilai positif atau nol, maka |-15| = 15." 
+  },
+  { 
+    id: "LT1_03", 
+    pertanyaan: "Pernyataan perbandingan tanda berikut ini yang bernilai BENAR adalah ...", 
+    pilihan: ["−12 > −5", "−4 < −9", "0 < −3", "−7 < 2"], 
+    jawaban_benar: "−7 < 2", 
+    pembahasan: "Bilangan negatif selalu lebih kecil dari bilangan positif, sehingga -7 < 2 bernilai benar." 
+  },
+  { 
+    id: "LT1_04", 
+    pertanyaan: "Jika kamu berdiri di titik −3 pada garis bilangan lalu melangkah 5 satuan ke arah kanan, kamu akan tiba di angka ...", 
+    pilihan: ["−8", "−2", "2", "8"], 
+    jawaban_benar: "2", 
+    pembahasan: "Melangkah ke kanan berarti menambahkan: -3 + 5 = 2." 
+  }
+];
+
+// Helper filter soal latihan per tahapan belajar
+export function getSoalLatihanByTahap(tahap) {
+  const t = parseInt(tahap);
+  switch (t) {
+    case 1:
+      return SOAL_LATIHAN_TAHAP_1;
+    case 2:
+      // Penjumlahan & Pengurangan
+      return [
+        SOAL_LATIHAN_DASAR[0], // L001
+        SOAL_LATIHAN_DASAR[1], // L002
+        SOAL_LATIHAN_DASAR[2], // L003
+        SOAL_LATIHAN_DASAR[6]  // L007
+      ];
+    case 3:
+      // Perkalian & Pembagian
+      return [
+        SOAL_LATIHAN_DASAR[3], // L004
+        SOAL_LATIHAN_DASAR[4], // L005
+        SOAL_LATIHAN_DASAR[5]  // L006
+      ];
+    case 4:
+      // Operasi Campuran
+      return SOAL_LATIHAN_CAMPURAN;
+    default:
+      return SOAL_LATIHAN_DASAR;
+  }
+}
+
 // Soal Cerita
 export const SOAL_CERITA = [
   { id: "SC01", judul: "Suhu", pertanyaan: "Suhu sebuah ruangan pada pagi hari adalah −4°C. Pada siang hari suhu naik 9°C, kemudian pada malam hari turun lagi 6°C. Berapakah suhu ruangan pada malam hari?", jawaban: "−1°C", pembahasan: "-4 + 9 - 6 = 5 - 6 = -1°C" },
@@ -40,3 +100,5 @@ export const SOAL_KUIS = [
   ...SOAL_LATIHAN_DASAR.slice(0, 5),
   ...SOAL_LATIHAN_CAMPURAN
 ];
+
+

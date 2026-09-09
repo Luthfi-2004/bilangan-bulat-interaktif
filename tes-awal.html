@@ -60,7 +60,10 @@
       if (introContainer) introContainer.style.display = 'none';
       if (quizContainer) quizContainer.style.display = 'block';
       
-      new QuizEngine('#app-content #quiz-container', questions, 'tes_awal');
+      new QuizEngine('#app-content #quiz-container', questions, 'tes_awal', null, {
+        label: 'Mulai Materi 1: Definisi Bilangan Bulat',
+        url: 'materi/1-definisi.html'
+      });
     };
 
     document.addEventListener('DOMContentLoaded', () => {
