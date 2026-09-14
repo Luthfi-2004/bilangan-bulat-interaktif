@@ -53,7 +53,7 @@ CREATE TABLE IF NOT EXISTS public.test_results (
     student_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
     student_name TEXT NOT NULL,
     jenis TEXT NOT NULL, -- 'tes_awal', 'latihan_dasar', 'latihan_campuran', 'kuis'
-    skor INTEGER NOT NULL,
+    skor INTEGER NOT NULL
 );
 
 -- Pastikan student_name tidak memblokir insert jika ada record lama atau perbedaan struktur
@@ -302,6 +302,10 @@ CREATE POLICY "Guru can insert materi_content" ON public.materi_content
 DROP POLICY IF EXISTS "Guru can update materi_content" ON public.materi_content;
 CREATE POLICY "Guru can update materi_content" ON public.materi_content
   FOR UPDATE USING (public.is_guru() OR auth.role() = 'authenticated');
+
+DROP POLICY IF EXISTS "Guru can delete materi_content" ON public.materi_content;
+CREATE POLICY "Guru can delete materi_content" ON public.materi_content
+  FOR DELETE USING (public.is_guru() OR auth.role() = 'authenticated');
 
 -- 4. Policies untuk test_results
 DROP POLICY IF EXISTS "Enable all access for anon" ON public.test_results;

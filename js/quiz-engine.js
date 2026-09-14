@@ -1,4 +1,4 @@
-import { saveTestResult } from './supabase-client.js';
+import { saveTestResult, isMatchingAnswer } from './supabase-client.js';
 import { checkAndUnlockBadges } from './badge-engine.js';
 
 export class QuizEngine {
@@ -145,7 +145,8 @@ export class QuizEngine {
   hitungSkor() {
     let benar = 0;
     this.soalArray.forEach((soal, index) => {
-      if (this.jawabanSiswa[index] === soal.jawaban_benar) {
+      const userAns = this.jawabanSiswa[index];
+      if (isMatchingAnswer(userAns, soal.jawaban_benar, soal.pilihan)) {
         benar++;
       }
     });
@@ -213,7 +214,7 @@ export class QuizEngine {
     
     this.soalArray.forEach((soal, index) => {
       const jawabanUser = this.jawabanSiswa[index];
-      const isCorrect = jawabanUser === soal.jawaban_benar;
+      const isCorrect = isMatchingAnswer(jawabanUser, soal.jawaban_benar, soal.pilihan);
       const borderColor = isCorrect ? 'border-l-emerald-500' : 'border-l-red-500';
       const iconResult = isCorrect ? '<i class="fa-solid fa-circle-check text-emerald-500"></i>' : '<i class="fa-solid fa-circle-xmark text-red-500"></i>';
       

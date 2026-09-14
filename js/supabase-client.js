@@ -127,23 +127,54 @@ export async function signOut() {
   }
 
   try {
+    // Hapus hanya sesi otentikasi siswa/guru
     localStorage.removeItem('math_current_user');
     localStorage.removeItem('math_student');
+    localStorage.removeItem('math_login_time');
 
-    // Hapus custom keys yang terkait aplikasi kita (tanpa menyentuh internal Supabase secara paksa jika tidak perlu)
-    const keysToRemove = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith('math_')) {
-        keysToRemove.push(key);
-      }
-    }
-    keysToRemove.forEach(k => localStorage.removeItem(k));
-
+    // JANGAN hapus 'math_custom_materi' agar materi yang dibuat guru tetap ada saat login kembali sebagai siswa/guru
     sessionStorage.clear();
   } catch (err) {
     console.warn("Storage cleanup error:", err);
   }
+}
+
+/**
+ * Normalisasi perbandingan jawaban kuis / tes.
+ * Mengatasi perbedaan minus Unicode (−) vs ASCII (-), huruf pilihan (A, B, C, D), dan whitespace.
+ */
+export function isMatchingAnswer(opt, key, choices = [], index = -1) {
+  if (opt === key) return true;
+  if (!opt && !key) return true;
+  if (!opt || !key) return false;
+
+  const norm = s => String(s).trim().toLowerCase().replace(/[\u2212\u2013\u2014]/g, '-');
+  const normOpt = norm(opt);
+  const normKey = norm(key);
+
+  if (normOpt === normKey) return true;
+
+  // Cek jika kunci jawaban berupa huruf pilihan 'A', 'B', 'C', 'D'
+  const letterMap = ['a', 'b', 'c', 'd'];
+  if (letterMap.includes(normKey)) {
+    const keyIdx = letterMap.indexOf(normKey);
+    if (index !== -1 && index === keyIdx) return true;
+    if (choices && choices[keyIdx] && norm(choices[keyIdx]) === normOpt) return true;
+  }
+
+  // Cek jika jawaban siswa berupa huruf pilihan
+  if (letterMap.includes(normOpt)) {
+    const optIdx = letterMap.indexOf(normOpt);
+    if (index !== -1 && index === optIdx) return true;
+    if (choices && choices[optIdx] && norm(choices[optIdx]) === normKey) return true;
+  }
+
+  // Toleransi prefix huruf misal 'A. -5' vs '-5'
+  const strippedOpt = normOpt.replace(/^[a-d][\.\)]\s*/, '');
+  const strippedKey = normKey.replace(/^[a-d][\.\)]\s*/, '');
+  if (strippedOpt === normKey || normOpt === strippedKey || strippedOpt === strippedKey) return true;
+
+  return false;
 }
 
 /**
@@ -537,7 +568,17 @@ function getLocalMateriList() {
       if (Array.isArray(parsed) && parsed.length > 0) return parsed;
     } catch (_) {}
   }
-  return DEFAULT_MATERI;
+  return DEFAULT_MATERI.map(formatMateriItem);
+}
+
+export function formatMateriItem(item) {
+  if (!item) return null;
+  const content = item.konten_html || item.konten || '';
+  return {
+    ...item,
+    konten: content,
+    konten_html: content
+  };
 }
 
 function saveLocalMateriList(list) {
@@ -555,18 +596,25 @@ export async function getAllMateri() {
       const { data, error } = await supabase
         .from('materi_content')
         .select('*')
+        .lt('urutan', 900)
         .order('urutan', { ascending: true });
 
       if (!error && data && data.length > 0) {
-        saveLocalMateriList(data);
-        return data;
+        // Filter out legacy placeholder items
+        const formatted = data
+          .filter(m => !m.slug.startsWith('legacy-'))
+          .map(formatMateriItem);
+
+        saveLocalMateriList(formatted);
+        return formatted;
       }
     } catch (e) {
       console.warn("Supabase getAllMateri fallback:", e);
     }
   }
 
-  return getLocalMateriList();
+  const localList = getLocalMateriList();
+  return (localList || []).map(formatMateriItem);
 }
 
 /**
@@ -581,14 +629,15 @@ export async function getMateri(slug) {
         .eq('slug', slug)
         .maybeSingle();
 
-      if (!error && data) return data;
+      if (!error && data) return formatMateriItem(data);
     } catch (e) {
       console.warn("Supabase getMateri fallback:", e);
     }
   }
 
   const localList = getLocalMateriList();
-  return localList.find(m => m.slug === slug) || null;
+  const found = localList.find(m => m.slug === slug);
+  return formatMateriItem(found);
 }
 
 /**
@@ -597,12 +646,16 @@ export async function getMateri(slug) {
 export async function addMateri(materiData) {
   const id = materiData.id || ('mat_' + Date.now().toString(36));
   const slug = materiData.slug || (materiData.judul.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''));
-  const payload = {
-    ...materiData,
+  const htmlContent = materiData.konten_html || materiData.konten || '';
+
+  // Payload yang persis dengan skema tabel materi_content di Supabase
+  const dbPayload = {
     id,
     slug,
+    judul: materiData.judul,
+    ringkasan: materiData.ringkasan || '',
+    konten_html: htmlContent,
     urutan: parseInt(materiData.urutan) || 1,
-    created_at: new Date().toISOString(),
     updated_at: new Date().toISOString()
   };
 
@@ -611,46 +664,53 @@ export async function addMateri(materiData) {
     try {
       const { data, error } = await supabase
         .from('materi_content')
-        .insert([payload])
+        .insert([dbPayload])
         .select()
         .single();
 
       if (!error && data) {
-        // Sync ke local
+        const formatted = formatMateriItem(data);
         const list = getLocalMateriList();
-        list.push(data);
+        list.push(formatted);
         list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
         saveLocalMateriList(list);
-        return data;
+        return formatted;
+      } else if (error) {
+        console.warn("Insert materi to Supabase warning:", error);
       }
     } catch (err) {
-      console.warn("Insert materi to supabase warning:", err);
+      console.warn("Insert materi to Supabase error:", err);
     }
   }
 
   // 2. Simpan ke local cache fallback
+  const localItem = formatMateriItem({ ...dbPayload, konten: htmlContent });
   const list = getLocalMateriList();
-  list.push(payload);
+  list.push(localItem);
   list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
   saveLocalMateriList(list);
-  return payload;
+  return localItem;
 }
 
 /**
  * Update Materi (Guru / Admin)
  */
 export async function updateMateriContent(idOrSlug, contentData) {
-  const updatedPayload = {
-    ...contentData,
-    urutan: parseInt(contentData.urutan) || contentData.urutan,
+  const htmlContent = contentData.konten_html !== undefined ? contentData.konten_html : (contentData.konten !== undefined ? contentData.konten : undefined);
+  
+  const dbPayload = {
     updated_at: new Date().toISOString()
   };
+  if (contentData.judul !== undefined) dbPayload.judul = contentData.judul;
+  if (contentData.ringkasan !== undefined) dbPayload.ringkasan = contentData.ringkasan;
+  if (htmlContent !== undefined) dbPayload.konten_html = htmlContent;
+  if (contentData.urutan !== undefined) dbPayload.urutan = parseInt(contentData.urutan) || 1;
+  if (contentData.slug !== undefined) dbPayload.slug = contentData.slug;
 
   // 1. Coba update di Supabase
   if (supabase) {
     try {
-      // Coba match berdasarkan slug atau id
-      let query = supabase.from('materi_content').update(updatedPayload);
+      let query = supabase.from('materi_content').update(dbPayload);
       if (contentData.id) {
         query = query.eq('id', contentData.id);
       } else {
@@ -658,41 +718,57 @@ export async function updateMateriContent(idOrSlug, contentData) {
       }
       const { data, error } = await query.select().single();
       if (!error && data) {
-        // Sync ke local
-        const list = getLocalMateriList().map(m => (m.slug === idOrSlug || m.id === contentData.id) ? { ...m, ...data } : m);
+        const formatted = formatMateriItem(data);
+        const list = getLocalMateriList().map(m => (m.slug === idOrSlug || m.id === contentData.id) ? formatted : m);
         list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
         saveLocalMateriList(list);
-        return data;
+        return formatted;
+      } else if (error) {
+        console.warn("Update materi Supabase warning:", error);
       }
     } catch (err) {
-      console.warn("Update materi supabase warning:", err);
+      console.warn("Update materi Supabase warning:", err);
     }
   }
 
   // 2. Update di local storage
   const list = getLocalMateriList();
   const idx = list.findIndex(m => m.slug === idOrSlug || (contentData.id && m.id === contentData.id));
+  const merged = {
+    ...(idx !== -1 ? list[idx] : {}),
+    ...contentData,
+    konten_html: htmlContent || (idx !== -1 ? list[idx].konten_html : ''),
+    konten: htmlContent || (idx !== -1 ? list[idx].konten : '')
+  };
   if (idx !== -1) {
-    list[idx] = { ...list[idx], ...updatedPayload };
+    list[idx] = merged;
   } else {
-    list.push({ slug: idOrSlug, ...updatedPayload });
+    list.push({ slug: idOrSlug, ...merged });
   }
   list.sort((a, b) => (a.urutan || 0) - (b.urutan || 0));
   saveLocalMateriList(list);
-  return list[idx] || updatedPayload;
+  return formatMateriItem(list[idx] || merged);
 }
 
 /**
  * Hapus Materi (Guru / Admin)
  */
 export async function deleteMateri(idOrSlug) {
-  // 1. Hapus dari Supabase jika ada
+  // 1. Hapus dari Supabase jika ada (atau arsipkan dengan urutan 999 jika delete RLS terbatas)
   if (supabase) {
     try {
-      await supabase
+      const del = await supabase
         .from('materi_content')
         .delete()
         .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`);
+
+      if (del.error) {
+        // Fallback: arsipkan dengan urutan 999 agar tersembunyi
+        await supabase
+          .from('materi_content')
+          .update({ urutan: 999, slug: 'legacy-' + idOrSlug })
+          .or(`id.eq.${idOrSlug},slug.eq.${idOrSlug}`);
+      }
     } catch (err) {
       console.warn("Delete materi supabase warning:", err);
     }

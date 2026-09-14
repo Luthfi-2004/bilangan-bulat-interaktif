@@ -19,7 +19,8 @@ import {
   getAllMateri,
   addMateri,
   updateMateriContent,
-  deleteMateri
+  deleteMateri,
+  isMatchingAnswer
 } from '../js/supabase-client.js';
 
 let currentUser = null;
@@ -570,7 +571,7 @@ function renderQuestionsList(questions) {
     const choicesHtml = (q.pilihan && Array.isArray(q.pilihan) && q.pilihan.length > 0)
       ? `<div class="grid grid-cols-2 gap-1.5 mt-3 pt-3 border-t border-slate-100 text-xs">
           ${q.pilihan.map((p, i) => `
-            <div class="px-2.5 py-1.5 rounded-lg border ${p === q.jawaban_benar ? 'border-emerald-500 bg-emerald-50 text-emerald-800 font-bold' : 'border-slate-200 bg-slate-50 text-slate-600'}">
+            <div class="px-2.5 py-1.5 rounded-lg border ${isMatchingAnswer(p, q.jawaban_benar, q.pilihan, i) ? 'border-emerald-500 bg-emerald-50 text-emerald-800 font-bold shadow-xs' : 'border-slate-200 bg-slate-50 text-slate-600'}">
               <span class="opacity-50">${String.fromCharCode(65 + i)}.</span> ${p}
             </div>
           `).join('')}
@@ -710,7 +711,7 @@ async function loadMateriCMS() {
                 <h3 class="text-base font-bold text-slate-900 leading-snug">${escapeHtml(m.judul)}</h3>
                 <div class="flex items-center gap-2 mt-1">
                   <span class="text-[11px] font-mono text-slate-400 bg-slate-100 px-2 py-0.5 rounded">slug: ${escapeHtml(m.slug)}</span>
-                  ${m.konten ? `<span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-semibold border border-emerald-100"><i class="fa-solid fa-check mr-1"></i>Uraian Tersedia</span>` : ''}
+                  ${(m.konten || m.konten_html) ? `<span class="text-[10px] text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded font-semibold border border-emerald-100"><i class="fa-solid fa-check mr-1"></i>Uraian Tersedia</span>` : ''}
                 </div>
               </div>
             </div>
@@ -1164,13 +1165,40 @@ function setupEventListeners() {
     modalQuestion.classList.add('hidden');
   });
 
+  // Sinkronisasi radio kunci jawaban dengan input jawaban benar
+  const radios = document.querySelectorAll('input[name="q-correct-choice"]');
+  const jbInput = document.getElementById('q-jawaban-benar');
+
+  radios.forEach((radio) => {
+    radio.addEventListener('change', () => {
+      if (radio.checked) {
+        const idx = radio.value;
+        const optInput = document.getElementById(`q-opt-${idx}`);
+        if (optInput && jbInput) {
+          jbInput.value = optInput.value.trim();
+        }
+        updateChoiceBoxStyles();
+      }
+    });
+  });
+
+  [0, 1, 2, 3].forEach(idx => {
+    const optInput = document.getElementById(`q-opt-${idx}`);
+    optInput?.addEventListener('input', () => {
+      const checkedRadio = document.querySelector('input[name="q-correct-choice"]:checked');
+      if (checkedRadio && checkedRadio.value === String(idx) && jbInput) {
+        jbInput.value = optInput.value.trim();
+      }
+    });
+  });
+
   formQuestion?.addEventListener('submit', async (e) => {
     e.preventDefault();
     const id = document.getElementById('q-id').value;
     const jenis = document.getElementById('q-jenis').value;
     const judul = document.getElementById('q-judul').value.trim();
     const pertanyaan = document.getElementById('q-pertanyaan').value.trim();
-    const jawaban_benar = document.getElementById('q-jawaban-benar').value.trim();
+    let jawaban_benar = document.getElementById('q-jawaban-benar').value.trim();
     const urutan = parseInt(document.getElementById('q-urutan').value) || 1;
     const pembahasan = document.getElementById('q-pembahasan').value.trim();
 
@@ -1183,6 +1211,10 @@ function setupEventListeners() {
 
     if (opt0 || opt1 || opt2 || opt3) {
       pilihan = [opt0, opt1, opt2, opt3];
+      const checkedRadio = document.querySelector('input[name="q-correct-choice"]:checked');
+      if (checkedRadio && pilihan[checkedRadio.value]) {
+        jawaban_benar = pilihan[checkedRadio.value];
+      }
     }
 
     const payload = {
@@ -1480,10 +1512,28 @@ function setupEventListeners() {
   });
 }
 
+function updateChoiceBoxStyles() {
+  const checkedRadio = document.querySelector('input[name="q-correct-choice"]:checked');
+  [0, 1, 2, 3].forEach(idx => {
+    const box = document.getElementById(`choice-box-${idx}`);
+    if (box) {
+      if (checkedRadio && checkedRadio.value === String(idx)) {
+        box.classList.add('border-emerald-500', 'bg-emerald-50', 'ring-1', 'ring-emerald-400');
+        box.classList.remove('border-slate-200', 'bg-slate-50');
+      } else {
+        box.classList.remove('border-emerald-500', 'bg-emerald-50', 'ring-1', 'ring-emerald-400');
+        box.classList.add('border-slate-200', 'bg-slate-50');
+      }
+    }
+  });
+}
+
 function openQuestionModal(q) {
   const modal = document.getElementById('modal-question');
   const title = document.getElementById('modal-question-title');
   const form = document.getElementById('form-question');
+
+  document.querySelectorAll('input[name="q-correct-choice"]').forEach(r => r.checked = false);
 
   if (q) {
     title.innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600"></i> Edit Soal (${q.id})`;
@@ -1500,17 +1550,32 @@ function openQuestionModal(q) {
       document.getElementById('q-opt-1').value = q.pilihan[1] || '';
       document.getElementById('q-opt-2').value = q.pilihan[2] || '';
       document.getElementById('q-opt-3').value = q.pilihan[3] || '';
+
+      let matchedIdx = -1;
+      q.pilihan.forEach((opt, idx) => {
+        if (isMatchingAnswer(opt, q.jawaban_benar, q.pilihan, idx)) {
+          matchedIdx = idx;
+        }
+      });
+      if (matchedIdx !== -1) {
+        const targetRadio = document.querySelector(`input[name="q-correct-choice"][value="${matchedIdx}"]`);
+        if (targetRadio) targetRadio.checked = true;
+      }
     } else {
       document.getElementById('q-opt-0').value = '';
       document.getElementById('q-opt-1').value = '';
       document.getElementById('q-opt-2').value = '';
       document.getElementById('q-opt-3').value = '';
     }
+    updateChoiceBoxStyles();
   } else {
     title.innerHTML = `<i class="fa-solid fa-plus text-blue-600"></i> Tambah Soal Baru`;
     form.reset();
     document.getElementById('q-id').value = '';
     document.getElementById('q-urutan').value = 1;
+    const r0 = document.querySelector('input[name="q-correct-choice"][value="0"]');
+    if (r0) r0.checked = true;
+    updateChoiceBoxStyles();
   }
 
   modal.classList.remove('hidden');
@@ -1528,7 +1593,7 @@ function openMateriModal(m) {
     document.getElementById('materi-urutan').value = m.urutan || 1;
     document.getElementById('materi-judul').value = m.judul || '';
     document.getElementById('materi-ringkasan').value = m.ringkasan || '';
-    document.getElementById('materi-konten').value = m.konten || '';
+    document.getElementById('materi-konten').value = m.konten || m.konten_html || '';
   } else {
     title.innerHTML = `<i class="fa-solid fa-book-open text-blue-600"></i> Tambah Materi Baru`;
     form.reset();

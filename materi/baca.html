@@ -125,10 +125,11 @@
         if (badgeEl) badgeEl.textContent = `Submateri #${item.urutan || 1}`;
 
         if (bodyEl) {
-          if (item.konten && item.konten.trim().length > 0) {
+          const content = (item.konten_html || item.konten || '').trim();
+          if (content.length > 0) {
             bodyEl.innerHTML = `
               <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs text-slate-800 leading-relaxed space-y-4">
-                ${item.konten}
+                ${content}
               </div>
             `;
           } else {
