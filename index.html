@@ -512,15 +512,22 @@
     }
     document.addEventListener('DOMContentLoaded',()=>{
       try{
-        const s=localStorage.getItem('math_student'),u=localStorage.getItem('math_current_user');
+        const s=localStorage.getItem('math_student');
+        const u=localStorage.getItem('math_current_user');
         if(s||u){
-          const url='dashboard.html';
+          const url = u ? 'admin/index.html' : 'dashboard.html';
           const nb=document.getElementById('nav-login-btn');
           if(nb){nb.href=url;nb.innerHTML="<i class='fa-solid fa-house'></i><span>Dashboard</span>";}
           const hb=document.getElementById('hero-main-btn');
-          if(hb){hb.href=url;hb.innerHTML="<i class='fa-solid fa-play' style='font-size:.75rem;'></i>Lanjutkan Belajar";}
+          if(hb){
+            hb.href=url;
+            hb.innerHTML="<i class='fa-solid fa-house' style='font-size:.75rem;'></i> Buka Dashboard";
+            // Hide secondary button when logged in
+            const secBtn = hb.nextElementSibling;
+            if(secBtn) secBtn.style.display = 'none';
+          }
           const bb=document.getElementById('bottom-cta-btn');
-          if(bb){bb.href=url;bb.innerHTML="<span>Buka Ruang Belajar</span><i class='fa-solid fa-arrow-right' style='font-size:.83rem;'></i>";}
+          if(bb){bb.href=url;bb.innerHTML="<span>Buka Dashboard</span><i class='fa-solid fa-arrow-right' style='font-size:.83rem;'></i>";}
         }
       }catch(_){}
     });
