@@ -1263,14 +1263,14 @@ function setupEventListeners() {
     renderProgressTable(filtered);
   });
 
-  // Ekspor CSV Nilai
-  document.getElementById('btn-export-csv')?.addEventListener('click', () => {
+  // Ekspor Excel
+  document.getElementById('btn-export-csv')?.addEventListener('click', async () => {
     if (allStudentsProgressCache.length === 0) {
       if (typeof Swal !== 'undefined') {
         Swal.fire({
           icon: 'info',
           title: 'Data Masih Kosong',
-          text: 'Belum ada data pengerjaan siswa untuk diekspor ke CSV.',
+          text: 'Belum ada data pengerjaan siswa untuk diekspor.',
           confirmButtonColor: '#2563eb'
         });
       } else {
@@ -1279,68 +1279,91 @@ function setupEventListeners() {
       return;
     }
 
-    let html = `
-    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
-    <head>
-    <meta charset="utf-8">
-    <style>
-      table { border-collapse: collapse; width: 100%; font-family: sans-serif; }
-      th { background-color: #10b981; color: white; font-weight: bold; border: 1px solid #ddd; padding: 10px; text-align: left; }
-      td { border: 1px solid #ddd; padding: 8px; }
-      tr:nth-child(even) { background-color: #f9fafb; }
-      h2 { font-family: sans-serif; color: #1f2937; }
-    </style>
-    </head>
-    <body>
-      <h2>Rekap Nilai Siswa - Bilangan Bulat</h2>
-      <table>
-        <thead>
-          <tr>
-            <th>No</th>
-            <th>Nama Siswa</th>
-            <th>Email</th>
-            <th>Tes Awal</th>
-            <th>Latihan Dasar</th>
-            <th>Latihan Campuran</th>
-            <th>Kuis Akhir</th>
-            <th>Penguasaan Materi (%)</th>
-            <th>Jumlah Lencana</th>
-          </tr>
-        </thead>
-        <tbody>
-    `;
+    try {
+      if (typeof ExcelJS === 'undefined') {
+        alert("Library Excel belum dimuat dengan sempurna. Coba refresh halaman.");
+        return;
+      }
 
-    allStudentsProgressCache.forEach((s, i) => {
-      html += `
-          <tr>
-            <td>${i + 1}</td>
-            <td>${s.name}</td>
-            <td>${s.email}</td>
-            <td>${s.tesAwal}</td>
-            <td>${s.latihanDasar}</td>
-            <td>${s.latihanCampuran}</td>
-            <td>${s.kuis}</td>
-            <td>${s.avgProgress}</td>
-            <td>${s.totalBadges}</td>
-          </tr>
-      `;
-    });
+      const workbook = new ExcelJS.Workbook();
+      const worksheet = workbook.addWorksheet('Rekap Nilai');
 
-    html += `
-        </tbody>
-      </table>
-    </body>
-    </html>
-    `;
+      // Tentukan kolom dan lebar
+      worksheet.columns = [
+        { header: 'No', key: 'no', width: 6 },
+        { header: 'Nama Siswa', key: 'name', width: 30 },
+        { header: 'Email', key: 'email', width: 35 },
+        { header: 'Tes Awal', key: 'tesAwal', width: 12 },
+        { header: 'Latihan Dasar', key: 'latihanDasar', width: 16 },
+        { header: 'Latihan Campuran', key: 'latihanCampuran', width: 20 },
+        { header: 'Kuis Akhir', key: 'kuis', width: 12 },
+        { header: 'Penguasaan Materi (%)', key: 'avgProgress', width: 24 },
+        { header: 'Jumlah Lencana', key: 'totalBadges', width: 16 }
+      ];
 
-    const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
-    const url = URL.createObjectURL(blob);
-    const link = document.createElement("a");
-    link.setAttribute("href", url);
-    link.setAttribute("download", `Rekap_Nilai_BilBul_${new Date().toISOString().slice(0,10)}.xls`);
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
+      // Beri style pada header (baris pertama)
+      const headerRow = worksheet.getRow(1);
+      headerRow.eachCell((cell) => {
+        cell.fill = {
+          type: 'pattern',
+          pattern: 'solid',
+          fgColor: { argb: 'FF10B981' } // Warna hijau emerald
+        };
+        cell.font = {
+          color: { argb: 'FFFFFFFF' }, // Teks putih
+          bold: true
+        };
+        cell.border = {
+          top: {style:'thin'}, left: {style:'thin'}, bottom: {style:'thin'}, right: {style:'thin'}
+        };
+        cell.alignment = { vertical: 'middle', horizontal: 'center' };
+      });
+      headerRow.height = 25;
+
+      // Masukkan data siswa ke worksheet
+      allStudentsProgressCache.forEach((s, i) => {
+        const row = worksheet.addRow({
+          no: i + 1,
+          name: s.name,
+          email: s.email,
+          tesAwal: s.tesAwal,
+          latihanDasar: s.latihanDasar,
+          latihanCampuran: s.latihanCampuran,
+          kuis: s.kuis,
+          avgProgress: s.avgProgress,
+          totalBadges: s.totalBadges
+        });
+
+        // Beri style border & warna selang-seling (Zebra-striping)
+        row.eachCell((cell) => {
+          cell.border = {
+            top: {style:'thin'}, left: {style:'thin'}, bottom: {style:'thin'}, right: {style:'thin'}
+          };
+          if (i % 2 !== 0) { // Baris genap
+            cell.fill = {
+              type: 'pattern',
+              pattern: 'solid',
+              fgColor: { argb: 'FFF9FAFB' } 
+            };
+          }
+        });
+      });
+
+      // Generate file buffer .xlsx
+      const buffer = await workbook.xlsx.writeBuffer();
+      const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = \`Rekap_Nilai_BilBul_\${new Date().toISOString().slice(0,10)}.xlsx\`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+    } catch (err) {
+      console.error("Gagal mengekspor Excel:", err);
+      alert("Terjadi kesalahan saat membuat file Excel.");
+    }
   });
 
   // ==========================================================
