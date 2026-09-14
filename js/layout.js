@@ -546,7 +546,11 @@ async function spaNavigate(url, pushState = true) {
     if (pushState) history.pushState({ spa: true, url }, '', url);
     updateActiveSidebarLink(new URL(url, window.location.href).pathname);
     await executePageScripts(doc);
-    window.dispatchEvent(new CustomEvent('spa:navigated', { detail: { url } }));
+    
+    // Beri waktu sejenak agar browser selesai mengevaluasi script bertipe module
+    setTimeout(() => {
+      window.dispatchEvent(new CustomEvent('spa:navigated', { detail: { url } }));
+    }, 150);
   } catch (err) {
     console.warn('SPA fallback to reload:', err);
     window.location.href = url;
