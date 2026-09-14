@@ -1417,6 +1417,38 @@ function setupEventListeners() {
     modalMateri?.classList.add('hidden');
   });
 
+  // Toolbar Bantuan Format Teks Materi untuk Guru
+  function wrapOrInsertText(before, after = '', defaultText = '') {
+    const textarea = document.getElementById('materi-konten');
+    if (!textarea) return;
+    textarea.focus();
+    const start = textarea.selectionStart;
+    const end = textarea.selectionEnd;
+    const selected = textarea.value.substring(start, end) || defaultText;
+    const replacement = before + selected + after;
+    textarea.setRangeText(replacement, start, end, 'select');
+  }
+
+  document.getElementById('btn-fmt-bold')?.addEventListener('click', () => {
+    wrapOrInsertText('**', '**', 'teks tebal');
+  });
+
+  document.getElementById('btn-fmt-italic')?.addEventListener('click', () => {
+    wrapOrInsertText('*', '*', 'teks miring');
+  });
+
+  document.getElementById('btn-fmt-bullet')?.addEventListener('click', () => {
+    wrapOrInsertText('• ', '', 'Poin materi');
+  });
+
+  document.getElementById('btn-fmt-num')?.addEventListener('click', () => {
+    wrapOrInsertText('1. ', '', 'Langkah nomor');
+  });
+
+  document.getElementById('btn-fmt-box')?.addEventListener('click', () => {
+    wrapOrInsertText('\n[Catatan: ', ']\n', 'Tulis catatan penting di sini');
+  });
+
   formMateri?.addEventListener('submit', async (e) => {
     e.preventDefault();
 

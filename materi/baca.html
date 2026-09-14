@@ -124,12 +124,36 @@
         if (numberEl) numberEl.textContent = item.urutan || '#';
         if (badgeEl) badgeEl.textContent = `Submateri #${item.urutan || 1}`;
 
+        function renderFormattedMateri(raw) {
+          if (!raw) return '';
+          // Jika sudah ada tag HTML (div, p, ul, ol, table, dll)
+          if (/<(div|p|h[1-6]|ul|ol|li|br|table|span|blockquote)\b/i.test(raw)) {
+            return raw;
+          }
+          // Jika teks biasa dari guru: otomatis dukung bold, italic, callout catatan, dan baris baru/paragraf
+          let formatted = raw
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(/\*(.*?)\*/g, '<em>$1</em>')
+            .replace(/\[Catatan:\s*([\s\S]*?)\]/gi, '<div class="my-4 p-4 rounded-xl bg-amber-50 border-l-4 border-amber-500 text-amber-900 font-medium"><i class="fa-solid fa-lightbulb text-amber-500 mr-2"></i>$1</div>');
+
+          return formatted
+            .split(/\n{2,}/)
+            .map(p => {
+              if (p.startsWith('<div')) return p;
+              return `<p class="mb-4 leading-relaxed">${p.replace(/\n/g, '<br>')}</p>`;
+            })
+            .join('');
+        }
+
         if (bodyEl) {
-          const content = (item.konten_html || item.konten || '').trim();
-          if (content.length > 0) {
+          const raw = (item.konten_html || item.konten || '').trim();
+          if (raw.length > 0) {
             bodyEl.innerHTML = `
               <div class="bg-white rounded-2xl border border-slate-200 p-6 md:p-8 shadow-xs text-slate-800 leading-relaxed space-y-4">
-                ${content}
+                ${renderFormattedMateri(raw)}
               </div>
             `;
           } else {
