@@ -569,39 +569,39 @@ function renderQuestionsList(questions) {
     };
 
     const choicesHtml = (q.pilihan && Array.isArray(q.pilihan) && q.pilihan.length > 0)
-      ? `<div class="grid grid-cols-2 gap-1.5 mt-3 pt-3 border-t border-slate-100 text-xs">
+      ? `<div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5 mt-3.5 pt-3.5 border-t border-slate-100 text-xs">
           ${q.pilihan.map((p, i) => `
-            <div class="px-2.5 py-1.5 rounded-lg border ${isMatchingAnswer(p, q.jawaban_benar, q.pilihan, i) ? 'border-emerald-500 bg-emerald-50 text-emerald-800 font-bold shadow-xs' : 'border-slate-200 bg-slate-50 text-slate-600'}">
-              <span class="opacity-50">${String.fromCharCode(65 + i)}.</span> ${p}
+            <div class="px-3.5 py-2.5 rounded-xl border ${isMatchingAnswer(p, q.jawaban_benar, q.pilihan, i) ? 'border-emerald-500 bg-emerald-50 text-emerald-800 font-bold shadow-xs' : 'border-slate-200 bg-slate-50 text-slate-600'}">
+              <span class="opacity-50 font-bold mr-1">${String.fromCharCode(65 + i)}.</span> ${p}
             </div>
           `).join('')}
          </div>`
       : '';
 
     html += `
-      <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
+      <div class="bg-white rounded-2xl border border-slate-200 p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between">
         <div>
-          <div class="flex items-center justify-between gap-2 mb-2">
-            <span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold uppercase bg-blue-50 text-blue-700">
+          <div class="flex items-center justify-between gap-2 mb-3">
+            <span class="px-3 py-1 rounded-full text-[11px] font-bold uppercase bg-blue-50 text-blue-700 border border-blue-100">
               ${categoryLabels[q.jenis] || q.jenis}
             </span>
-            <div class="flex items-center gap-1">
-              <button class="btn-edit-q p-1.5 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors" data-id="${q.id}" title="Edit Soal">
+            <div class="flex items-center gap-1.5">
+              <button class="btn-edit-q p-2 text-slate-400 hover:text-blue-600 hover:bg-blue-50 rounded-xl transition-colors" data-id="${q.id}" title="Edit Soal">
                 <i class="fa-solid fa-pen text-xs"></i>
               </button>
-              <button class="btn-delete-q p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" data-id="${q.id}" title="Hapus Soal">
+              <button class="btn-delete-q p-2 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-colors" data-id="${q.id}" title="Hapus Soal">
                 <i class="fa-solid fa-trash-can text-xs"></i>
               </button>
             </div>
           </div>
 
-          ${q.judul ? `<div class="font-bold text-xs text-slate-400 uppercase tracking-wider mb-1">${q.judul}</div>` : ''}
-          <h4 class="font-bold text-slate-800 text-base leading-snug">${q.pertanyaan}</h4>
+          ${q.judul ? `<div class="font-bold text-xs text-slate-400 uppercase tracking-wider mb-1.5">${q.judul}</div>` : ''}
+          <h4 class="font-bold text-slate-800 text-base leading-snug my-1">${q.pertanyaan}</h4>
 
           ${choicesHtml}
         </div>
 
-        <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs">
+        <div class="mt-5 pt-3.5 border-t border-slate-100 flex items-center justify-between text-xs">
           <span class="text-slate-500">Jawaban Benar: <strong class="text-emerald-600">${q.jawaban_benar}</strong></span>
           <span class="text-slate-400">Urutan #${q.urutan || (index + 1)}</span>
         </div>
@@ -717,15 +717,15 @@ async function loadMateriCMS() {
             </div>
 
             <div class="flex items-center gap-2 self-start sm:self-auto">
-              <a href="${previewUrl}" target="_blank" class="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-xs rounded-xl border border-slate-200 transition-colors flex items-center gap-1.5" title="Buka Pratinjau Materi">
+              <a href="${previewUrl}" target="_blank" class="px-3.5 py-2 bg-slate-50 hover:bg-slate-100 text-slate-600 font-semibold text-xs rounded-xl border border-slate-200 transition-colors flex items-center gap-1.5" title="Buka Pratinjau Materi">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[11px]"></i>
                 <span class="hidden sm:inline">Pratinjau</span>
               </a>
-              <button class="btn-edit-materi px-3 py-1.5 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-xs rounded-xl border border-blue-200 transition-colors flex items-center gap-1.5" data-slug="${escapeHtml(m.slug)}">
+              <button class="btn-edit-materi px-3.5 py-2 bg-blue-50 hover:bg-blue-100 text-blue-600 font-bold text-xs rounded-xl border border-blue-200 transition-colors flex items-center gap-1.5" data-slug="${escapeHtml(m.slug)}">
                 <i class="fa-solid fa-pen-to-square text-[11px]"></i>
                 <span>Edit</span>
               </button>
-              <button class="btn-delete-materi px-3 py-1.5 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl border border-red-200 transition-colors flex items-center gap-1.5" data-slug="${escapeHtml(m.slug)}" data-judul="${escapeHtml(m.judul)}">
+              <button class="btn-delete-materi px-3.5 py-2 bg-red-50 hover:bg-red-100 text-red-600 font-bold text-xs rounded-xl border border-red-200 transition-colors flex items-center gap-1.5" data-slug="${escapeHtml(m.slug)}" data-judul="${escapeHtml(m.judul)}">
                 <i class="fa-solid fa-trash-can text-[11px]"></i>
                 <span>Hapus</span>
               </button>
@@ -735,7 +735,7 @@ async function loadMateriCMS() {
           <div class="mt-4 space-y-2">
             <div>
               <span class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Ringkasan Materi:</span>
-              <p class="text-xs text-slate-600 mt-0.5 leading-relaxed">${escapeHtml(m.ringkasan || 'Tidak ada ringkasan.')}</p>
+              <p class="text-xs text-slate-600 mt-1 leading-relaxed">${escapeHtml(m.ringkasan || 'Tidak ada ringkasan.')}</p>
             </div>
           </div>
         </div>

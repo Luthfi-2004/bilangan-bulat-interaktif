@@ -27,13 +27,19 @@
   <style>
     /* DataTables Tailwind-Friendly Styling */
     .dataTables_wrapper {
-      padding: 1.25rem;
+      padding: 1.25rem 0.75rem;
       font-size: 0.875rem;
+    }
+    .dataTables_wrapper .dataTables_length {
+      margin-bottom: 1.25rem;
+    }
+    .dataTables_wrapper .dataTables_filter {
+      margin-bottom: 1.25rem;
     }
     .dataTables_wrapper .dataTables_length select {
       border: 1px solid #cbd5e1;
       border-radius: 0.5rem;
-      padding: 0.25rem 1.5rem 0.25rem 0.6rem;
+      padding: 0.35rem 1.75rem 0.35rem 0.75rem;
       background-color: #f8fafc;
       font-size: 0.75rem;
       margin: 0 0.4rem;
@@ -41,7 +47,7 @@
     .dataTables_wrapper .dataTables_filter input {
       border: 1px solid #cbd5e1;
       border-radius: 0.5rem;
-      padding: 0.35rem 0.75rem;
+      padding: 0.45rem 0.85rem;
       background-color: #f8fafc;
       font-size: 0.75rem;
       margin-left: 0.5rem;
@@ -55,13 +61,13 @@
     .dataTables_wrapper .dataTables_info {
       font-size: 0.75rem;
       color: #64748b;
-      padding-top: 1rem;
+      padding-top: 1.25rem;
     }
     .dataTables_wrapper .dataTables_paginate {
-      padding-top: 0.75rem;
+      padding-top: 1.25rem;
     }
     .dataTables_wrapper .dataTables_paginate .paginate_button {
-      padding: 0.3rem 0.65rem !important;
+      padding: 0.35rem 0.75rem !important;
       border-radius: 0.5rem !important;
       border: 1px solid transparent !important;
       font-size: 0.75rem !important;
@@ -98,122 +104,415 @@
        ADMIN SIDEBAR — RESPONSIVE SYSTEM (CLEAN)
        ============================================================ */
     #admin-sidebar {
-      width: 248px; flex-shrink: 0;
-      transition: width 0.3s cubic-bezier(.4,0,.2,1),
-                  transform 0.3s cubic-bezier(.4,0,.2,1),
-                  box-shadow 0.3s;
-      overflow: hidden; z-index: 40;
-      display: flex; flex-direction: column;
+      position: relative;
+      top: 0;
+      left: 0;
+      height: 100vh;
+      width: 248px;
+      flex-shrink: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 40;
+      transition: width 0.25s ease, transform 0.25s ease;
+      overflow: hidden;
+    }
+
+    /* Brand Header */
+    #admin-sidebar .brand-header {
+      height: 4rem;
+      padding: 0 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      border-bottom: 1px solid #1e293b;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    /* Sidebar text label */
+    #admin-sidebar .sidebar-text {
+      display: flex;
+      flex-direction: column;
+      white-space: nowrap;
+      overflow: hidden;
+      transition: opacity 0.2s ease, width 0.2s ease;
+    }
+
+    /* Nav Item */
+    .admin-nav-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      width: 100%;
+      border-radius: 0.75rem;
+      font-size: 0.875rem;
+      font-weight: 600;
+      transition: all 0.15s ease;
+      cursor: pointer;
+      white-space: nowrap;
+      border: none;
+      background: transparent;
+      text-align: left;
+      text-decoration: none;
       position: relative;
     }
-
-    /* Brand */
-    .brand-header {
-      display: flex; align-items: center; gap: 12px;
-      height: 72px; padding: 0 14px;
-      border-bottom: 1px solid rgba(255,255,255,0.07);
-      flex-shrink: 0; overflow: hidden;
+    .admin-nav-item:hover {
+      background-color: #1e293b;
+      color: #ffffff;
     }
-    .sidebar-text {
-      display: flex; flex-direction: column;
-      overflow: hidden; white-space: nowrap;
-      transition: opacity 0.25s, width 0.3s;
-      flex: 1; min-width: 0;
+    .admin-nav-item.active {
+      background-color: #2563eb !important;
+      color: #ffffff !important;
+      box-shadow: 0 4px 6px -1px rgba(37, 99, 235, 0.3);
+    }
+    .admin-nav-item span {
+      white-space: nowrap;
+      overflow: hidden;
+      transition: opacity 0.2s ease;
     }
 
-
-
-    /* Nav buttons */
-    .admin-nav-item {
-      position: relative; overflow: hidden;
-      transition: all 0.18s;
+    /* Collapse button (Desktop only) */
+    #admin-sidebar-collapse-btn {
+      display: none;
     }
-    .admin-nav-item span:first-of-type {
-      white-space: nowrap; overflow: hidden;
-      transition: opacity 0.2s, width 0.3s;
+    @media (min-width: 1024px) {
+      #admin-sidebar-collapse-btn {
+        display: flex;
+      }
+    }
+
+    /* Collapsed state (Desktop) */
+    #admin-sidebar.collapsed {
+      width: 68px !important;
+    }
+    #admin-sidebar.collapsed .sidebar-text,
+    #admin-sidebar.collapsed .admin-nav-item span,
+    #admin-sidebar.collapsed .user-info,
+    #admin-sidebar.collapsed .btn-grid {
+      opacity: 0;
+      width: 0;
+      pointer-events: none;
+      display: none !important;
+    }
+    #admin-sidebar.collapsed .admin-nav-item {
+      justify-content: center;
+      padding: 0.75rem;
+    }
+    #admin-sidebar.collapsed .brand-header {
+      justify-content: center;
+      padding: 0;
+    }
+    #admin-sidebar.collapsed .user-footer {
+      padding: 0.75rem;
+      display: flex;
+      justify-content: center;
+    }
+
+    /* Tooltip on hover when collapsed */
+    #admin-sidebar.collapsed .admin-nav-item:hover::after {
+      content: attr(data-label);
+      position: absolute;
+      left: calc(100% + 10px);
+      top: 50%;
+      transform: translateY(-50%);
+      background-color: #0f172a;
+      color: #ffffff;
+      padding: 0.35rem 0.75rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      white-space: nowrap;
+      z-index: 50;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+      pointer-events: none;
+      border: 1px solid #334155;
+    }
+
+    /* Mobile & Tablet Drawer (< 1024px) */
+    @media (max-width: 1023px) {
+      #admin-sidebar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100vh;
+        width: 260px;
+        transform: translateX(-100%);
+        box-shadow: none;
+      }
+      #admin-sidebar.open {
+        transform: translateX(0);
+        box-shadow: 4px 0 24px rgba(0, 0, 0, 0.4);
+      }
+    }
+
+    /* Overlay backdrop */
+    #admin-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background-color: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(2px);
+      z-index: 35;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    #admin-overlay.active {
+      display: block;
+      opacity: 1;
     }
 
     /* Hamburger button */
     #admin-hamburger {
       display: flex;
-      width: 36px; height: 36px; border-radius: 9px;
-      background: #f1f5f9; border: 1px solid #e2e8f0;
-      color: #475569; cursor: pointer;
-      align-items: center; justify-content: center;
-      transition: all 0.2s; flex-shrink: 0;
-      font-size: 1rem; margin-right: 10px;
+      align-items: center;
+      justify-content: center;
+      width: 2.5rem;
+      height: 2.5rem;
+      border-radius: 0.75rem;
+      background-color: #f1f5f9;
+      color: #334155;
+      border: 1px solid #e2e8f0;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-right: 0.875rem;
+      flex-shrink: 0;
     }
-    #admin-hamburger:hover { background: #2563eb; color: white; border-color: #2563eb; }
-
-    /* Overlay */
-    #admin-overlay {
-      position: fixed; inset: 0;
-      background: rgba(0,0,0,0.55); backdrop-filter: blur(3px);
-      z-index: 30; opacity: 0; pointer-events: none; transition: opacity 0.3s;
-    }
-    #admin-overlay.active { opacity: 1; pointer-events: auto; }
-
-    /* User footer */
-    .user-info, .btn-grid {
-      transition: opacity 0.25s, max-height 0.3s;
+    #admin-hamburger:hover {
+      background-color: #e2e8f0;
+      color: #0f172a;
     }
 
-    /* ====== DESKTOP (>=1024px) ====== */
+    /* ============================================================
+       STANDALONE ROBUST UTILITY SPACING ENGINE FOR ADMIN
+       ============================================================ */
+
+    /* 1. Gap Utilities */
+    .gap-0 { gap: 0 !important; }
+    .gap-0\.5 { gap: 0.125rem !important; }
+    .gap-1 { gap: 0.25rem !important; }
+    .gap-1\.5 { gap: 0.375rem !important; }
+    .gap-2 { gap: 0.5rem !important; }
+    .gap-2\.5 { gap: 0.625rem !important; }
+    .gap-3 { gap: 0.75rem !important; }
+    .gap-3\.5 { gap: 0.875rem !important; }
+    .gap-4 { gap: 1rem !important; }
+    .gap-5 { gap: 1.25rem !important; }
+    .gap-6 { gap: 1.5rem !important; }
+    .gap-8 { gap: 2rem !important; }
+    .gap-10 { gap: 2.5rem !important; }
+
+    /* 2. Space-Y (Vertical Children Separation) */
+    .space-y-1 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.25rem !important; }
+    .space-y-1\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.375rem !important; }
+    .space-y-2 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.5rem !important; }
+    .space-y-2\.5 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.625rem !important; }
+    .space-y-3 > :not([hidden]) ~ :not([hidden]) { margin-top: 0.75rem !important; }
+    .space-y-4 > :not([hidden]) ~ :not([hidden]) { margin-top: 1rem !important; }
+    .space-y-5 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.25rem !important; }
+    .space-y-6 > :not([hidden]) ~ :not([hidden]) { margin-top: 1.5rem !important; }
+    .space-y-8 > :not([hidden]) ~ :not([hidden]) { margin-top: 2rem !important; }
+
+    /* 3. Space-X (Horizontal Children Separation) */
+    .space-x-1 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.25rem !important; }
+    .space-x-2 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.5rem !important; }
+    .space-x-3 > :not([hidden]) ~ :not([hidden]) { margin-left: 0.75rem !important; }
+    .space-x-4 > :not([hidden]) ~ :not([hidden]) { margin-left: 1rem !important; }
+    .space-x-6 > :not([hidden]) ~ :not([hidden]) { margin-left: 1.5rem !important; }
+
+    /* 4. Margin-Top Utilities */
+    .mt-0 { margin-top: 0 !important; }
+    .mt-0\.5 { margin-top: 0.125rem !important; }
+    .mt-1 { margin-top: 0.25rem !important; }
+    .mt-1\.5 { margin-top: 0.375rem !important; }
+    .mt-2 { margin-top: 0.5rem !important; }
+    .mt-2\.5 { margin-top: 0.625rem !important; }
+    .mt-3 { margin-top: 0.75rem !important; }
+    .mt-3\.5 { margin-top: 0.875rem !important; }
+    .mt-4 { margin-top: 1rem !important; }
+    .mt-5 { margin-top: 1.25rem !important; }
+    .mt-6 { margin-top: 1.5rem !important; }
+    .mt-8 { margin-top: 2rem !important; }
+    .mt-10 { margin-top: 2.5rem !important; }
+    .mt-auto { margin-top: auto !important; }
+
+    /* 5. Margin-Bottom Utilities */
+    .mb-0 { margin-bottom: 0 !important; }
+    .mb-0\.5 { margin-bottom: 0.125rem !important; }
+    .mb-1 { margin-bottom: 0.25rem !important; }
+    .mb-1\.5 { margin-bottom: 0.375rem !important; }
+    .mb-2 { margin-bottom: 0.5rem !important; }
+    .mb-2\.5 { margin-bottom: 0.625rem !important; }
+    .mb-3 { margin-bottom: 0.75rem !important; }
+    .mb-3\.5 { margin-bottom: 0.875rem !important; }
+    .mb-4 { margin-bottom: 1rem !important; }
+    .mb-5 { margin-bottom: 1.25rem !important; }
+    .mb-6 { margin-bottom: 1.5rem !important; }
+    .mb-8 { margin-bottom: 2rem !important; }
+
+    /* 6. Margin Y / X Utilities */
+    .my-1 { margin-top: 0.25rem !important; margin-bottom: 0.25rem !important; }
+    .my-2 { margin-top: 0.5rem !important; margin-bottom: 0.5rem !important; }
+    .my-3 { margin-top: 0.75rem !important; margin-bottom: 0.75rem !important; }
+    .my-4 { margin-top: 1rem !important; margin-bottom: 1rem !important; }
+    .my-6 { margin-top: 1.5rem !important; margin-bottom: 1.5rem !important; }
+    .my-8 { margin-top: 2rem !important; margin-bottom: 2rem !important; }
+    .my-auto { margin-top: auto !important; margin-bottom: auto !important; }
+    .mx-auto { margin-left: auto !important; margin-right: auto !important; }
+    .mr-1 { margin-right: 0.25rem !important; }
+    .mr-1\.5 { margin-right: 0.375rem !important; }
+    .mr-2 { margin-right: 0.5rem !important; }
+    .mr-2\.5 { margin-right: 0.625rem !important; }
+    .mr-3 { margin-right: 0.75rem !important; }
+    .mr-4 { margin-right: 1rem !important; }
+    .ml-1 { margin-left: 0.25rem !important; }
+    .ml-2 { margin-left: 0.5rem !important; }
+    .ml-auto { margin-left: auto !important; }
+
+    /* 7. Padding Top & Bottom */
+    .pt-0 { padding-top: 0 !important; }
+    .pt-1 { padding-top: 0.25rem !important; }
+    .pt-1\.5 { padding-top: 0.375rem !important; }
+    .pt-2 { padding-top: 0.5rem !important; }
+    .pt-2\.5 { padding-top: 0.625rem !important; }
+    .pt-3 { padding-top: 0.75rem !important; }
+    .pt-3\.5 { padding-top: 0.875rem !important; }
+    .pt-4 { padding-top: 1rem !important; }
+    .pt-5 { padding-top: 1.25rem !important; }
+    .pt-6 { padding-top: 1.5rem !important; }
+    .pt-7 { padding-top: 1.75rem !important; }
+    .pt-8 { padding-top: 2rem !important; }
+    .pt-10 { padding-top: 2.5rem !important; }
+    .pt-12 { padding-top: 3rem !important; }
+    .pt-14 { padding-top: 3.5rem !important; }
+    .pt-16 { padding-top: 4rem !important; }
+    .pb-1 { padding-bottom: 0.25rem !important; }
+    .pb-2 { padding-bottom: 0.5rem !important; }
+    .pb-3 { padding-bottom: 0.75rem !important; }
+    .pb-3\.5 { padding-bottom: 0.875rem !important; }
+    .pb-4 { padding-bottom: 1rem !important; }
+    .pb-5 { padding-bottom: 1.25rem !important; }
+    .pb-6 { padding-bottom: 1.5rem !important; }
+    .pb-8 { padding-bottom: 2rem !important; }
+    .pb-12 { padding-bottom: 3rem !important; }
+    .pb-16 { padding-bottom: 4rem !important; }
+
+    /* 8. Padding Box */
+    .p-0\.5 { padding: 0.125rem !important; }
+    .p-1 { padding: 0.25rem !important; }
+    .p-1\.5 { padding: 0.375rem !important; }
+    .p-2 { padding: 0.5rem !important; }
+    .p-2\.5 { padding: 0.625rem !important; }
+    .p-3 { padding: 0.75rem !important; }
+    .p-3\.5 { padding: 0.875rem !important; }
+    .p-4 { padding: 1rem !important; }
+    .p-5 { padding: 1.25rem !important; }
+    .p-6 { padding: 1.5rem !important; }
+    .p-7 { padding: 1.75rem !important; }
+    .p-8 { padding: 2rem !important; }
+    .p-10 { padding: 2.5rem !important; }
+    .py-0\.5 { padding-top: 0.125rem !important; padding-bottom: 0.125rem !important; }
+    .py-1 { padding-top: 0.25rem !important; padding-bottom: 0.25rem !important; }
+    .py-1\.5 { padding-top: 0.375rem !important; padding-bottom: 0.375rem !important; }
+    .py-2 { padding-top: 0.5rem !important; padding-bottom: 0.5rem !important; }
+    .py-2\.5 { padding-top: 0.625rem !important; padding-bottom: 0.625rem !important; }
+    .py-3 { padding-top: 0.75rem !important; padding-bottom: 0.75rem !important; }
+    .py-3\.5 { padding-top: 0.875rem !important; padding-bottom: 0.875rem !important; }
+    .py-4 { padding-top: 1rem !important; padding-bottom: 1rem !important; }
+    .px-1\.5 { padding-left: 0.375rem !important; padding-right: 0.375rem !important; }
+    .px-2 { padding-left: 0.5rem !important; padding-right: 0.5rem !important; }
+    .px-2\.5 { padding-left: 0.625rem !important; padding-right: 0.625rem !important; }
+    .px-3 { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+    .px-3\.5 { padding-left: 0.875rem !important; padding-right: 0.875rem !important; }
+    .px-4 { padding-left: 1rem !important; padding-right: 1rem !important; }
+    .px-5 { padding-left: 1.25rem !important; padding-right: 1.25rem !important; }
+    .px-6 { padding-left: 1.5rem !important; padding-right: 1.5rem !important; }
+    .px-8 { padding-left: 2rem !important; padding-right: 2rem !important; }
+
+    /* 9. Grid Columns */
+    .grid { display: grid !important; }
+    .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+    .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+    .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+    .grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+
+    @media (min-width: 640px) {
+      .sm\:grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)) !important; }
+      .sm\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .sm\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+      .sm\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+      .sm\:gap-3 { gap: 0.75rem !important; }
+      .sm\:gap-3\.5 { gap: 0.875rem !important; }
+      .sm\:gap-4 { gap: 1rem !important; }
+      .sm\:gap-6 { gap: 1.5rem !important; }
+      .sm\:p-6 { padding: 1.5rem !important; }
+      .sm\:p-7 { padding: 1.75rem !important; }
+      .sm\:p-8 { padding: 2rem !important; }
+      .sm\:pt-14 { padding-top: 3.5rem !important; }
+      .sm\:py-10 { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
+      .sm\:py-12 { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+      .sm\:flex-row { flex-direction: row !important; }
+      .sm\:items-center { align-items: center !important; }
+      .sm\:self-auto { align-self: auto !important; }
+      .sm\:col-span-2 { grid-column: span 2 / span 2 !important; }
+    }
+
+    @media (min-width: 768px) {
+      .md\:grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; }
+      .md\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+      .md\:gap-4 { gap: 1rem !important; }
+      .md\:gap-6 { gap: 1.5rem !important; }
+      .md\:p-8 { padding: 2rem !important; }
+      .md\:pt-8 { padding-top: 2rem !important; }
+      .md\:px-8 { padding-left: 2rem !important; padding-right: 2rem !important; }
+    }
+
     @media (min-width: 1024px) {
-      #admin-sidebar.collapsed { width: 68px; }
-
-      #admin-sidebar.collapsed .sidebar-text,
-      #admin-sidebar.collapsed .user-info,
-      #admin-sidebar.collapsed .btn-grid {
-        opacity: 0; width: 0; overflow: hidden; pointer-events: none;
-      }
-      
-
-      #admin-sidebar.collapsed .admin-nav-item span:first-of-type {
-        opacity: 0; width: 0; pointer-events: none;
-      }
-
-      /* CSS Tooltip via data-label */
-      #admin-sidebar.collapsed .admin-nav-item::after {
-        content: attr(data-label);
-        position: absolute; left: 72px;
-        background: #1e293b; color: white;
-        padding: 5px 11px; border-radius: 7px;
-        font-size: 0.78rem; font-weight: 500;
-        white-space: nowrap; pointer-events: none;
-        opacity: 0; z-index: 200;
-        box-shadow: 0 4px 16px rgba(0,0,0,0.3);
-        border: 1px solid #334155;
-        transition: opacity 0.15s;
-      }
-      #admin-sidebar.collapsed .admin-nav-item:hover::after { opacity: 1; }
+      .lg\:grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)) !important; }
+      .lg\:grid-cols-4 { grid-template-columns: repeat(4, minmax(0, 1fr)) !important; }
+      .lg\:col-span-2 { grid-column: span 2 / span 2 !important; }
+      .lg\:gap-6 { gap: 1.5rem !important; }
+      .lg\:gap-8 { gap: 2rem !important; }
     }
 
-    /* ====== TABLET (768-1023px) ====== */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      #admin-sidebar-collapse-btn { display: none !important; }
-      #admin-hamburger { display: flex !important; }
-      #admin-sidebar {
-        position: fixed !important; top: 0; left: 0;
-        height: 100% !important; transform: translateX(-100%);
-        box-shadow: none;
-      }
-      #admin-sidebar.open { transform: translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.4); }
-    }
+    /* 10. Max Widths & Sizing */
+    .max-w-md { max-width: 28rem !important; }
+    .max-w-lg { max-width: 32rem !important; }
+    .max-w-xl { max-width: 36rem !important; }
+    .max-w-2xl { max-width: 42rem !important; }
+    .max-w-3xl { max-width: 48rem !important; }
+    .max-w-4xl { max-width: 56rem !important; }
+    .max-w-5xl { max-width: 64rem !important; }
+    .w-full { width: 100% !important; }
+    .w-1\.5 { width: 0.375rem !important; }
+    .h-1\.5 { height: 0.375rem !important; }
+    .w-2 { width: 0.5rem !important; }
+    .h-2 { height: 0.5rem !important; }
+    .w-4 { width: 1rem !important; }
+    .h-4 { height: 1rem !important; }
+    .w-9 { width: 2.25rem !important; }
+    .h-9 { height: 2.25rem !important; }
+    .w-10 { width: 2.5rem !important; }
+    .h-10 { height: 2.5rem !important; }
+    .w-12 { width: 3rem !important; }
+    .h-12 { height: 3rem !important; }
+    .w-14 { width: 3.5rem !important; }
+    .h-14 { height: 3.5rem !important; }
+    .w-16 { width: 4rem !important; }
+    .h-16 { height: 4rem !important; }
+    .min-h-full { min-height: 100% !important; }
+    .min-h-\[160px\] { min-height: 160px !important; }
+    .max-h-80 { max-height: 20rem !important; }
 
-    /* ====== MOBILE (<768px) ====== */
-    @media (max-width: 767px) {
-      #admin-sidebar-collapse-btn { display: none !important; }
-      #admin-hamburger { display: flex !important; }
-      #admin-sidebar {
-        position: fixed !important; top: 0; left: 0;
-        height: 100% !important; width: 260px !important;
-        transform: translateX(-100%); box-shadow: none;
-      }
-      #admin-sidebar.open { transform: translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.5); }
-      .admin-main-content { padding: 1.25rem 1rem 2.5rem 1rem !important; }
-    }
-
+    /* 11. Typography & Colors */
+    .text-\[10px\] { font-size: 10px !important; line-height: 14px !important; }
+    .text-\[11px\] { font-size: 11px !important; line-height: 16px !important; }
+    .bg-slate-900\/60 { background-color: rgba(15, 23, 42, 0.6) !important; }
+    .bg-slate-900\/90 { background-color: rgba(15, 23, 42, 0.9) !important; }
+    .bg-blue-500\/20 { background-color: rgba(59, 130, 246, 0.2) !important; }
+    .bg-red-500\/20 { background-color: rgba(239, 68, 68, 0.2) !important; }
+    .bg-red-500\/30:hover { background-color: rgba(239, 68, 68, 0.3) !important; }
+    .border-slate-200\/80 { border-color: rgba(226, 232, 240, 0.8) !important; }
+    .backdrop-blur-xs { backdrop-filter: blur(2px) !important; -webkit-backdrop-filter: blur(2px) !important; }
   </style>
 </head>
 <body data-no-layout="true" class="bg-slate-50 text-slate-800 font-sans antialiased">
@@ -468,7 +767,7 @@
           </div>
 
           <!-- Students Table -->
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-2">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-4 sm:p-5">
             <div class="overflow-x-auto">
               <table id="table-students" class="w-full text-left text-sm text-slate-600">
                 <thead class="bg-slate-50 text-slate-700 font-bold uppercase text-xs border-b border-slate-200">
@@ -513,7 +812,7 @@
           </div>
 
           <!-- Realtime Progress Table -->
-          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-2">
+          <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden p-4 sm:p-5">
             <div class="overflow-x-auto">
               <table id="table-progress" class="w-full text-left text-sm text-slate-600">
                 <thead class="bg-slate-50 text-slate-700 font-bold uppercase text-xs border-b border-slate-200">
@@ -601,279 +900,290 @@
   <!-- ==========================================================
        MODAL: TAMBAH SISWA BARU
        ========================================================== -->
-  <div id="modal-add-student" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 overflow-y-auto pt-10 sm:pt-14 pb-12">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 my-auto">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
-        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-user-plus text-blue-600"></i> Buat Akun Siswa Baru
-        </h3>
-        <button id="btn-close-student-modal" class="text-slate-400 hover:text-slate-600">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <form id="form-create-student" class="space-y-4">
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nama Siswa</label>
-          <input type="text" id="new-student-name" required placeholder="Contoh: Ahmad Rizki" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Email Siswa</label>
-          <input type="email" id="new-student-email" required placeholder="rizki@kelas7.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
-          <span class="text-[11px] text-slate-400 mt-1 block">Gunakan format email bebas (misal: nama@kelas7.com).</span>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kata Sandi Awal</label>
-          <div class="flex gap-2">
-            <input type="text" id="new-student-password" required value="siswa123" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-600">
-            <button type="button" id="btn-gen-pass" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl whitespace-nowrap">
-              Acak
-            </button>
-          </div>
-          <span class="text-[11px] text-slate-400 mt-1 block">Minimal 6 karakter. Berikan sandi ini kepada siswa.</span>
-        </div>
-
-        <div class="pt-4 mt-5 border-t border-slate-100">
-          <button type="submit" id="btn-submit-student" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow transition-colors flex items-center justify-center gap-2">
-            <span>Daftarkan Siswa</span>
-            <i class="fa-solid fa-check"></i>
+  <!-- ==========================================================
+       MODAL: TAMBAH SISWA BARU
+       ========================================================== -->
+  <div id="modal-add-student" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-4 sm:p-6">
+    <div class="min-h-full flex items-center justify-center py-8 sm:py-12">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+          <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-user-plus text-blue-600"></i> Buat Akun Siswa Baru
+          </h3>
+          <button id="btn-close-student-modal" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg transition-colors">
+            <i class="fa-solid fa-xmark text-lg"></i>
           </button>
         </div>
-      </form>
+
+        <form id="form-create-student" class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Nama Siswa</label>
+            <input type="text" id="new-student-name" required placeholder="Contoh: Ahmad Rizki" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Email Siswa</label>
+            <input type="email" id="new-student-email" required placeholder="rizki@kelas7.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
+            <span class="text-[11px] text-slate-400 mt-1.5 block">Gunakan format email bebas (misal: nama@kelas7.com).</span>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Kata Sandi Awal</label>
+            <div class="flex gap-2.5">
+              <input type="text" id="new-student-password" required value="siswa123" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-600">
+              <button type="button" id="btn-gen-pass" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl whitespace-nowrap transition-colors">
+                Acak
+              </button>
+            </div>
+            <span class="text-[11px] text-slate-400 mt-1.5 block">Minimal 6 karakter. Berikan sandi ini kepada siswa.</span>
+          </div>
+
+          <div class="pt-4 mt-6 border-t border-slate-100">
+            <button type="submit" id="btn-submit-student" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow transition-colors flex items-center justify-center gap-2">
+              <span>Daftarkan Siswa</span>
+              <i class="fa-solid fa-check"></i>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
   <!-- ==========================================================
        MODAL: EDIT AKUN SISWA
        ========================================================== -->
-  <div id="modal-edit-student" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 overflow-y-auto pt-10 sm:pt-14 pb-12">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 my-auto">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
-        <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-user-pen text-amber-600"></i> Edit Akun Siswa
-        </h3>
-        <button id="btn-close-edit-student-modal" class="text-slate-400 hover:text-slate-600">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
-
-      <form id="form-edit-student" class="space-y-4">
-        <input type="hidden" id="edit-student-id">
-
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nama Siswa</label>
-          <input type="text" id="edit-student-name" required placeholder="Nama siswa" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+  <div id="modal-edit-student" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-4 sm:p-6">
+    <div class="min-h-full flex items-center justify-center py-8 sm:py-12">
+      <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+          <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-user-pen text-amber-600"></i> Edit Akun Siswa
+          </h3>
+          <button id="btn-close-edit-student-modal" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg transition-colors">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
         </div>
 
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Email Siswa</label>
-          <input type="email" id="edit-student-email" required placeholder="email@kelas7.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
-        </div>
+        <form id="form-edit-student" class="space-y-4">
+          <input type="hidden" id="edit-student-id">
 
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kata Sandi Siswa</label>
-          <div class="flex gap-2">
-            <input type="text" id="edit-student-password" required placeholder="Sandi siswa" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500">
-            <button type="button" id="btn-edit-gen-pass" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl whitespace-nowrap">
-              Acak
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Nama Siswa</label>
+            <input type="text" id="edit-student-name" required placeholder="Nama siswa" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Email Siswa</label>
+            <input type="email" id="edit-student-email" required placeholder="email@kelas7.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Kata Sandi Siswa</label>
+            <div class="flex gap-2.5">
+              <input type="text" id="edit-student-password" required placeholder="Sandi siswa" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500">
+              <button type="button" id="btn-edit-gen-pass" class="px-3.5 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl whitespace-nowrap transition-colors">
+                Acak
+              </button>
+            </div>
+            <span class="text-[11px] text-slate-400 mt-1.5 block">Guru dapat melihat dan mengubah kata sandi siswa secara langsung.</span>
+          </div>
+
+          <div class="pt-4 mt-6 border-t border-slate-100 flex items-center justify-end gap-3">
+            <button type="button" id="btn-cancel-edit-student" class="px-4 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 font-semibold text-sm rounded-xl transition-colors">
+              Batal
+            </button>
+            <button type="submit" id="btn-submit-edit-student" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm rounded-xl shadow transition-colors flex items-center gap-2">
+              <span>Simpan Perubahan</span>
+              <i class="fa-solid fa-check"></i>
             </button>
           </div>
-          <span class="text-[11px] text-slate-400 mt-1 block">Guru dapat melihat dan mengubah kata sandi siswa secara langsung.</span>
-        </div>
-
-        <div class="pt-4 mt-5 border-t border-slate-100 flex items-center justify-end gap-3">
-          <button type="button" id="btn-cancel-edit-student" class="px-4 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 font-semibold text-sm rounded-xl transition-colors">
-            Batal
-          </button>
-          <button type="submit" id="btn-submit-edit-student" class="px-5 py-2.5 bg-amber-600 hover:bg-amber-700 text-white font-bold text-sm rounded-xl shadow transition-colors flex items-center gap-2">
-            <span>Simpan Perubahan</span>
-            <i class="fa-solid fa-check"></i>
-          </button>
-        </div>
-      </form>
+        </form>
+      </div>
     </div>
   </div>
 
   <!-- ==========================================================
        MODAL: TAMBAH / EDIT SOAL (CMS)
        ========================================================== -->
-  <div id="modal-question" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 md:p-8 overflow-y-auto pt-8 sm:pt-14 pb-16">
-    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-auto">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-        <h3 id="modal-question-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-pen-to-square text-blue-600"></i> Tambah Soal Baru
-        </h3>
-        <button id="btn-close-question-modal" class="text-slate-400 hover:text-slate-600">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
+  <div id="modal-question" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-4 sm:p-6">
+    <div class="min-h-full flex items-center justify-center py-8 sm:py-12">
+      <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+          <h3 id="modal-question-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-pen-to-square text-blue-600"></i> Tambah Soal Baru
+          </h3>
+          <button id="btn-close-question-modal" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg transition-colors">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
+
+        <form id="form-question" class="space-y-5">
+          <input type="hidden" id="q-id">
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Kategori Soal</label>
+              <select id="q-jenis" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
+                <option value="tes_awal">Tes Awal</option>
+                <option value="latihan_dasar">Latihan Dasar</option>
+                <option value="latihan_campuran">Latihan Campuran</option>
+                <option value="soal_cerita">Soal Cerita</option>
+                <option value="kuis">Kuis Akhir</option>
+              </select>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Judul / Topik</label>
+              <input type="text" id="q-judul" placeholder="Contoh: Penjumlahan" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Teks Pertanyaan</label>
+            <textarea id="q-pertanyaan" required rows="3" placeholder="Tuliskan pertanyaan di sini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white"></textarea>
+          </div>
+
+          <!-- Pilihan Jawaban (Untuk Pilihan Ganda) -->
+          <div id="q-choices-container">
+            <div class="flex items-center justify-between mb-2.5">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Pilihan Jawaban (Pilih Kunci Jawaban yang Benar)</label>
+              <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Pilih radio untuk kunci benar</span>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div class="flex items-center gap-2.5 p-2.5 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-0">
+                <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
+                  <input type="radio" name="q-correct-choice" value="0" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                  <span>A.</span>
+                </label>
+                <input type="text" id="q-opt-0" placeholder="Pilihan A" class="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              </div>
+
+              <div class="flex items-center gap-2.5 p-2.5 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-1">
+                <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
+                  <input type="radio" name="q-correct-choice" value="1" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                  <span>B.</span>
+                </label>
+                <input type="text" id="q-opt-1" placeholder="Pilihan B" class="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              </div>
+
+              <div class="flex items-center gap-2.5 p-2.5 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-2">
+                <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
+                  <input type="radio" name="q-correct-choice" value="2" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                  <span>C.</span>
+                </label>
+                <input type="text" id="q-opt-2" placeholder="Pilihan C" class="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              </div>
+
+              <div class="flex items-center gap-2.5 p-2.5 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-3">
+                <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
+                  <input type="radio" name="q-correct-choice" value="3" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
+                  <span>D.</span>
+                </label>
+                <input type="text" id="q-opt-3" placeholder="Pilihan D" class="w-full px-3.5 py-2 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Kunci Jawaban Benar</label>
+              <input type="text" id="q-jawaban-benar" required placeholder="Teks kunci jawaban" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <p class="text-[11px] text-slate-400 mt-1.5">Otomatis sinkron dengan pilihan yang dilingkari di atas.</p>
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Urutan Tampil</label>
+              <input type="number" id="q-urutan" value="1" min="1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+            </div>
+          </div>
+
+          <div class="pt-2">
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Pembahasan / Langkah Penyelesaian</label>
+              <span class="text-[11px] text-blue-600 font-medium"><i class="fa-solid fa-calculator mr-1"></i>Langkah hitung rinci</span>
+            </div>
+            <textarea id="q-pembahasan" rows="7" placeholder="Tuliskan uraian langkah hitung dan pembahasan penyelesaian soal di sini secara rinci...&#10;&#10;Contoh:&#10;Langkah 1: Kerjakan operasi perkalian terlebih dahulu: (-6) x 4 = -24&#10;Langkah 2: Hitung penjumlahan: -24 + 10 = -14&#10;Jadi jawaban yang benar adalah -14." class="w-full min-h-[160px] px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"></textarea>
+            <p class="text-[11px] text-slate-400 mt-2">Uraian pembahasan ini akan otomatis ditampilkan kepada siswa setelah tes selesai sebagai bahan evaluasi belajar.</p>
+          </div>
+
+          <div class="pt-5 mt-7 border-t border-slate-100 flex justify-end gap-3">
+            <button type="button" id="btn-cancel-q" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-colors">
+              Batal
+            </button>
+            <button type="submit" id="btn-save-q" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
+              <span>Simpan Soal</span>
+              <i class="fa-solid fa-check"></i>
+            </button>
+          </div>
+        </form>
       </div>
-
-      <form id="form-question" class="space-y-5">
-        <input type="hidden" id="q-id">
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kategori Soal</label>
-            <select id="q-jenis" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
-              <option value="tes_awal">Tes Awal</option>
-              <option value="latihan_dasar">Latihan Dasar</option>
-              <option value="latihan_campuran">Latihan Campuran</option>
-              <option value="soal_cerita">Soal Cerita</option>
-              <option value="kuis">Kuis Akhir</option>
-            </select>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Judul / Topik</label>
-            <input type="text" id="q-judul" placeholder="Contoh: Penjumlahan" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Teks Pertanyaan</label>
-          <textarea id="q-pertanyaan" required rows="3" placeholder="Tuliskan pertanyaan di sini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white"></textarea>
-        </div>
-
-        <!-- Pilihan Jawaban (Untuk Pilihan Ganda) -->
-        <div id="q-choices-container">
-          <div class="flex items-center justify-between mb-2">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Pilihan Jawaban (Pilih Kunci Jawaban yang Benar)</label>
-            <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Pilih radio untuk kunci benar</span>
-          </div>
-          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-            <div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-0">
-              <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
-                <input type="radio" name="q-correct-choice" value="0" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-                <span>A.</span>
-              </label>
-              <input type="text" id="q-opt-0" placeholder="Pilihan A" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
-            </div>
-
-            <div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-1">
-              <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
-                <input type="radio" name="q-correct-choice" value="1" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-                <span>B.</span>
-              </label>
-              <input type="text" id="q-opt-1" placeholder="Pilihan B" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
-            </div>
-
-            <div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-2">
-              <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
-                <input type="radio" name="q-correct-choice" value="2" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-                <span>C.</span>
-              </label>
-              <input type="text" id="q-opt-2" placeholder="Pilihan C" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
-            </div>
-
-            <div class="flex items-center gap-2 p-2 bg-slate-50 border border-slate-200 rounded-xl choice-box" id="choice-box-3">
-              <label class="flex items-center gap-1.5 cursor-pointer flex-shrink-0 text-xs font-bold text-slate-700 select-none">
-                <input type="radio" name="q-correct-choice" value="3" class="w-4 h-4 text-emerald-600 focus:ring-emerald-500 cursor-pointer">
-                <span>D.</span>
-              </label>
-              <input type="text" id="q-opt-3" placeholder="Pilihan D" class="w-full px-2.5 py-1.5 bg-white border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-1 focus:ring-emerald-500">
-            </div>
-          </div>
-        </div>
-
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kunci Jawaban Benar</label>
-            <input type="text" id="q-jawaban-benar" required placeholder="Teks kunci jawaban" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
-            <p class="text-[11px] text-slate-400 mt-1">Otomatis sinkron dengan pilihan yang dilingkari di atas.</p>
-          </div>
-          <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Urutan Tampil</label>
-            <input type="number" id="q-urutan" value="1" min="1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
-          </div>
-        </div>
-
-        <div class="pt-1">
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Pembahasan / Langkah Penyelesaian</label>
-            <span class="text-[11px] text-blue-600 font-medium"><i class="fa-solid fa-calculator mr-1"></i>Langkah hitung rinci</span>
-          </div>
-          <textarea id="q-pembahasan" rows="7" placeholder="Tuliskan uraian langkah hitung dan pembahasan penyelesaian soal di sini secara rinci...&#10;&#10;Contoh:&#10;Langkah 1: Kerjakan operasi perkalian terlebih dahulu: (-6) x 4 = -24&#10;Langkah 2: Hitung penjumlahan: -24 + 10 = -14&#10;Jadi jawaban yang benar adalah -14." class="w-full min-h-[160px] px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"></textarea>
-          <p class="text-[11px] text-slate-400 mt-1.5">Uraian pembahasan ini akan otomatis ditampilkan kepada siswa setelah tes selesai sebagai bahan evaluasi belajar.</p>
-        </div>
-
-        <div class="pt-4 mt-6 border-t border-slate-100 flex justify-end gap-3">
-          <button type="button" id="btn-cancel-q" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-colors">
-            Batal
-          </button>
-          <button type="submit" id="btn-save-q" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
-            <span>Simpan Soal</span>
-            <i class="fa-solid fa-check"></i>
-          </button>
-        </div>
-      </form>
     </div>
   </div>
 
   <!-- ==========================================================
        MODAL: TAMBAH / EDIT MATERI (CMS)
        ========================================================== -->
-  <div id="modal-materi" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 md:p-8 overflow-y-auto pt-8 sm:pt-14 pb-16">
-    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-auto">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
-        <h3 id="modal-materi-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
-          <i class="fa-solid fa-book-open text-blue-600"></i> Tambah Materi Baru
-        </h3>
-        <button id="btn-close-materi-modal" class="text-slate-400 hover:text-slate-600">
-          <i class="fa-solid fa-xmark text-lg"></i>
-        </button>
-      </div>
+  <div id="modal-materi" class="hidden fixed inset-0 z-50 overflow-y-auto bg-slate-900/60 backdrop-blur-xs p-4 sm:p-6">
+    <div class="min-h-full flex items-center justify-center py-8 sm:py-12">
+      <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 relative">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
+          <h3 id="modal-materi-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
+            <i class="fa-solid fa-book-open text-blue-600"></i> Tambah Materi Baru
+          </h3>
+          <button id="btn-close-materi-modal" class="text-slate-400 hover:text-slate-600 p-1.5 rounded-lg transition-colors">
+            <i class="fa-solid fa-xmark text-lg"></i>
+          </button>
+        </div>
 
-      <form id="form-materi" class="space-y-5">
-        <input type="hidden" id="materi-id">
-        <input type="hidden" id="materi-slug">
+        <form id="form-materi" class="space-y-5">
+          <input type="hidden" id="materi-id">
+          <input type="hidden" id="materi-slug">
 
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div class="sm:col-span-2">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Judul Materi</label>
-            <input type="text" id="materi-judul" required placeholder="Contoh: Operasi Perkalian Bilangan Bulat" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:bg-white">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            <div class="sm:col-span-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Judul Materi</label>
+              <input type="text" id="materi-judul" required placeholder="Contoh: Operasi Perkalian Bilangan Bulat" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:bg-white">
+            </div>
+            <div>
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Nomor Urutan</label>
+              <input type="number" id="materi-urutan" required min="1" value="1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white">
+            </div>
           </div>
+
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nomor Urutan</label>
-            <input type="number" id="materi-urutan" required min="1" value="1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white">
-          </div>
-        </div>
-
-        <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Ringkasan Singkat (Muncul di Katalog Siswa)</label>
-          <textarea id="materi-ringkasan" required rows="2" placeholder="Ringkasan konsep pokok yang dipelajari pada bab ini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"></textarea>
-        </div>
-
-        <div>
-          <div class="flex items-center justify-between mb-1.5">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Isi / Uraian Materi Pembelajaran</label>
-            <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-pen-nib mr-1"></i>Tulis Teks Biasa (Otomatis Rapi)</span>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-2">Ringkasan Singkat (Muncul di Katalog Siswa)</label>
+            <textarea id="materi-ringkasan" required rows="2" placeholder="Ringkasan konsep pokok yang dipelajari pada bab ini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"></textarea>
           </div>
 
-          <!-- Quick Formatting Toolbar untuk Memudahkan Guru -->
-          <div class="flex flex-wrap items-center gap-1.5 mb-2.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
-            <span class="text-[11px] text-slate-400 font-semibold px-1.5">Alat Cepat:</span>
-            <button type="button" id="btn-fmt-bold" class="px-2.5 py-1 bg-white hover:bg-slate-200 rounded-lg font-bold border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Tebalkan Teks"><b>B</b> Tebal</button>
-            <button type="button" id="btn-fmt-italic" class="px-2.5 py-1 bg-white hover:bg-slate-200 rounded-lg italic border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Miringkan Teks"><i>I</i> Miring</button>
-            <button type="button" id="btn-fmt-bullet" class="px-2.5 py-1 bg-white hover:bg-slate-200 rounded-lg border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Daftar Poin">• Poin</button>
-            <button type="button" id="btn-fmt-num" class="px-2.5 py-1 bg-white hover:bg-slate-200 rounded-lg border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Daftar Nomor">1. Nomor</button>
-            <button type="button" id="btn-fmt-box" class="px-2.5 py-1 bg-white hover:bg-slate-200 rounded-lg border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Kotak Catatan"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>Catatan</button>
+          <div>
+            <div class="flex items-center justify-between mb-2">
+              <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Isi / Uraian Materi Pembelajaran</label>
+              <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-pen-nib mr-1"></i>Tulis Teks Biasa (Otomatis Rapi)</span>
+            </div>
+
+            <!-- Quick Formatting Toolbar untuk Memudahkan Guru -->
+            <div class="flex flex-wrap items-center gap-2 mb-3 bg-slate-100/80 p-2 rounded-xl border border-slate-200 text-xs">
+              <span class="text-[11px] text-slate-500 font-bold px-1.5">Alat Cepat:</span>
+              <button type="button" id="btn-fmt-bold" class="px-3 py-1.5 bg-white hover:bg-slate-200 rounded-lg font-bold border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Tebalkan Teks"><b>B</b> Tebal</button>
+              <button type="button" id="btn-fmt-italic" class="px-3 py-1.5 bg-white hover:bg-slate-200 rounded-lg italic border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Miringkan Teks"><i>I</i> Miring</button>
+              <button type="button" id="btn-fmt-bullet" class="px-3 py-1.5 bg-white hover:bg-slate-200 rounded-lg border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Daftar Poin">• Poin</button>
+              <button type="button" id="btn-fmt-num" class="px-3 py-1.5 bg-white hover:bg-slate-200 rounded-lg border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Daftar Nomor">1. Nomor</button>
+              <button type="button" id="btn-fmt-box" class="px-3 py-1.5 bg-white hover:bg-slate-200 rounded-lg border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Kotak Catatan"><i class="fa-solid fa-lightbulb text-amber-500 mr-1"></i>Catatan</button>
+            </div>
+
+            <textarea id="materi-konten" rows="8" placeholder="Ketik uraian materi di sini seperti mengetik di dokumen / catatan...&#10;&#10;Contoh:&#10;Operasi perkalian bilangan bulat mengikuti aturan tanda:&#10;1. Positif dikali positif menghasilkan positif.&#10;2. Negatif dikali positif menghasilkan negatif.&#10;&#10;Gunakan tombol Enter untuk membuat baris dan paragraf baru." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-sans leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
+            <span class="text-[11px] text-slate-400 mt-2 block">Bapak/Ibu Guru cukup mengetik teks biasa. Paragraf, baris baru, dan poin akan otomatis disusun rapi saat siswa membuka materi.</span>
           </div>
 
-          <textarea id="materi-konten" rows="8" placeholder="Ketik uraian materi di sini seperti mengetik di dokumen / catatan...&#10;&#10;Contoh:&#10;Operasi perkalian bilangan bulat mengikuti aturan tanda:&#10;1. Positif dikali positif menghasilkan positif.&#10;2. Negatif dikali positif menghasilkan negatif.&#10;&#10;Gunakan tombol Enter untuk membuat baris dan paragraf baru." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-sans leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-          <span class="text-[11px] text-slate-400 mt-1.5 block">Bapak/Ibu Guru cukup mengetik teks biasa. Paragraf, baris baru, dan poin akan otomatis disusun rapi saat siswa membuka materi.</span>
-        </div>
-
-        <div class="pt-4 mt-6 border-t border-slate-100 flex justify-end gap-3">
-          <button type="button" id="btn-cancel-materi" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-colors">
-            Batal
-          </button>
-          <button type="submit" id="btn-save-materi" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
-            <span>Simpan Materi</span>
-            <i class="fa-solid fa-check"></i>
-          </button>
-        </div>
-      </form>
+          <div class="pt-5 mt-7 border-t border-slate-100 flex justify-end gap-3">
+            <button type="button" id="btn-cancel-materi" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-colors">
+              Batal
+            </button>
+            <button type="submit" id="btn-save-materi" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
+              <span>Simpan Materi</span>
+              <i class="fa-solid fa-check"></i>
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 
