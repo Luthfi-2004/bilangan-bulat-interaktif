@@ -1279,16 +1279,65 @@ function setupEventListeners() {
       return;
     }
 
-    let csv = "Nama Siswa,Email,Tes Awal,Latihan Dasar,Latihan Campuran,Kuis Akhir,Penguasaan Materi (%),Jumlah Lencana\n";
-    allStudentsProgressCache.forEach(s => {
-      csv += `"${s.name}","${s.email}","${s.tesAwal}","${s.latihanDasar}","${s.latihanCampuran}","${s.kuis}","${s.avgProgress}","${s.totalBadges}"\n`;
+    let html = `
+    <html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40">
+    <head>
+    <meta charset="utf-8">
+    <style>
+      table { border-collapse: collapse; width: 100%; font-family: sans-serif; }
+      th { background-color: #10b981; color: white; font-weight: bold; border: 1px solid #ddd; padding: 10px; text-align: left; }
+      td { border: 1px solid #ddd; padding: 8px; }
+      tr:nth-child(even) { background-color: #f9fafb; }
+      h2 { font-family: sans-serif; color: #1f2937; }
+    </style>
+    </head>
+    <body>
+      <h2>Rekap Nilai Siswa - Bilangan Bulat</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>No</th>
+            <th>Nama Siswa</th>
+            <th>Email</th>
+            <th>Tes Awal</th>
+            <th>Latihan Dasar</th>
+            <th>Latihan Campuran</th>
+            <th>Kuis Akhir</th>
+            <th>Penguasaan Materi (%)</th>
+            <th>Jumlah Lencana</th>
+          </tr>
+        </thead>
+        <tbody>
+    `;
+
+    allStudentsProgressCache.forEach((s, i) => {
+      html += `
+          <tr>
+            <td>${i + 1}</td>
+            <td>${s.name}</td>
+            <td>${s.email}</td>
+            <td>${s.tesAwal}</td>
+            <td>${s.latihanDasar}</td>
+            <td>${s.latihanCampuran}</td>
+            <td>${s.kuis}</td>
+            <td>${s.avgProgress}</td>
+            <td>${s.totalBadges}</td>
+          </tr>
+      `;
     });
 
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    html += `
+        </tbody>
+      </table>
+    </body>
+    </html>
+    `;
+
+    const blob = new Blob([html], { type: 'application/vnd.ms-excel' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.setAttribute("href", url);
-    link.setAttribute("download", `Rekap_Nilai_BilBul_${new Date().toISOString().slice(0,10)}.csv`);
+    link.setAttribute("download", `Rekap_Nilai_BilBul_${new Date().toISOString().slice(0,10)}.xls`);
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
