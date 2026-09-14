@@ -76,6 +76,7 @@ export async function signIn(email, password) {
     role: profile?.role || data.user.user_metadata?.role || 'siswa'
   };
   localStorage.setItem('math_current_user', JSON.stringify(sessionUser));
+  localStorage.setItem('math_login_time', Date.now().toString());
 
   return { session: data.session, user: sessionUser };
 }
