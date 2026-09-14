@@ -114,11 +114,13 @@
           const isTesAwal = r.jenis === 'tes_awal';
           const isGame = r.jenis === 'game';
           
+          // Sembunyikan history game edukasi dari daftar
+          if (isGame) return;
+          
           if (isKuis && r.skor > highestKuis) highestKuis = r.skor;
           if (isTesAwal) hasTesAwal = true;
           
           let title = r.jenis.replace('_', ' ').toUpperCase();
-          if (isGame) title = 'GAME EDUKASI';
           
           const colorClass = r.skor >= 80 ? 'text-emerald-500' : (r.skor >= 60 ? 'text-blue-500' : 'text-amber-500');
           const bgIconClass = r.skor >= 80 ? 'bg-emerald-50 text-emerald-500' : (r.skor >= 60 ? 'bg-blue-50 text-blue-500' : 'bg-amber-50 text-amber-500');
