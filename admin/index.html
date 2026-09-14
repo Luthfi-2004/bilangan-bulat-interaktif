@@ -700,7 +700,7 @@
        MODAL: TAMBAH / EDIT SOAL (CMS)
        ========================================================== -->
   <div id="modal-question" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl border border-slate-100 my-8">
+    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-8">
       <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
         <h3 id="modal-question-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-pen-to-square text-blue-600"></i> Tambah Soal Baru
@@ -710,10 +710,10 @@
         </button>
       </div>
 
-      <form id="form-question" class="space-y-4">
+      <form id="form-question" class="space-y-5">
         <input type="hidden" id="q-id">
 
-        <div class="grid grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Kategori Soal</label>
             <select id="q-jenis" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
@@ -726,13 +726,13 @@
           </div>
           <div>
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Judul / Topik</label>
-            <input type="text" id="q-judul" placeholder="Contoh: Penjumlahan" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-sm">
+            <input type="text" id="q-judul" placeholder="Contoh: Penjumlahan" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
           </div>
         </div>
 
         <div>
           <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Teks Pertanyaan</label>
-          <textarea id="q-pertanyaan" required rows="2" placeholder="Tuliskan pertanyaan di sini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+          <textarea id="q-pertanyaan" required rows="3" placeholder="Tuliskan pertanyaan di sini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white"></textarea>
         </div>
 
         <!-- Pilihan Jawaban (Untuk Pilihan Ganda) -->
@@ -789,8 +789,12 @@
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Pembahasan / Langkah Penyelesaian</label>
-          <textarea id="q-pembahasan" rows="2" placeholder="Jelaskan alasan atau langkah hitungnya..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm"></textarea>
+          <div class="flex items-center justify-between mb-1">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Pembahasan / Langkah Penyelesaian</label>
+            <span class="text-[11px] text-blue-600 font-medium"><i class="fa-solid fa-calculator mr-1"></i>Langkah hitung rinci</span>
+          </div>
+          <textarea id="q-pembahasan" rows="7" placeholder="Tuliskan uraian langkah hitung dan pembahasan penyelesaian soal di sini secara rinci...&#10;&#10;Contoh:&#10;Langkah 1: Kerjakan operasi perkalian terlebih dahulu: (-6) x 4 = -24&#10;Langkah 2: Hitung penjumlahan: -24 + 10 = -14&#10;Jadi jawaban yang benar adalah -14." class="w-full min-h-[160px] px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"></textarea>
+          <p class="text-[11px] text-slate-400 mt-1">Uraian pembahasan ini akan otomatis ditampilkan kepada siswa setelah tes selesai sebagai bahan evaluasi belajar.</p>
         </div>
 
         <div class="pt-2 flex justify-end gap-3">
