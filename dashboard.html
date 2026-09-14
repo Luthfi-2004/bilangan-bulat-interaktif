@@ -79,8 +79,8 @@
   <script src="js/layout.js"></script>
   <script type="module" src="js/main.js"></script>
   <script type="module">
-    import { getCurrentUser } from './js/supabase-client.js';
-    import { FLOW_STEPS, getCompletedStepIds, getResumeStep } from './js/learning-flow.js';
+    import { getCurrentUser, getTestResults, getStudentBadges } from './js/supabase-client.js';
+    import { FLOW_STEPS, getCompletedStepIds, getResumeStep, markStepCompleted } from './js/learning-flow.js';
 
     // Cegah akses kembali via tombol Back browser (BFCache)
     window.addEventListener('pageshow', async (event) => {
@@ -159,6 +159,34 @@
       if (!user) {
         window.location.replace('login.html?logout=true');
         return;
+      }
+
+      // Sync data roadmap dari database jika local storage terhapus
+      try {
+        const [results, badges] = await Promise.all([
+          getTestResults(user.id),
+          getStudentBadges(user.id)
+        ]);
+
+        if (results && results.length > 0) {
+          if (results.some(r => r.jenis === 'tes_awal')) markStepCompleted('step_tes_awal');
+          if (results.some(r => r.jenis === 'kuis')) markStepCompleted('step_kuis');
+          if (results.some(r => r.jenis === 'latihan_dasar')) {
+             markStepCompleted('step_lat_1');
+             markStepCompleted('step_lat_2');
+             markStepCompleted('step_lat_3');
+          }
+          if (results.some(r => r.jenis === 'latihan_campuran')) {
+             markStepCompleted('step_lat_4');
+          }
+        }
+        
+        if (badges && badges.length > 0) {
+          if (badges.includes('b_rajin_belajar')) markStepCompleted('step_materi');
+          if (badges.includes('b_master')) markStepCompleted('step_kuis');
+        }
+      } catch (err) {
+        console.warn('Gagal memulihkan progress:', err);
       }
 
       // Render content
