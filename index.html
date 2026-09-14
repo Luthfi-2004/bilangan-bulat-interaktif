@@ -512,8 +512,8 @@
     }
     document.addEventListener('DOMContentLoaded',()=>{
       try{
-        let s = localStorage.getItem('math_student');
-        let u = localStorage.getItem('math_current_user');
+        let sStr = localStorage.getItem('math_student');
+        let uStr = localStorage.getItem('math_current_user');
         const loginTimeStr = localStorage.getItem('math_login_time');
         
         // Auto logout 24 jam (24 * 60 * 60 * 1000 ms)
@@ -521,23 +521,7 @@
            localStorage.removeItem('math_student');
            localStorage.removeItem('math_current_user');
            localStorage.removeItem('math_login_time');
-           s = null; u = null;
-        }
-
-        if(s||u){
-          const url = u ? 'admin/index.html' : 'dashboard.html';
-          const nb=document.getElementById('nav-login-btn');
-          if(nb){nb.href=url;nb.innerHTML="<i class='fa-solid fa-house'></i><span>Dashboard</span>";}
-          const hb=document.getElementById('hero-main-btn');
-          if(hb){
-            hb.href=url;
-            hb.innerHTML="<i class='fa-solid fa-house' style='font-size:.75rem;'></i> Buka Dashboard";
-            // Hide secondary button when logged in
-            const secBtn = hb.nextElementSibling;
-            if(secBtn) secBtn.style.display = 'none';
-          }
-          const bb=document.getElementById('bottom-cta-btn');
-          if(bb){bb.href=url;bb.innerHTML="<span>Buka Dashboard</span><i class='fa-solid fa-arrow-right' style='font-size:.83rem;'></i>";}
+           sStr = null; uStr = null;
         }
       }catch(_){}
     });
