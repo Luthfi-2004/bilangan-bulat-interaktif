@@ -864,6 +864,7 @@ function setupEventListeners() {
   const formCreateStudent = document.getElementById('form-create-student');
 
   btnOpenStudent?.addEventListener('click', () => {
+    modalStudent.scrollTop = 0;
     modalStudent.classList.remove('hidden');
   });
 
@@ -1031,6 +1032,7 @@ function setupEventListeners() {
       document.getElementById('edit-student-email').value = email;
       document.getElementById('edit-student-password').value = password;
 
+      modalEditStudent.scrollTop = 0;
       modalEditStudent.classList.remove('hidden');
       return;
     }
@@ -1610,6 +1612,7 @@ function openQuestionModal(q) {
     updateChoiceBoxStyles();
   }
 
+  modal.scrollTop = 0;
   modal.classList.remove('hidden');
 }
 
@@ -1640,5 +1643,6 @@ function openMateriModal(m) {
     document.getElementById('materi-urutan').value = nextUrutan;
   }
 
+  modal.scrollTop = 0;
   modal.classList.remove('hidden');
 }

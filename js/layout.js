@@ -300,14 +300,14 @@ function injectLayoutStyles() {
         width: 260px !important; transform: translateX(-100%); box-shadow: none;
       }
       #app-sidebar.sb-open { transform:translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.2); }
-      #app-content { padding: 1rem !important; }
+      #app-content { padding: 1.5rem 1rem 2.25rem 1rem !important; }
     }
 
     /* ============ MAIN AREA ============ */
     #app-main { flex:1; display:flex; flex-direction:column; min-width:0; overflow:hidden; }
-    #app-content { flex:1; overflow-y:auto; padding:2rem; transition:opacity 0.15s; }
-    @media (max-width:1023px) { #app-content { padding: 1.25rem; } }
-    @media (max-width:767px)  { #app-content { padding: 1rem; } }
+    #app-content { flex:1; overflow-y:auto; padding:2.25rem 2rem 3rem 2rem; transition:opacity 0.15s; }
+    @media (max-width:1023px) { #app-content { padding: 1.75rem 1.25rem 2.5rem 1.25rem; } }
+    @media (max-width:767px)  { #app-content { padding: 1.5rem 1rem 2.25rem 1rem !important; } }
   `;
   document.head.appendChild(el);
 }

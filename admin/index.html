@@ -211,7 +211,7 @@
         transform: translateX(-100%); box-shadow: none;
       }
       #admin-sidebar.open { transform: translateX(0); box-shadow: 12px 0 40px rgba(0,0,0,0.5); }
-      .admin-main-content { padding: 1rem !important; }
+      .admin-main-content { padding: 1.25rem 1rem 2.5rem 1rem !important; }
     }
 
   </style>
@@ -309,7 +309,7 @@
             <i class="fa-solid fa-bars" style="font-size:1.1rem;"></i>
           </button>
           <div>
-            <h1 id="page-title" class="text-lg md:text-2xl font-black text-slate-900 tracking-tight leading-none">
+            <h1 id="page-title" class="text-lg md:text-2xl font-black text-slate-900 tracking-tight leading-tight mb-0.5">
               Dashboard Guru
             </h1>
             <p id="page-subtitle" class="text-xs font-medium text-slate-500 hidden sm:block">
@@ -330,7 +330,7 @@
       </header>
 
       <!-- Dynamic Content Body -->
-      <main class="flex-1 overflow-y-auto p-6 md:p-8">
+      <main class="admin-main-content flex-1 overflow-y-auto p-6 md:p-8 pt-7 md:pt-8">
         
         <!-- ==========================================================
              TAB 1: DASHBOARD RINGKASAN
@@ -601,9 +601,9 @@
   <!-- ==========================================================
        MODAL: TAMBAH SISWA BARU
        ========================================================== -->
-  <div id="modal-add-student" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+  <div id="modal-add-student" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 overflow-y-auto pt-10 sm:pt-14 pb-12">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 my-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
         <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-user-plus text-blue-600"></i> Buat Akun Siswa Baru
         </h3>
@@ -614,28 +614,28 @@
 
       <form id="form-create-student" class="space-y-4">
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Nama Siswa</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nama Siswa</label>
           <input type="text" id="new-student-name" required placeholder="Contoh: Ahmad Rizki" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Email Siswa</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Email Siswa</label>
           <input type="email" id="new-student-email" required placeholder="rizki@kelas7.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-blue-600">
-          <span class="text-[11px] text-slate-400">Gunakan format email bebas (misal: nama@kelas7.com).</span>
+          <span class="text-[11px] text-slate-400 mt-1 block">Gunakan format email bebas (misal: nama@kelas7.com).</span>
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Kata Sandi Awal</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kata Sandi Awal</label>
           <div class="flex gap-2">
             <input type="text" id="new-student-password" required value="siswa123" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-blue-600">
             <button type="button" id="btn-gen-pass" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl whitespace-nowrap">
               Acak
             </button>
           </div>
-          <span class="text-[11px] text-slate-400">Minimal 6 karakter. Berikan sandi ini kepada siswa.</span>
+          <span class="text-[11px] text-slate-400 mt-1 block">Minimal 6 karakter. Berikan sandi ini kepada siswa.</span>
         </div>
 
-        <div class="pt-2">
+        <div class="pt-4 mt-5 border-t border-slate-100">
           <button type="submit" id="btn-submit-student" class="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white font-bold text-sm rounded-xl shadow transition-colors flex items-center justify-center gap-2">
             <span>Daftarkan Siswa</span>
             <i class="fa-solid fa-check"></i>
@@ -648,9 +648,9 @@
   <!-- ==========================================================
        MODAL: EDIT AKUN SISWA
        ========================================================== -->
-  <div id="modal-edit-student" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4">
-    <div class="bg-white rounded-2xl max-w-md w-full p-6 shadow-2xl border border-slate-100">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+  <div id="modal-edit-student" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start sm:items-center justify-center p-4 overflow-y-auto pt-10 sm:pt-14 pb-12">
+    <div class="bg-white rounded-2xl max-w-md w-full p-6 sm:p-7 shadow-2xl border border-slate-100 my-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-5">
         <h3 class="font-bold text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-user-pen text-amber-600"></i> Edit Akun Siswa
         </h3>
@@ -663,27 +663,27 @@
         <input type="hidden" id="edit-student-id">
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Nama Siswa</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nama Siswa</label>
           <input type="text" id="edit-student-name" required placeholder="Nama siswa" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Email Siswa</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Email Siswa</label>
           <input type="email" id="edit-student-email" required placeholder="email@kelas7.com" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-500">
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Kata Sandi Siswa</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kata Sandi Siswa</label>
           <div class="flex gap-2">
             <input type="text" id="edit-student-password" required placeholder="Sandi siswa" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-mono focus:outline-none focus:ring-2 focus:ring-amber-500">
             <button type="button" id="btn-edit-gen-pass" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl whitespace-nowrap">
               Acak
             </button>
           </div>
-          <span class="text-[11px] text-slate-400">Guru dapat melihat dan mengubah kata sandi siswa secara langsung.</span>
+          <span class="text-[11px] text-slate-400 mt-1 block">Guru dapat melihat dan mengubah kata sandi siswa secara langsung.</span>
         </div>
 
-        <div class="pt-2 flex items-center justify-end gap-3">
+        <div class="pt-4 mt-5 border-t border-slate-100 flex items-center justify-end gap-3">
           <button type="button" id="btn-cancel-edit-student" class="px-4 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 font-semibold text-sm rounded-xl transition-colors">
             Batal
           </button>
@@ -699,9 +699,9 @@
   <!-- ==========================================================
        MODAL: TAMBAH / EDIT SOAL (CMS)
        ========================================================== -->
-  <div id="modal-question" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-8">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+  <div id="modal-question" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 md:p-8 overflow-y-auto pt-8 sm:pt-14 pb-16">
+    <div class="bg-white rounded-2xl max-w-3xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
         <h3 id="modal-question-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-pen-to-square text-blue-600"></i> Tambah Soal Baru
         </h3>
@@ -715,7 +715,7 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Kategori Soal</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kategori Soal</label>
             <select id="q-jenis" required class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-xs font-semibold">
               <option value="tes_awal">Tes Awal</option>
               <option value="latihan_dasar">Latihan Dasar</option>
@@ -725,19 +725,19 @@
             </select>
           </div>
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Judul / Topik</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Judul / Topik</label>
             <input type="text" id="q-judul" placeholder="Contoh: Penjumlahan" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Teks Pertanyaan</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Teks Pertanyaan</label>
           <textarea id="q-pertanyaan" required rows="3" placeholder="Tuliskan pertanyaan di sini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white"></textarea>
         </div>
 
         <!-- Pilihan Jawaban (Untuk Pilihan Ganda) -->
         <div id="q-choices-container">
-          <div class="flex items-center justify-between mb-1.5">
+          <div class="flex items-center justify-between mb-2">
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Pilihan Jawaban (Pilih Kunci Jawaban yang Benar)</label>
             <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-circle-check mr-1"></i>Pilih radio untuk kunci benar</span>
           </div>
@@ -778,31 +778,32 @@
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Kunci Jawaban Benar</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Kunci Jawaban Benar</label>
             <input type="text" id="q-jawaban-benar" required placeholder="Teks kunci jawaban" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-bold text-emerald-700 focus:outline-none focus:ring-2 focus:ring-emerald-500">
             <p class="text-[11px] text-slate-400 mt-1">Otomatis sinkron dengan pilihan yang dilingkari di atas.</p>
           </div>
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Urutan Tampil</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Urutan Tampil</label>
             <input type="number" id="q-urutan" value="1" min="1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm">
           </div>
         </div>
 
-        <div>
-          <div class="flex items-center justify-between mb-1">
+        <div class="pt-1">
+          <div class="flex items-center justify-between mb-1.5">
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Pembahasan / Langkah Penyelesaian</label>
             <span class="text-[11px] text-blue-600 font-medium"><i class="fa-solid fa-calculator mr-1"></i>Langkah hitung rinci</span>
           </div>
           <textarea id="q-pembahasan" rows="7" placeholder="Tuliskan uraian langkah hitung dan pembahasan penyelesaian soal di sini secara rinci...&#10;&#10;Contoh:&#10;Langkah 1: Kerjakan operasi perkalian terlebih dahulu: (-6) x 4 = -24&#10;Langkah 2: Hitung penjumlahan: -24 + 10 = -14&#10;Jadi jawaban yang benar adalah -14." class="w-full min-h-[160px] px-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all font-sans"></textarea>
-          <p class="text-[11px] text-slate-400 mt-1">Uraian pembahasan ini akan otomatis ditampilkan kepada siswa setelah tes selesai sebagai bahan evaluasi belajar.</p>
+          <p class="text-[11px] text-slate-400 mt-1.5">Uraian pembahasan ini akan otomatis ditampilkan kepada siswa setelah tes selesai sebagai bahan evaluasi belajar.</p>
         </div>
 
-        <div class="pt-2 flex justify-end gap-3">
-          <button type="button" id="btn-cancel-q" class="px-4 py-2 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold">
+        <div class="pt-4 mt-6 border-t border-slate-100 flex justify-end gap-3">
+          <button type="button" id="btn-cancel-q" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-colors">
             Batal
           </button>
-          <button type="submit" id="btn-save-q" class="px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow">
-            Simpan Soal
+          <button type="submit" id="btn-save-q" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
+            <span>Simpan Soal</span>
+            <i class="fa-solid fa-check"></i>
           </button>
         </div>
       </form>
@@ -812,9 +813,9 @@
   <!-- ==========================================================
        MODAL: TAMBAH / EDIT MATERI (CMS)
        ========================================================== -->
-  <div id="modal-materi" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-center justify-center p-4 overflow-y-auto">
-    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 shadow-2xl border border-slate-100 my-8">
-      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-4">
+  <div id="modal-materi" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-xs flex items-start justify-center p-4 sm:p-6 md:p-8 overflow-y-auto pt-8 sm:pt-14 pb-16">
+    <div class="bg-white rounded-2xl max-w-2xl w-full p-6 sm:p-8 shadow-2xl border border-slate-100 my-auto">
+      <div class="flex items-center justify-between pb-4 border-b border-slate-100 mb-6">
         <h3 id="modal-materi-title" class="font-bold text-slate-900 text-base flex items-center gap-2">
           <i class="fa-solid fa-book-open text-blue-600"></i> Tambah Materi Baru
         </h3>
@@ -823,34 +824,34 @@
         </button>
       </div>
 
-      <form id="form-materi" class="space-y-4">
+      <form id="form-materi" class="space-y-5">
         <input type="hidden" id="materi-id">
         <input type="hidden" id="materi-slug">
 
         <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
           <div class="sm:col-span-2">
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Judul Materi</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Judul Materi</label>
             <input type="text" id="materi-judul" required placeholder="Contoh: Operasi Perkalian Bilangan Bulat" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-semibold focus:bg-white">
           </div>
           <div>
-            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Nomor Urutan</label>
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Nomor Urutan</label>
             <input type="number" id="materi-urutan" required min="1" value="1" class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white">
           </div>
         </div>
 
         <div>
-          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1">Ringkasan Singkat (Muncul di Katalog Siswa)</label>
+          <label class="block text-xs font-bold uppercase tracking-wider text-slate-700 mb-1.5">Ringkasan Singkat (Muncul di Katalog Siswa)</label>
           <textarea id="materi-ringkasan" required rows="2" placeholder="Ringkasan konsep pokok yang dipelajari pada bab ini..." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:bg-white"></textarea>
         </div>
 
         <div>
-          <div class="flex items-center justify-between mb-1">
+          <div class="flex items-center justify-between mb-1.5">
             <label class="block text-xs font-bold uppercase tracking-wider text-slate-700">Isi / Uraian Materi Pembelajaran</label>
             <span class="text-[11px] text-emerald-600 font-semibold"><i class="fa-solid fa-pen-nib mr-1"></i>Tulis Teks Biasa (Otomatis Rapi)</span>
           </div>
 
           <!-- Quick Formatting Toolbar untuk Memudahkan Guru -->
-          <div class="flex flex-wrap items-center gap-1.5 mb-2 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
+          <div class="flex flex-wrap items-center gap-1.5 mb-2.5 bg-slate-100 p-1.5 rounded-xl border border-slate-200 text-xs">
             <span class="text-[11px] text-slate-400 font-semibold px-1.5">Alat Cepat:</span>
             <button type="button" id="btn-fmt-bold" class="px-2.5 py-1 bg-white hover:bg-slate-200 rounded-lg font-bold border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Tebalkan Teks"><b>B</b> Tebal</button>
             <button type="button" id="btn-fmt-italic" class="px-2.5 py-1 bg-white hover:bg-slate-200 rounded-lg italic border border-slate-200 text-slate-700 shadow-2xs transition-colors" title="Miringkan Teks"><i>I</i> Miring</button>
@@ -860,11 +861,11 @@
           </div>
 
           <textarea id="materi-konten" rows="8" placeholder="Ketik uraian materi di sini seperti mengetik di dokumen / catatan...&#10;&#10;Contoh:&#10;Operasi perkalian bilangan bulat mengikuti aturan tanda:&#10;1. Positif dikali positif menghasilkan positif.&#10;2. Negatif dikali positif menghasilkan negatif.&#10;&#10;Gunakan tombol Enter untuk membuat baris dan paragraf baru." class="w-full px-3.5 py-2.5 bg-slate-50 border border-slate-200 rounded-xl text-sm font-sans leading-relaxed focus:bg-white focus:outline-none focus:ring-2 focus:ring-blue-500"></textarea>
-          <span class="text-[11px] text-slate-400 mt-1 block">Bapak/Ibu Guru cukup mengetik teks biasa. Paragraf, baris baru, dan poin akan otomatis disusun rapi saat siswa membuka materi.</span>
+          <span class="text-[11px] text-slate-400 mt-1.5 block">Bapak/Ibu Guru cukup mengetik teks biasa. Paragraf, baris baru, dan poin akan otomatis disusun rapi saat siswa membuka materi.</span>
         </div>
 
-        <div class="pt-2 flex justify-end gap-3">
-          <button type="button" id="btn-cancel-materi" class="px-4 py-2 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-colors">
+        <div class="pt-4 mt-6 border-t border-slate-100 flex justify-end gap-3">
+          <button type="button" id="btn-cancel-materi" class="px-5 py-2.5 text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl text-sm font-semibold transition-colors">
             Batal
           </button>
           <button type="submit" id="btn-save-materi" class="px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-sm font-bold shadow-sm transition-colors flex items-center gap-2">
