@@ -119,7 +119,22 @@
         titleEl.innerHTML = `<i class="fa-solid fa-pen-to-square text-blue-600 mr-3"></i> ${cfg.judul}`;
       }
 
-      const soal = getSoalLatihanByTahap(tahapNum);
+      // Tampilkan loading sementara soal diambil
+      if (quizContainer) quizContainer.innerHTML = `
+        <div class="py-16 text-center text-slate-400">
+          <i class="fa-solid fa-circle-notch fa-spin text-3xl mb-3 text-blue-600"></i>
+          <p class="font-medium">Memuat soal latihan...</p>
+        </div>
+      `;
+
+      // Latihan campuran (tahap 4) ambil dari Supabase agar mengikuti pengaturan admin
+      let soal;
+      if (cfg.jenis === 'latihan_campuran') {
+        soal = await getQuestions('latihan_campuran');
+      } else {
+        soal = getSoalLatihanByTahap(tahapNum);
+      }
+
       if (quizContainer) quizContainer.innerHTML = '';
       new QuizEngine('#app-content #quiz-container', soal, cfg.jenis, null, cfg.nextAction);
     };
